@@ -13,4 +13,4 @@ class GoogleAdmin(admin.OSMGeoAdmin):
 	scrollable = True
 	map_width = 800
 	map_height = 600
-	debug = True
+	debug = False

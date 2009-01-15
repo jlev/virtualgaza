@@ -5,41 +5,44 @@ class Author(models.Model):
 	from django.contrib.auth.models import User
 	phone_number = models.CharField(max_length=15,blank=True)
 	user = models.ForeignKey(User, unique=True)
+	picture = models.ImageField(upload_to='authors')
 	def __unicode__(self):
 		return self.user.get_full_name()
 
-class Testimony(models.Model):
-	'''The abstract base class of all testimony models'''
-	author = models.ManyToManyField(Author,verbose_name="Author")
-	neighborhood = models.ManyToManyField(Neighborhood,verbose_name="Neighborhood",blank=True)
+class Diary(models.Model):
+	'''Abstract base class for all diary entries
+	This should not be registered in the admin site, or directly exposed to users
+	'''
+	author = models.ForeignKey(Author) #many to one
+	neighborhood = models.ForeignKey(Neighborhood,blank=True)
 	created_date = models.DateTimeField("Created",auto_now=False)
-	uploaded = models.DateTimeField("Uploaded",auto_now=True)
-	description = models.CharField("Short Description",max_length=250)
+	uploaded_date = models.DateTimeField("Uploaded",auto_now=True)
+	description = models.CharField("Description",max_length=250)
+	approved = models.BooleanField('Approved')
 	
 	def __unicode__(self):
 		return self.description
 	
 	class Meta:
-		abstract = True #this is an abstract base class, can't be instantiated
+		abstract = True
 
-
-class Diary(Testimony):
+class Text(Diary):
 	text = models.TextField()
 	class Meta:
-		verbose_name = "diary entry"
-		verbose_name_plural = "diary entries"
-
-class Photograph(Testimony):
-	photo = models.ImageField(upload_to='photos')
+		verbose_name = "diary"
+		verbose_name_plural = "diaries"
+	
+class Photograph(Diary):
+	photo = models.ImageField(upload_to='photos/%Y/%m/%d')
 	class Meta:
 		verbose_name_plural = "photos"
 
-class Video(Testimony):
-	video = models.FileField(upload_to='video')
+class Video(Diary):
+	video = models.FileField(upload_to='video/%Y/%m/%d')
 	class Meta:
 		verbose_name_plural = "videos"
 
-class Audio(Testimony):
-	audio = models.FileField(upload_to='audio')
+class Audio(Diary):
+	audio = models.FileField(upload_to='audio/%Y/%m/%d')
 	class Meta:
 		verbose_name_plural = "audio"

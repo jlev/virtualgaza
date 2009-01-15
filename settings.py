@@ -44,17 +44,20 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+SITE_ROOT = '/Users/jlev/CompCult/svn/virtualgaza/'
+MEDIA_ROOT = SITE_ROOT + 'media/'
+STATIC_DOC_ROOT = MEDIA_ROOT
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = ''
+#MEDIA_URL = 'http://www.virtualgaza.com/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = SITE_ROOT + 'media/admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'n^07awh1gxt@5i#ti5u(er)+(oola_97*pg9hw75!qj6=cs1zw'
@@ -79,7 +82,7 @@ PREPEND_WWW = False #set to true when deploying
 ROOT_URLCONF = 'virtualgaza.urls'
 
 TEMPLATE_DIRS = (
-	"/Users/jlev/Sites/Virtual Gaza/virtualgaza/templates"
+	SITE_ROOT + 'templates/'
 )
 
 INSTALLED_APPS = (
