@@ -1,2 +1,2 @@
-{% extends "gis/admin/openlayers.js" %}
+{% extends "gis/admin/openlayers-modified.js" %}
 {% block base_layer %}new OpenLayers.Layer.Google("Google Base Layer", {'type': G_HYBRID_MAP, 'sphericalMercator' : true, 'layerswitcher':true});{% endblock %}

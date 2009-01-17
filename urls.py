@@ -3,50 +3,61 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib import databrowse
 from django.contrib.auth.decorators import login_required
-from virtualgaza.testimony.models import Text,Video,Audio,Photograph
-from virtualgaza.tour.models import Neighborhood,Building,Event
+
+import virtualgaza.testimony.models
+import virtualgaza.testimony.views
+import virtualgaza.tour.models
+import virtualgaza.tour.views
 
 admin.autodiscover()
 
-databrowse.site.register(Text)
-databrowse.site.register(Video)
-databrowse.site.register(Audio)
-databrowse.site.register(Photograph)
+databrowse.site.register(virtualgaza.testimony.models.Text)
+databrowse.site.register(virtualgaza.testimony.models.Video)
+databrowse.site.register(virtualgaza.testimony.models.Audio)
+databrowse.site.register(virtualgaza.testimony.models.PhotoAlbum)
+databrowse.site.register(virtualgaza.testimony.models.Photograph)
 
-databrowse.site.register(Neighborhood)
-databrowse.site.register(Building)
-databrowse.site.register(Event)
+databrowse.site.register(virtualgaza.tour.models.Neighborhood)
+databrowse.site.register(virtualgaza.tour.models.Building)
+databrowse.site.register(virtualgaza.tour.models.Event)
 
-urlpatterns = patterns('',
+
+#need to fix these regex so they're smarter
+#right now, order matters!
+urlpatterns = patterns('virtualgaza.testimony.views',
+	(r'^$', 'index'),
+	(r'^author/$','all_authors'),
+	(r'^author/(?P<id>)/$','author_by_id'),
+	(r'^author/(?P<firstName>[-\w]+)-(?P<lastName>[-\w]+)/$','author_by_full_name'),
+	(r'^author/(?P<lastName>[A-Za-z]+)/$','author_by_last_name'),
+)
+
+text_info_dict = {
+	'queryset': virtualgaza.testimony.models.Text.objects.filter(approved=1),
+	'date_field': 'created_date'
+}
+urlpatterns += patterns('django.views.generic.date_based',
+	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$', 'object_detail',
+		dict(text_info_dict,month_format='%m',slug_field='description')), #add slug field only for object_detail
+	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$','archive_day',
+		dict(text_info_dict,month_format='%m')),
+	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/$','archive_month',
+		dict(text_info_dict,month_format='%m')),
+	(r'^testimony/(?P<year>\d{4})/$','archive_year',text_info_dict),
+	(r'^testimony/$','archive_index',
+		dict(text_info_dict,num_latest=10)),
+)
+
+urlpatterns += patterns('',
 	(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 	(r'^admin/(.*)', admin.site.root),
 	(r'^db/(.*)', login_required(databrowse.site.root)),
 	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 )
 
-text_info_dict = {
-    'queryset': Text.objects.all(),
-    'date_field': 'created_date',
-}
-
-urlpatterns += patterns('django.views.generic.date_based',
-   (r'^diary/(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$', 'object_detail', text_info_dict),
-   (r'^diary/(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$',               'archive_day',   text_info_dict),
-   (r'^diary/(?P<year>\d{4})/(?P<month>[a-z]{3})/$',                                'archive_month', text_info_dict),
-   (r'^diary/(?P<year>\d{4})/$',                                                    'archive_year',  text_info_dict),
-)
-
-
-#urlpatterns += patterns('virtualgaza.tour.views',
-#	(r'^neighborhood/<name>',neighborhoods),
-#	(r'^buildings/<name>',building),
-#	(r'^events/(?P<year>\d{4})/$',event_year),
-#	(r'^events/(?P<year>\d{4})/(?P<month>\d{2})/$',event_month),
-#	(r'^events/(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d+)/$',event_day),
-#)
 
 #let django serve the static media when in debug mode
 if settings.DEBUG:
 	urlpatterns += patterns('',
-	(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),
+		(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT}),
 	)

@@ -7,8 +7,9 @@ class GoogleAdmin(admin.OSMGeoAdmin):
 	GMAP = GoogleMap(key=settings.GOOGLE_MAPS_API_KEY,version='2.x')
 	extra_js = [GMAP.api_url + GMAP.key]
 	map_template = 'gis/admin/google.html'
+	map_srid = 900913 #map data in spherical mercator
+	display_srid = 4326 #display mouse coords in gps
 	
-	#override defaults in OSMGeoAdmin
 	save_as = True
 	scrollable = True
 	map_width = 800
