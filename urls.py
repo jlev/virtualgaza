@@ -21,17 +21,22 @@ databrowse.site.register(virtualgaza.tour.models.Neighborhood)
 databrowse.site.register(virtualgaza.tour.models.Building)
 databrowse.site.register(virtualgaza.tour.models.Event)
 
-
-#need to fix these regex so they're smarter
-#right now, order matters!
-urlpatterns = patterns('virtualgaza.testimony.views',
-	(r'^$', 'index'),
-	(r'^author/$','all_authors'),
-	(r'^author/(?P<id>)/$','author_by_id'),
-	(r'^author/(?P<firstName>[-\w]+)-(?P<lastName>[-\w]+)/$','author_by_full_name'),
-	(r'^author/(?P<lastName>[A-Za-z]+)/$','author_by_last_name'),
+#MAP URLS
+urlpatterns = patterns('virtualgaza.tour.views',
+	(r'^$','all_neighborhoods'),
+	(r'^neighborhood/$','all_neighborhoods'),
+	(r'^neighborhood/(?P<nameSlug>[\w-]+)/$','one_neighborhood'),
 )
 
+#AUTHOR URLS
+urlpatterns += patterns('virtualgaza.testimony.views',
+	(r'^author/$','authors_by_neighborhood'),
+	(r'^author/(?P<id>)/$','author_by_id'),
+	(r'^author/(?P<firstName>[\w-]+)-(?P<lastName>[\w-]+)/$','author_by_full_name'),
+	#(r'^author/(?P<lastName>[\w-]+)/$','author_by_last_name'),
+)
+
+#ARCHIVE URLS
 text_info_dict = {
 	'queryset': virtualgaza.testimony.models.Text.objects.filter(approved=1),
 	'date_field': 'created_date'
@@ -44,10 +49,11 @@ urlpatterns += patterns('django.views.generic.date_based',
 	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/$','archive_month',
 		dict(text_info_dict,month_format='%m')),
 	(r'^testimony/(?P<year>\d{4})/$','archive_year',text_info_dict),
-	(r'^testimony/$','archive_index',
-		dict(text_info_dict,num_latest=10)),
+	(r'^recent/$','archive_index',
+		dict(text_info_dict,num_latest=15)),
 )
 
+#ADMIN URLS
 urlpatterns += patterns('',
 	(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 	(r'^admin/(.*)', admin.site.root),

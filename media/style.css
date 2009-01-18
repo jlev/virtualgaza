@@ -1,0 +1,122 @@
+body {
+	background:#F0F0F0;
+	border:none;
+	color:black;
+	font-family:arial, sans-serif;
+	font-size:12pt;
+}
+
+a {
+	color:red;
+	text-decoration:none;
+}
+
+a:hover {
+	color:black;
+	text-decoration:none;
+}
+
+a h1{
+	color:black;
+}
+
+#centered {
+	position:relative;
+	margin:50px auto;
+	width:700px;
+}
+
+#map {
+	position:absolute;
+	height:600px;
+	width:700px;
+	border:dashed 1px;
+}
+
+#caption {
+	position:relative;
+	font-size:12pt;
+	font-style:italic;
+	top:620px;
+}
+
+#menu-left {
+	z-index:1;
+	position:absolute;
+	top:50px;
+	left:0px;
+	width:150px;
+	text-align:right;
+}
+
+#menu-left ul {
+	z-index:1;
+	color:red;
+	font-weight:bold;
+	list-style-type:none;
+}
+
+#menu-right {
+	z-index:1;
+	position:absolute;
+	top:50px;
+	right:0px;
+	width:150px;
+	text-align:left;
+}
+
+#menu-right ul {
+	z-index:1;
+	padding-left:0px;
+	color:red;
+	font-weight:bold;
+	list-style-type:none;
+}
+
+#logo-left {
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:150px;
+	text-align:right;
+}
+
+#logo-right {
+	position:absolute;
+	top:0px;
+	right:-0px;
+	width:150px;
+	text-align:left;
+}
+
+#profile-pic {
+	position:relative;
+	float:left;
+	margin-right:10px;
+}
+
+#profile-text {
+	/* doesn't float properly, fix before launch */
+	position:relative;
+	float:right;
+}
+
+#credits{
+	font-size:10pt;
+	list-style:disc;
+}
+
+#footer {
+	position:absolute;
+	margin-left:5px;
+	margin-bottom:10px;
+	bottom:0px;
+	font-size:10pt;
+}
+
+#admin-login {
+	position:absolute;
+	right:0px;
+	margin-right:5px;
+	bottom:5px;
+}

@@ -18,7 +18,7 @@ class Author(models.Model):
 	email = models.EmailField('e-mail address', blank=True)
 	date_joined = models.DateTimeField('date joined', default=datetime.datetime.now)
 	phone_number = models.CharField(max_length=15,blank=True)
-	picture = models.ImageField(upload_to='authors',blank=True)
+	picture = models.ImageField(upload_to='authors',default="/media/authors/none.jpg")
 	neighborhood = models.ForeignKey(Neighborhood)
 	location = models.ForeignKey(Location,blank=True,null=True)
 		#only blank or null on first creation, but save method creates proper object
@@ -41,7 +41,7 @@ class Author(models.Model):
 	def save(self):
 		locationName = "%s's Location" % self.get_full_name()
 		self.location = self.neighborhood.getRandomLocationWithin(locationName)
-		self.save_base(force_insert=False, force_update=False)
+		super.save()
 
 class Diary(models.Model):
 	'''Abstract base class for all diary entries
@@ -55,6 +55,10 @@ class Diary(models.Model):
 	
 	def __unicode__(self):
 		return self.description
+	
+	def save(self):
+		self.increase_postcount()
+		super.save()
 	
 	class Meta:
 		abstract = True

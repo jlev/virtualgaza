@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link rel="stylesheet" href="/media/style.css" type="text/css"/>
+	<script type="text/javascript" src="/media/ibox/ibox.js"></script>
+	<script type="text/javascript">
+		iBox.default_width = 600;
+		iBox.fade_in_speed = 0;
+		iBox.setPath('/media/ibox/');
+	</script>
+	
+	{% block google %}<script src='http://maps.google.com/maps?file=api&amp;v={{ googleAPIVersion }}&amp;key={{ googleAPIKey }}'></script>{% endblock %}
+	{% block openlayers %}<script src="http://openlayers.org/api/OpenLayers.js"></script>{% endblock %}
+	<script type="text/javascript">
+	{% include "base/map.js" %}
+	</script>
+	<title>VirtualGaza | {% block title %}{{ pageTitle }}{% endblock %}</title>
+  </head>
+  <body onload="init()">
+
+	<div id="logo-left">
+		<a href="/">
+		<h1>VGAZA</h1>
+		</a>
+	</div>
+	<div id="logo-right">
+		<a href="/">
+		<h1>AZAGV</h1>
+		</a>
+	</div>
+	<div id="menu-left">
+		{% block sidebar-left %}
+		<ul>
+			<li><a rel="ibox" href="/about/">About</a></li>
+			<li><a rel="ibox" href="/author/">Contributors</a></li>
+			<li><a rel="ibox" href="/recent/">Recent</a></li>
+			<li><a rel="ibox" href="/submit/">Submit</a></li>
+			<li><a rel="ibox" href="/links/">Links</a></li>
+		</ul>
+		{% endblock %}
+	</div>
+	
+	<div id="menu-right">
+		{% block sidebar-right %}
+		<ul>
+			<li><a rel="ibox" href="/about/">Tuoba</a></li>
+			<li><a rel="ibox" href="/author/">Srotubirtnoc</a></li>
+			<li><a rel="ibox" href="/recent/">Tnecer</a></li>
+			<li><a rel="ibox" href="/submit/">Timbus</a></li>
+			<li><a rel="ibox" href="/links/">Sknil</a></li>
+		</ul>
+		{% endblock %}
+	</div>
+
+	<div id="centered">
+		<div id="map">
+			{% block map %}{% endblock %}
+		</div>
+		<div id="caption">
+		{% block caption %}{{ captionText }}{% endblock %}
+		</div>
+	</div>
+
+	<div id="footer">
+		{%block footer%}{%endblock%}
+	</div>
+	<div id="admin-login">
+		<a href="/admin/">&pi;</a>
+	</div>
+
+<!-- Google Analytics Magic -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-7059313-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>
