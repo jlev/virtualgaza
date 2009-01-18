@@ -1,0 +1,17 @@
+{% extends "base/box.html" %}
+{% block title %}VirtualGaza Authors{% endblock %}
+
+{% block content %}
+	<ul>
+	{% regroup authors_unsorted by neighborhood as author_list %}
+		
+	{% for neighborhood in author_list %}
+		<li>{{neighborhood.grouper}}</li>
+		<ul>
+		{% for author in neighborhood.list %}
+		<li><a href="/author/{{author.first_name}}-{{author.last_name}}/">{{author}}</a>
+		{% endfor %}
+		</ul>
+	{% endfor %}
+	</ul>
+{% endblock %}

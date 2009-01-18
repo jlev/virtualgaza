@@ -1,0 +1,11 @@
+{% extends "base/box.html" %}
+{% block title %}VirtualGaza Testimony: {{ year }}{% endblock %}
+
+{% block content %}
+	Year Archive<br>
+	<ul>
+	{% for month in date_list %}
+	<li><a href="/testimony/{{year}}/{{month.month}}/">{{month.month}}</li>
+	{% endfor %}
+	</ul>
+{% endblock %}

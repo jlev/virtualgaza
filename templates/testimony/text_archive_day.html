@@ -1,0 +1,10 @@
+{% extends "base/box.html" %}
+{% block title %}VirtualGaza Testimony: {{ day }}{% endblock %}
+
+{% block content %}
+	Daily Archive<br>
+	{% for entry in object_list %}
+	<li>{{entry.author}},{{ entry.created_date }},
+		<a href="/testimony/{{day.year}}/{{day.month}}/{{day.day}}/{{entry.description}}/">{{ entry.description }}</a></li>
+	{% endfor %}
+{% endblock %}

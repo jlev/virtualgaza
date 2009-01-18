@@ -1,0 +1,8 @@
+{% extends "base/box.html" %}
+
+{% block title %}{{ object.description }} {{ year }}{{ month }}{{ day }}{% endblock %}
+
+{% block content %}
+<h1>{{ object.description }}</h1> 
+<h2>{{ object.author }}</h2>
+{% endblock %}

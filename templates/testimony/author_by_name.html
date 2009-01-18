@@ -1,0 +1,10 @@
+{% extends "base/box.html" %}
+{% block title %}VirtualGaza Author{% endblock %}
+
+{% block content %}
+	<ul>
+	{% for author in author_list %}
+	<li>{{author.get_full_name}},{{ author.neighborhood.name }}</li>
+	{% endfor %}
+	</ul>
+{% endblock %}

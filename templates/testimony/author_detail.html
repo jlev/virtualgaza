@@ -1,0 +1,20 @@
+{% extends "base/base.html" %}
+{% block title %}{{author.get_full_name}}{% endblock %}
+
+{% block map %}
+{% endblock %}
+
+{% block caption %}	
+	<img id="profile_pic" src="{{author.picture}}"</img>
+	<div id="profile_text">
+	{{author.get_full_name}}, {{ author.neighborhood.name }}<br>
+	Joined: {{author.date_joined}}<br>
+	Posts: {{author.num_posts}}<br>
+	<br />
+	<ul>
+	{% for post in posts %}
+	<li>{{post.created_date}}: {{post.description}}</li>
+	{% endfor %}
+	</ul>
+	</div>
+{% endblock %}
