@@ -38,15 +38,19 @@
 			<key>filename</key>
 			<string>settings.py</string>
 			<key>lastUsed</key>
-			<date>2009-01-16T21:05:06Z</date>
+			<date>2009-01-17T19:01:05Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>urls.py</string>
 			<key>lastUsed</key>
-			<date>2009-01-17T06:18:22Z</date>
+			<date>2009-01-18T03:29:28Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>media</string>
 			<key>regexFolderFilter</key>
@@ -56,12 +60,12 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>200</integer>
+	<integer>199</integer>
 	<key>metaData</key>
 	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{292, 29}, {829, 832}}</string>
+	<string>{{399, 138}, {1002, 729}}</string>
 </dict>
 </plist>

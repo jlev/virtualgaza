@@ -18,7 +18,7 @@ class Author(models.Model):
 	email = models.EmailField('e-mail address', blank=True)
 	date_joined = models.DateTimeField('date joined', default=datetime.datetime.now)
 	phone_number = models.CharField(max_length=15,blank=True)
-	picture = models.ImageField(upload_to='authors',default="/media/authors/none.jpg")
+	picture = models.ImageField(upload_to='authors',blank=True)
 	neighborhood = models.ForeignKey(Neighborhood)
 	location = models.ForeignKey(Location,blank=True,null=True)
 		#only blank or null on first creation, but save method creates proper object
@@ -30,18 +30,20 @@ class Author(models.Model):
 		return full_name.strip()
 		
 	def increase_postcount(self):
-		num_posts += 1
+		self.num_posts += 1
 	
 	def set_last_post_time(self):
-		last_post_time = datetime.datetime.now()
+		self.last_post_time = datetime.datetime.now()
 		
 	def __unicode__(self):
 		return self.get_full_name()
 		
 	def save(self):
 		locationName = "%s's Location" % self.get_full_name()
-		self.location = self.neighborhood.getRandomLocationWithin(locationName)
-		super.save()
+		if (not self.location):
+			self.location = self.neighborhood.getRandomLocationWithin(locationName)
+		#should call super.save(), but didn't seem to work...
+		self.save_base(force_insert=False, force_update=False)
 
 class Diary(models.Model):
 	'''Abstract base class for all diary entries
@@ -57,8 +59,9 @@ class Diary(models.Model):
 		return self.description
 	
 	def save(self):
-		self.increase_postcount()
-		super.save()
+		self.author.increase_postcount()
+		#super.save()
+		self.save_base(force_insert=False, force_update=False)
 	
 	class Meta:
 		abstract = True

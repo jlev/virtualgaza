@@ -4,9 +4,9 @@
 {% block content %}
 	<h2>Recent Testimony</h2>
 	{% for entry in latest %}
-		<li><a href="/testimony/{{entry.created_date.year}}/{{entry.created_date.month}}/{{entry.created_date.day}}/{{entry.description}}/">
-			{{ entry.description }}</a> by <a href="/author/{{entry.author.first_name}}-{{entry.author.last_name}}">{{entry.author}}</a>
-			on <a href="/testimony/{{entry.created_date.year}}/{{entry.created_date.month}}/{{entry.created_date.day}}/">{{ entry.created_date }}</a
+		<li><a rel="ibox" href="/testimony/{{entry.created_date.year}}/{{entry.created_date.month}}/{{entry.created_date.day}}/{{entry.description|slugify}}/">
+			{{ entry.description }}</a> by <a href="/author/{{entry.author.first_name|slugify}}_{{entry.author.last_name|slugify}}">{{entry.author}}</a>
+			on <a rel="ibox" href="/testimony/{{entry.created_date.year}}/{{entry.created_date.month}}/{{entry.created_date.day}}/">{{ entry.created_date.date }}</a
 		</li>
 		
 	{% endfor %}

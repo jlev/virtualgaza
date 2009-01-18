@@ -1,5 +1,5 @@
 body {
-	background:#F0F0F0;
+	background:#C0C0C0;
 	border:none;
 	color:black;
 	font-family:arial, sans-serif;
@@ -7,7 +7,7 @@ body {
 }
 
 a {
-	color:red;
+	color:blue;
 	text-decoration:none;
 }
 
@@ -36,41 +36,51 @@ a h1{
 #caption {
 	position:relative;
 	font-size:12pt;
-	font-style:italic;
 	top:620px;
+	text-align:center;
 }
 
 #menu-left {
-	z-index:1;
 	position:absolute;
-	top:50px;
-	left:0px;
-	width:150px;
-	text-align:right;
-}
-
-#menu-left ul {
 	z-index:1;
-	color:red;
-	font-weight:bold;
-	list-style-type:none;
+	top:150px;
+	width:150px;
+	text-align:center;
+	left:0px;
 }
 
 #menu-right {
-	z-index:1;
 	position:absolute;
-	top:50px;
-	right:0px;
+	z-index:1;
+	top:150px;
 	width:150px;
-	text-align:left;
+	text-align:center;
+	right:0px;
 }
 
-#menu-right ul {
+#menu-left li {
 	z-index:1;
-	padding-left:0px;
-	color:red;
 	font-weight:bold;
 	list-style-type:none;
+	font-size:14pt;
+	padding-top:5px;
+}
+
+#menu-right li {
+	z-index:1;
+	font-weight:bold;
+	list-style-type:none;
+	font-size:14pt;
+	padding-top:5px;
+	text-align:center;
+}
+
+#menu-left li a {
+	color:#606060;
+}
+
+#menu-right li a {
+	color:#606060;
 }
 
 #logo-left {

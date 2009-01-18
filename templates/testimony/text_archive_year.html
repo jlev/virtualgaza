@@ -5,7 +5,7 @@
 	Year Archive<br>
 	<ul>
 	{% for month in date_list %}
-	<li><a href="/testimony/{{year}}/{{month.month}}/">{{month.month}}</li>
+	<li><a rel="ibox" href="/testimony/{{year}}/{{month.month}}/">{{month.month}}</li>
 	{% endfor %}
 	</ul>
 {% endblock %}

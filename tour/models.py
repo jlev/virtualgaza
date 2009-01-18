@@ -3,10 +3,17 @@ from django.contrib.gis.db import models
 theSRID = 900913
 
 class Location(models.Model):
-	name = models.CharField(max_length=100)
+	name = models.CharField(max_length=100,unique=True)
 	coords = models.PointField(srid=theSRID)
 	objects = models.GeoManager()
 	
+	def __unicode__(self):
+		return self.name
+		
+class Border(models.Model):
+	name = models.CharField(max_length=100)
+	line = models.LineStringField(srid=theSRID)
+	objects = models.GeoManager()
 	def __unicode__(self):
 		return self.name
 

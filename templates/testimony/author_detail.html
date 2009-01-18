@@ -8,12 +8,11 @@
 	<img id="profile_pic" src="{{author.picture}}"</img>
 	<div id="profile_text">
 	{{author.get_full_name}}, {{ author.neighborhood.name }}<br>
-	Joined: {{author.date_joined}}<br>
-	Posts: {{author.num_posts}}<br>
+	Joined: {{author.date_joined.date}}<br>
 	<br />
 	<ul>
 	{% for post in posts %}
-	<li>{{post.created_date}}: {{post.description}}</li>
+	<li>{{post.created_date.date}}: <a href="/testimony/{{post.created_date.year}}/{{post.created_date.month}}/{{post.created_date.day}}/{{post.description|slugify}}">{{post.description}}</li>
 	{% endfor %}
 	</ul>
 	</div>

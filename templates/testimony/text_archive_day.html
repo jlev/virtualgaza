@@ -5,6 +5,6 @@
 	Daily Archive<br>
 	{% for entry in object_list %}
 	<li>{{entry.author}},{{ entry.created_date }},
-		<a href="/testimony/{{day.year}}/{{day.month}}/{{day.day}}/{{entry.description}}/">{{ entry.description }}</a></li>
+		<a rel="ibox" href="/testimony/{{day.year}}/{{day.month}}/{{day.day}}/{{entry.description|slugify}}/">{{ entry.description }}</a></li>
 	{% endfor %}
 {% endblock %}

@@ -2,6 +2,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="/media/style.css" type="text/css"/>
 	<script type="text/javascript" src="/media/ibox/ibox.js"></script>
 	<script type="text/javascript">
@@ -11,7 +12,7 @@
 	</script>
 	
 	{% block google %}<script src='http://maps.google.com/maps?file=api&amp;v={{ googleAPIVersion }}&amp;key={{ googleAPIKey }}'></script>{% endblock %}
-	{% block openlayers %}<script src="http://openlayers.org/api/OpenLayers.js"></script>{% endblock %}
+	{% block openlayers %}<script src="http://www.openlayers.org/api/OpenLayers.js"></script>{% endblock %}
 	<script type="text/javascript">
 	{% include "base/map.js" %}
 	</script>
@@ -29,26 +30,27 @@
 		<h1>AZAGV</h1>
 		</a>
 	</div>
+	
 	<div id="menu-left">
 		{% block sidebar-left %}
 		<ul>
-			<li><a rel="ibox" href="/about/">About</a></li>
+			<li><a rel="ibox" href="/about/english/">About</a></li>
 			<li><a rel="ibox" href="/author/">Contributors</a></li>
 			<li><a rel="ibox" href="/recent/">Recent</a></li>
-			<li><a rel="ibox" href="/submit/">Submit</a></li>
-			<li><a rel="ibox" href="/links/">Links</a></li>
+			<li><a rel="ibox" href="/submit/english/">Submit</a></li>
+			<li><a rel="ibox" href="/links/english/">Links</a></li>
 		</ul>
 		{% endblock %}
 	</div>
-	
+
 	<div id="menu-right">
 		{% block sidebar-right %}
 		<ul>
-			<li><a rel="ibox" href="/about/">Tuoba</a></li>
-			<li><a rel="ibox" href="/author/">Srotubirtnoc</a></li>
-			<li><a rel="ibox" href="/recent/">Tnecer</a></li>
-			<li><a rel="ibox" href="/submit/">Timbus</a></li>
-			<li><a rel="ibox" href="/links/">Sknil</a></li>
+			<li><a rel="ibox" href="/about/arabic/">من نحن</a></li>
+			<li><a rel="ibox" href="/author/">المشاركي</a></li>
+			<li><a rel="ibox" href="/recent/">جديد</a></li>
+			<li><a rel="ibox" href="/submit/arabic/">إرسال</a></li>
+			<li><a rel="ibox" href="/links/arabic/">مواقع</a></li>
 		</ul>
 		{% endblock %}
 	</div>

@@ -15,9 +15,13 @@ function init() {
 					'fillOpacity':0.1,
 					});
 	var pointStyleMap = new OpenLayers.StyleMap(
-					{'pointRadius': 20, //why does this control image size?
+					{'pointRadius': 10, //why does this control image size?
 					'fillOpacity':1,
-					'externalGraphic':'/media/pins/testimony.png'
+					'externalGraphic':'/media/pins/male.png'
+					});
+	var lineStyleMap = new OpenLayers.StyleMap(
+					{'strokeWidth':3,
+					'strokeColor':'#FFFF00',
 					});
 	
 	var baseLayer = new OpenLayers.Layer.Google(
@@ -28,17 +32,16 @@ function init() {
 	var geojson_format = new OpenLayers.Format.GeoJSON();
 	var polygon_layer = new OpenLayers.Layer.Vector(" {{ vector_layer_name }} ",{'styleMap': polygonStyleMap});
 
-	var zoom_extent;
 	{% if poly_list %}
 		{% for poly in poly_list %}
 			var polygon_bounds_{{ forloop.counter }} = {{ poly|safe }}; 
-			polygon_layer.addFeatures(geojson_format.read(polygon_bounds_{{ forloop.counter }}));
+			var polygon_feature_{{forloop.counter}} = geojson_format.read(polygon_bounds_{{ forloop.counter }});
+			polygon_layer.addFeatures(polygon_feature_{{ forloop.counter }});
 		{% endfor %}
 		map.addLayer(polygon_layer);
-		
 		map.zoomToExtent(polygon_layer.getDataExtent());
 	{% endif %}
-	
+
 	{% if point_list %}
 		var point_layer = new OpenLayers.Layer.Vector(" {{ point_layer_name }} ",{'styleMap': pointStyleMap});
 		{% for point in point_list %}
@@ -52,6 +55,17 @@ function init() {
 			map.zoomOut(); //there isn't imagery at the closest levels
 		{% endif %}
 	{% endif %}
+
+	{% if line_list %}
+		var line_layer = new OpenLayers.Layer.Vector(" {{ line_layer_name }} ",{'styleMap': lineStyleMap});
+		{% for line in line_list %}
+			var line_{{ forloop.counter }} = {{ line|safe }}; 
+			var line_feature_{{forloop.counter}} = geojson_format.read(line_{{ forloop.counter }});
+			line_layer.addFeatures(line_feature_{{ forloop.counter }});
+		{% endfor %}
+		map.addLayer(line_layer);
+	{% endif %}
+	
 	
 	//center manually?
 	

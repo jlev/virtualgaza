@@ -32,7 +32,15 @@ class EventAdmin(tour.widgets.GoogleAdmin):
 	default_lon = gaza_sm.coords[0]
 	default_lat = gaza_sm.coords[1]
 	default_zoom = 12
+	
+class BorderAdmin(tour.widgets.GoogleAdmin):
+	fields = ['name','line']
+	default_lon = gaza_sm.coords[0]
+	default_lat = gaza_sm.coords[1]
+	default_zoom = 11
+	debug = True
 
+admin.site.register(tour.models.Border,BorderAdmin)
 admin.site.register(tour.models.Neighborhood, NeighborhoodAdmin)
 admin.site.register(tour.models.Location, LocationAdmin)
 admin.site.register(tour.models.Building, BuildingAdmin)
