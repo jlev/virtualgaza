@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from django.template.defaultfilters import slugify
 from virtualgaza.tour.models import Neighborhood,Location
 
 GENDER_CHOICES = (
@@ -39,9 +40,9 @@ class Author(models.Model):
 		return self.get_full_name()
 		
 	def save(self):
-		locationName = "%s's Location" % self.get_full_name()
 		if (not self.location):
-			self.location = self.neighborhood.getRandomLocationWithin(locationName)
+			self.location = self.neighborhood.getRandomLocationWithin(
+					slugify(self.first_name) + "_" + slugify(self.last_name))
 		#should call super.save(), but didn't seem to work...
 		self.save_base(force_insert=False, force_update=False)
 

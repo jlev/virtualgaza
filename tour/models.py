@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.template.defaultfilters import slugify
 
 theSRID = 900913
 
@@ -7,6 +8,13 @@ class Location(models.Model):
 	coords = models.PointField(srid=theSRID)
 	objects = models.GeoManager()
 	
+	def getJSON(self):
+		json = {}
+		json['type']='Feature'
+		json['geometry'] = eval(self.coords.geojson)
+		json['properties'] = {'name':str(self.name),
+					'link':str("/author/%s" % slugify(self.name))}
+		return str(json)
 	def __unicode__(self):
 		return self.name
 		
@@ -14,6 +22,13 @@ class Border(models.Model):
 	name = models.CharField(max_length=100)
 	line = models.LineStringField(srid=theSRID)
 	objects = models.GeoManager()
+	
+	def getJSON(self):
+		json = {}
+		json['type']='Feature'
+		json['geometry'] = eval(self.line.geojson)
+		json['properties'] = {'name':str(self.name)}
+		return str(json)
 	def __unicode__(self):
 		return self.name
 
@@ -24,13 +39,23 @@ class Neighborhood(models.Model):
 	population = models.IntegerField(blank=True,null=True)
 	objects = models.GeoManager()
 	
+	def getJSON(self):
+		json = {}
+		json['type']='Feature'
+		json['geometry'] = eval(self.bounds.geojson)
+		pop = self.population
+		if pop is None:
+			pop = 0
+		json['properties'] = {'name':str(self.name),'population':pop,
+							'link':str("/neighborhood/%s" % slugify(self.name))}
+		return str(json)
+	
 	def __unicode__(self):
 		return self.name
 
 	def getRandomLocationWithin(self,theName):
 		bounds = self.bounds.boundary.coords
 		#extent doesn't seem to work on the linestring, so do it manually
-		print "bounds",bounds
 		(xbounds,ybounds) = ([],[])
 		for b in bounds:
 			xbounds.append(b[0])
@@ -50,7 +75,7 @@ class Neighborhood(models.Model):
 			tries += 1
 			if (contains.__len__() != 0):
 				goodLoc = True
-		print "found random point after",tries,"tries"
+#		print "found random point after",tries,"tries"
 		l = Location(name=theName,coords=thePoint)
 		l.save()
 		return l

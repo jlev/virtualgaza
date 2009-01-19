@@ -22,7 +22,7 @@ def authors_by_neighborhood(requst):
 	
 	point_list = []
 	for a in author_list:
-		point_list.append(a.location.coords.geojson)
+		point_list.append(a.location.getJSON())
 	return render_to_response('testimony/all_authors.html',dict(mapDict,
 				authors_unsorted=author_list,
 				point_list=point_list)
@@ -35,7 +35,7 @@ def author_by_full_name(request, firstName, lastName):
 	return render_to_response('testimony/author_detail.html',dict(mapDict,
 				author=author,posts=posts,
 				point_layer_name=author,
-				point_list=[author.location.coords.geojson],
+				point_list=[author.location.getJSON()],
 				poly_list=[])
 			)
 
@@ -44,14 +44,14 @@ def author_by_id(request, id):
 	author = get_object_or_404(Author, id=id)
 	return render_to_response('testimony/author_detail.html',dict(mapDict,
 				author=author,
-				point_list=[author.location.coords.geojson])
+				point_list=[author.location.getJSON()])
 			)
 	
 def author_by_last_name(request, lastName):
 	author_list = get_list_or_404(Author, last_name__iexact=deslug(lastName))
 	point_list = []
 	for a in author_list:
-		point_list.append(a.location.coords.geojson)
+		point_list.append(a.location.getJSON())
 	
 	return render_to_response('testimony/author_by_name.html',dict(mapDict,
 				author_list=author_list,

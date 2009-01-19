@@ -41,7 +41,7 @@ text_info_dict = {
 	'date_field': 'created_date'
 }
 urlpatterns += patterns('django.views.generic.date_based',
-	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/(?P<description>[\w-]+)/$', 'object_detail',
+	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/(?P<slug>[\w-]+)/$', 'object_detail',
 		dict(text_info_dict,month_format='%m',slug_field='description')),
 	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$','archive_day',
 		dict(text_info_dict,month_format='%m')),

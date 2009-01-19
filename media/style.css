@@ -33,17 +33,30 @@ a h1{
 	border:dashed 1px;
 }
 
+.map-popup {
+	font-size:10pt;
+	text-align:center
+}
+
 #caption {
 	position:relative;
-	font-size:12pt;
+	font-size:10pt;
 	top:620px;
 	text-align:center;
 }
 
+#content {
+	position:relative;
+	font-size:10pt;
+	top:620px;
+	text-align:left;
+}
+
+
 #menu-left {
 	position:absolute;
 	z-index:1;
-	top:150px;
+	top:165px;
 	width:150px;
 	text-align:center;
 	left:0px;
@@ -52,7 +65,7 @@ a h1{
 #menu-right {
 	position:absolute;
 	z-index:1;
-	top:150px;
+	top:165px;
 	width:150px;
 	text-align:center;
 	right:0px;
@@ -85,10 +98,9 @@ a h1{
 
 #logo-left {
 	position:absolute;
-	top:0px;
-	left:0px;
+	top:15px;
+	left:15px;
 	width:150px;
-	text-align:right;
 }
 
 #logo-right {
@@ -96,7 +108,6 @@ a h1{
 	top:0px;
 	right:-0px;
 	width:150px;
-	text-align:left;
 }
 
 #profile-pic {
@@ -129,4 +140,12 @@ a h1{
 	right:0px;
 	margin-right:5px;
 	bottom:5px;
+}
+
+#admin-login a {
+	color:#606060;
+}
+
+.rtl {
+	text-align:right;
 }

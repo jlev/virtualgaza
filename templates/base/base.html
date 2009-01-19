@@ -21,14 +21,10 @@
   <body onload="init()">
 
 	<div id="logo-left">
-		<a href="/">
-		<h1>VGAZA</h1>
-		</a>
+		<a href="/"><img src="/media/vgaza_red_150.png"></a>
 	</div>
 	<div id="logo-right">
-		<a href="/">
-		<h1>AZAGV</h1>
-		</a>
+<!--	<a href="/"><img src="/media/vgaza_arabic_red_150.png"></a> -->
 	</div>
 	
 	<div id="menu-left">
@@ -61,6 +57,9 @@
 		</div>
 		<div id="caption">
 		{% block caption %}{{ captionText }}{% endblock %}
+		</div>
+		<div id="content">
+		{% block content %}{{ contentText }}{% endblock %}
 		</div>
 	</div>
 

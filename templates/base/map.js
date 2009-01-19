@@ -66,30 +66,52 @@ function init() {
 		map.addLayer(line_layer);
 	{% endif %}
 	
-	
-	//center manually?
-	
 	//SELECT CONTROLS
+/* FOR POPUPS
 	var selectControl, selectedFeature;
 	function onPopupClose(evt) {
 		selectControl.unselect(selectedFeature);
 	}
 	function onFeatureSelect(feature) {
 		selectedFeature = feature;
-		popup = new OpenLayers.Popup.FramedCloud("chicken", 
+
+		popup = new OpenLayers.Popup.FramedCloud("popup", 
 			feature.geometry.getBounds().getCenterLonLat(),
 			null,
-			"<div style='font-size:.8em'>Feature: " + feature.id + "</div>",
-			null, true, onPopupClose);
+			"<div style='map-popup'>" + feature.attributes.name +"</div>",
+			null, false, onPopupClose);
+			
+		popup.minSize = new OpenLayers.Size(100,50);
 		feature.popup = popup;
 		map.addPopup(popup);
-	 }
+
+	}
 	function onFeatureUnselect(feature) {
-		map.removePopup(feature.popup);
-		feature.popup.destroy();
-		feature.popup = null;
+		 map.removePopup(feature.popup);
+		 feature.popup.destroy();
+		 feature.popup = null;
 	}
 	selectControl = new OpenLayers.Control.SelectFeature(polygon_layer,
-	                {onSelect: onFeatureSelect, onUnselect: onFeatureUnselect});
-	
+						{onSelect: onFeatureSelect, onUnselect:
+						onFeatureUnselect,hover:true});
+	map.addControl(selectControl);
+	selectControl.activate();
+*/
+
+//for  handlers
+function goToiBoxLink(feature) {
+	iBox.showURL(feature.attributes.link,'title','options');
+}
+function goToWindowLink(feature) {
+	window.location.href = feature.attributes.link;
+}
+var polySelectControl = new OpenLayers.Control.SelectFeature(polygon_layer,
+					{onSelect: goToWindowLink});
+var pointSelectControl = new OpenLayers.Control.SelectFeature(point_layer,
+					{onSelect: goToiBoxLink});
+map.addControl(polySelectControl);
+polySelectControl.activate();
+
+map.addControl(pointSelectControl);
+pointSelectControl.activate();
 }
