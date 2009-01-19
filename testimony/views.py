@@ -57,3 +57,10 @@ def author_by_last_name(request, lastName):
 				author_list=author_list,
 				point_list=point_list)
 			)
+			
+def post_by_date_and_name(request, year, month, day, slug):
+	theDescription = deslug(slug)
+	thePost = get_object_or_404(Text,created_date__year=(year),created_date__month=(month),created_date__day=(day),description__iexact=theDescription)
+	return render_to_response('testimony/text_detail.html',
+						{'object':thePost,
+						'year':year,'month':month,'day':day})
