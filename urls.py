@@ -30,27 +30,13 @@ urlpatterns = patterns('virtualgaza.tour.views',
 
 #AUTHOR URLS
 urlpatterns += patterns('virtualgaza.testimony.views',
+	(r'^recent/$','posts_by_recent',{'num_latest':15}),
 	(r'^author/$','authors_by_neighborhood'),
 	(r'^author/(?P<id>)/$','author_by_id'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/$','author_by_full_name'),
-	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/(?P<slug>[\w-]+)/$', 'post_by_date_and_name')
-)
-
-#GENERIC ARCHIVE URLS
-text_info_dict = {
-	'queryset': virtualgaza.testimony.models.Text.objects.filter(approved=1),
-	'date_field': 'created_date'
-}
-urlpatterns += patterns('django.views.generic.date_based',
-	#(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/(?P<slug>[\w-]+)/$', 'object_detail',
-		dict(text_info_dict,month_format='%m',slug_field='description')),
-	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$','archive_day',
-		dict(text_info_dict,month_format='%m')),
-	(r'^testimony/(?P<year>\d{4})/(?P<month>\w{1,2})/$','archive_month',
-		dict(text_info_dict,month_format='%m')),
-	(r'^testimony/(?P<year>\d{4})/$','archive_year',text_info_dict),
-	(r'^recent/$','archive_index',
-		dict(text_info_dict,num_latest=15)),
+	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/$', 'posts_by_author_and_year'),
+	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/(?P<month>\w{1,2})/$', 'posts_by_author_and_month'),
+	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$', 'posts_by_author_and_date')
 )
 
 #ADMIN URLS
