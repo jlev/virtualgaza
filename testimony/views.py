@@ -23,7 +23,7 @@ def authors_by_neighborhood(requst):
 	point_list = []
 	for a in author_list:
 		point_list.append(a.location.getJSON())
-	return render_to_response('testimony/all_authors.html',dict(mapDict,
+	return render_to_response('testimony/authors_by_neighborhood.html',dict(mapDict,
 				authors_unsorted=author_list,
 				point_list=point_list)
 			)
@@ -53,14 +53,71 @@ def author_by_last_name(request, lastName):
 	for a in author_list:
 		point_list.append(a.location.getJSON())
 	
-	return render_to_response('testimony/author_by_name.html',dict(mapDict,
+	return render_to_response('testimony/authors_by_name.html',dict(mapDict,
 				author_list=author_list,
 				point_list=point_list)
 			)
+
+def posts_by_author(request, firstName, lastName):
+	first = deslug(firstName)
+	last = deslug(lastName)
+	posts=get_list_or_404(Text,author__first_name__iexact=first,
+					author__last_name__iexact=last,approved=1)
+
+	return render_to_response('testimony/post_list.html',
+						{'first_name':first,'last_name':last,
+						'postList':posts}
+						)
+
+def posts_by_author_and_year(request, firstName, lastName, year):
+	first = deslug(firstName)
+	last = deslug(lastName)
+	posts=get_list_or_404(Text,author__first_name__iexact=first,
+					author__last_name__iexact=last,
+					created_date__year=year,approved=1)
+
+	return render_to_response('testimony/post_list.html',
+						{'first_name':first,'last_name':last,
+						'year':year,
+						'postList':posts}
+					)
+
+def posts_by_author_and_month(request, firstName, lastName, year, month):
+	first = deslug(firstName)
+	last = deslug(lastName)
+	posts=get_list_or_404(Text,author__first_name__iexact=first,
+					author__last_name__iexact=last,
+					created_date__year=year,
+					created_date__month=month,
+					approved=1)
+
+	return render_to_response('testimony/post_list.html',
+						{'first_name':first,'last_name':last,
+						'year':year,'month':month,
+						'postList':posts}
+					)
+
+def posts_by_author_and_date(request, firstName, lastName, year, month, day):
+	first = deslug(firstName)
+	last = deslug(lastName)
+	posts=get_list_or_404(Text,author__first_name__iexact=first,
+					author__last_name__iexact=last,
+					created_date__year=year,
+					created_date__month=month,
+					created_date__day=day,
+					approved=1)
+					
+	return render_to_response('testimony/post_list.html',
+						{'first_name':first,'last_name':last,
+						'year':year,'month':month,'day':day,
+						'postList':posts}
+				)
 			
-def post_by_date_and_name(request, year, month, day, slug):
-	theDescription = deslug(slug)
-	thePost = get_object_or_404(Text,created_date__year=(year),created_date__month=(month),created_date__day=(day),description__iexact=theDescription)
-	return render_to_response('testimony/text_detail.html',
-						{'object':thePost,
-						'year':year,'month':month,'day':day})
+def posts_by_recent(request, num_latest):
+	posts=Text.objects.all().filter(approved=1).order_by('created_date')[:num_latest]
+	#abuse the name and year fields of the template for title display
+	return render_to_response('testimony/post_list.html',
+				{'first_name':'Most','last_name':'Recent','year':num_latest,
+					'postList':posts}
+				)
+
