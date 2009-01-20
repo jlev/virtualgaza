@@ -1,0 +1,11 @@
+{% extends "base/box.html" %}
+
+{% block title %}{{ first_name }} {{ last_name }} | {{ year }} {{ month }} {{ day }}{% endblock %}
+
+{% block content %}
+{% for post in postList %}
+	<h1>{{ post.description }}</h1> 
+	<h2>{{ post.author }}</h2>
+	{{ post.text|linebreaks}}
+{% endfor %}
+{% endblock %}
