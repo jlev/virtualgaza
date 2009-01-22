@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
+from django.template import RequestContext 
 from django.conf import settings
 from testimony.models import Author,Text,Photograph,Video,Audio
 from tour.models import Neighborhood
@@ -25,8 +26,8 @@ def authors_by_neighborhood(requst):
 		point_list.append(a.location.getJSON())
 	return render_to_response('testimony/authors_by_neighborhood.html',dict(mapDict,
 				authors_unsorted=author_list,
-				point_list=point_list)
-			)
+				point_list=point_list),
+			context_instance = RequestContext(request))
 
 def author_by_full_name(request, firstName, lastName):
 	"""Gets author by full name"""
@@ -36,16 +37,16 @@ def author_by_full_name(request, firstName, lastName):
 				author=author,posts=posts,
 				point_layer_name=author,
 				point_list=[author.location.getJSON()],
-				poly_list=[])
-			)
+				poly_list=[]),
+			context_instance = RequestContext(request))
 
 def author_by_id(request, id):
 	"""Gets author by full name"""
 	author = get_object_or_404(Author, id=id)
 	return render_to_response('testimony/author_detail.html',dict(mapDict,
 				author=author,
-				point_list=[author.location.getJSON()])
-			)
+				point_list=[author.location.getJSON()]),
+			context_instance = RequestContext(request))
 	
 def author_by_last_name(request, lastName):
 	author_list = get_list_or_404(Author, last_name__iexact=deslug(lastName))
@@ -55,8 +56,8 @@ def author_by_last_name(request, lastName):
 	
 	return render_to_response('testimony/authors_by_name.html',dict(mapDict,
 				author_list=author_list,
-				point_list=point_list)
-			)
+				point_list=point_list),
+			context_instance = RequestContext(request))
 
 def posts_by_author(request, firstName, lastName):
 	first = deslug(firstName)
@@ -66,8 +67,8 @@ def posts_by_author(request, firstName, lastName):
 
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
-						'postList':posts}
-						)
+						'postList':posts},
+						context_instance = RequestContext(request))
 
 def posts_by_author_and_year(request, firstName, lastName, year):
 	first = deslug(firstName)
@@ -79,8 +80,8 @@ def posts_by_author_and_year(request, firstName, lastName, year):
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
 						'year':year,
-						'postList':posts}
-					)
+						'postList':posts},
+					context_instance = RequestContext(request))
 
 def posts_by_author_and_month(request, firstName, lastName, year, month):
 	first = deslug(firstName)
@@ -94,8 +95,8 @@ def posts_by_author_and_month(request, firstName, lastName, year, month):
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
 						'year':year,'month':month,
-						'postList':posts}
-					)
+						'postList':posts},
+					context_instance = RequestContext(request))
 
 def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 	first = deslug(firstName)
@@ -110,14 +111,14 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
 						'year':year,'month':month,'day':day,
-						'postList':posts}
-				)
+						'postList':posts},
+				context_instance = RequestContext(request))
 			
 def posts_by_recent(request, num_latest):
 	posts=Text.objects.all().filter(approved=1).order_by('created_date')[:num_latest]
 	#abuse the name and year fields of the template for title display
 	return render_to_response('testimony/post_list.html',
 				{'first_name':'Most','last_name':'Recent','year':num_latest,
-					'postList':posts}
-				)
+					'postList':posts},
+				context_instance = RequestContext(request))
 

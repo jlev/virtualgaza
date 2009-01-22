@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
+from django.template import RequestContext 
 from django.conf import settings
 from tour.models import Neighborhood,Location,Border
 from testimony.models import Author
@@ -36,7 +37,8 @@ def all_neighborhoods(request):
 								vector_layer_name="Neighborhoods",poly_list=polygonList,
 								point_layer_name="Authors",point_list=pointList,
 								line_layer_name="Border",line_list=lineList,
-								captionText="This site is currently under construction. We will add more data layers in the coming days.")
+								captionText="This site is currently under construction. We will add more data layers in the coming days."),
+								context_instance = RequestContext(request)
 							)
 
 def one_neighborhood(request,nameSlug):
@@ -49,5 +51,5 @@ def one_neighborhood(request,nameSlug):
 		pointList.append(a.location.getJSON())
 	return render_to_response('tour/neighborhood_authors.html', dict(mapDict,
 							vector_layer_name=humanName,poly_list=polygonList,
-							point_layer_name="Testimony",point_list=pointList)
-							)
+							point_layer_name="Testimony",point_list=pointList),
+							 context_instance = RequestContext(request))
