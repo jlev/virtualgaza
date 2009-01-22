@@ -103,6 +103,10 @@ a h1{
 	width:150px;
 }
 
+#logo-left a {
+	color:#C0C0C0;
+}
+
 #logo-right {
 	position:absolute;
 	top:0px;

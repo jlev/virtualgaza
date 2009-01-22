@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+        <title>OpenLayers ToolTips</title>
+<style type="text/css">
+	body {
+		margin : 20px;
+	}
+	#map {
+		width: 800px;
+		height: 626px;
+		border: 1px solid black;
+	}
+</style>
+<script src="http://www.openlayers.org/api/OpenLayers.js" type="text/javascript"></script>
+<script src="./ToolTips.js" type="text/javascript"></script>
+<script defer="defer" type="text/javascript">
+
+ function init(){
+      var bounds = new OpenLayers.Bounds(
+          55.185611724, -21.415085482499997,
+          55.867049316, -20.8459795275
+      );
+      var options = {
+          controls: [],
+          maxExtent: bounds,
+          maxResolution: 0.002661865593750007,
+          projection: "EPSG:4326",
+          units: 'degrees'
+      };
+      map = new OpenLayers.Map('map', options);
+      
+     
+     var wms = new OpenLayers.Layer.WMS("OpenLayers WMS", 
+       "http://labs.metacarta.com/wms/vmap0", {layers: 'basic'}, {buffer: 0});   
+			var markers = new OpenLayers.Layer.Markers("Marker");
+
+			markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(55.48,-20.96)));
+			markers.events.register("mouseover", markers, toolTipsOver);
+			markers.events.register("mouseout", markers, toolTipsOut);
+		
+			map.addLayers([wms,markers]);
+			ttips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : true, opacity : 0.50});
+			map.addControl(ttips);
+			map.addControl(new OpenLayers.Control.PanZoomBar());
+      map.addControl(new OpenLayers.Control.Navigation());
+			map.addControl(new OpenLayers.Control.MousePosition());
+			map.addControl(new OpenLayers.Control.LayerSwitcher());
+			map.zoomToExtent(bounds); 
+
+			function toolTipsOver(e) {
+				ttips.show({html:"My first ToolTips"});
+			}
+
+			function toolTipsOut(e){
+				ttips.hide();
+			}
+  }
+
+</script>
+</head>
+	<body onload="init()">
+      <div id="map"></div>  
+  </body>
+</html>
