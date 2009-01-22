@@ -3,16 +3,25 @@ from django.template.defaultfilters import slugify
 
 theSRID = 900913
 
+def deslug(name):
+	bits = name.split('-')
+	bits[0] = bits[0].capitalize()
+	return " ".join(bits)
+
 class Location(models.Model):
 	name = models.CharField(max_length=100,unique=True)
 	coords = models.PointField(srid=theSRID)
 	objects = models.GeoManager()
 	
 	def getJSON(self):
+		first,last = str(self.name).split('_')
+		firstName = deslug(first)
+		lastName = deslug(last)
+		
 		json = {}
 		json['type']='Feature'
 		json['geometry'] = eval(self.coords.geojson)
-		json['properties'] = {'name':str(self.name),
+		json['properties'] = {'name':str(self.name),'displayName':str(firstName + " " + lastName),
 					'link':str("/author/%s" % slugify(self.name))}
 		return str(json)
 	def __unicode__(self):
@@ -47,7 +56,7 @@ class Neighborhood(models.Model):
 		if pop is None:
 			pop = 0
 		json['properties'] = {'name':str(self.name),'population':pop,
-							'link':str("/neighborhood/%s" % slugify(self.name))}
+							'link':str("/neighborhood/%s" %slugify(self.name))}
 		return str(json)
 	
 	def __unicode__(self):
