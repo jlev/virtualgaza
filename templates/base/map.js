@@ -25,7 +25,7 @@ function init() {
 	var pointStyleMap = new OpenLayers.StyleMap(
 					{'pointRadius': 10, //why does this control image size?
 					'fillOpacity':1,
-					'externalGraphic':'/media/pins/male.png'
+					'externalGraphic':'{{MEDIA_URL}}pins/male.png'
 					});
 	var lineStyleMap = new OpenLayers.StyleMap(
 					{'strokeWidth':3,
