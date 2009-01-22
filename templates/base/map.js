@@ -13,6 +13,14 @@ function init() {
 					'strokeColor':'#FF6600',
 					'fillColor':'#FF6600',
 					'fillOpacity':0.1,
+					
+					pointerEvents: "visiblePainted",
+					label : "${name}",
+					fontColor: "white",
+					fontSize: "10px",
+					fontFamily: "Arial, sans-serif",
+					fontWeight: "bold",
+					labelAlign: "center"
 					});
 	var pointStyleMap = new OpenLayers.StyleMap(
 					{'pointRadius': 10, //why does this control image size?
@@ -36,6 +44,7 @@ function init() {
 		{% for poly in poly_list %}
 			var polygon_bounds_{{ forloop.counter }} = {{ poly|safe }}; 
 			var polygon_feature_{{forloop.counter}} = geojson_format.read(polygon_bounds_{{ forloop.counter }});
+			
 			polygon_layer.addFeatures(polygon_feature_{{ forloop.counter }});
 		{% endfor %}
 		map.addLayer(polygon_layer);
@@ -65,53 +74,30 @@ function init() {
 		{% endfor %}
 		map.addLayer(line_layer);
 	{% endif %}
-	
-	//SELECT CONTROLS
-/* FOR POPUPS
-	var selectControl, selectedFeature;
-	function onPopupClose(evt) {
-		selectControl.unselect(selectedFeature);
-	}
-	function onFeatureSelect(feature) {
-		selectedFeature = feature;
 
-		popup = new OpenLayers.Popup.FramedCloud("popup", 
-			feature.geometry.getBounds().getCenterLonLat(),
-			null,
-			"<div style='map-popup'>" + feature.attributes.name +"</div>",
-			null, false, onPopupClose);
-			
-		popup.minSize = new OpenLayers.Size(100,50);
-		feature.popup = popup;
-		map.addPopup(popup);
-
-	}
-	function onFeatureUnselect(feature) {
-		 map.removePopup(feature.popup);
-		 feature.popup.destroy();
-		 feature.popup = null;
-	}
-	selectControl = new OpenLayers.Control.SelectFeature(polygon_layer,
-						{onSelect: onFeatureSelect, onUnselect:
-						onFeatureUnselect,hover:true});
-	map.addControl(selectControl);
-	selectControl.activate();
-*/
-
-//for  handlers
+//event handlers
 function goToiBoxLink(feature) {
 	iBox.showURL(feature.attributes.link,'title','options');
 }
 function goToWindowLink(feature) {
 	window.location.href = feature.attributes.link;
 }
-var polySelectControl = new OpenLayers.Control.SelectFeature(polygon_layer,
-					{onSelect: goToWindowLink});
-var pointSelectControl = new OpenLayers.Control.SelectFeature(point_layer,
-					{onSelect: goToiBoxLink});
-map.addControl(polySelectControl);
-polySelectControl.activate();
+function toolTipsOver(feature) {
+	tooltips.show({html:feature.attributes.displayName});
+}
+function toolTipsOut(feature){
+	tooltips.hide();
+}
 
+//select controls
+tooltips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : true, opacity : 0.50});
+map.addControl(tooltips);
+
+/*var pointSelectControl = new OpenLayers.Control.SelectFeature(point_layer,
+					{onSelect: toolTipsOver,onUnselect:toolTipsOut,hover:true});*/
+var pointSelectControl = new OpenLayers.Control.newSelectFeature(point_layer,
+					               {onClickSelect: goToiBoxLink,
+					                onHoverSelect: toolTipsOver, onHoverUnselect: toolTipsOut});
 map.addControl(pointSelectControl);
 pointSelectControl.activate();
 }

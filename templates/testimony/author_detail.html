@@ -12,7 +12,7 @@
 	<br />
 	<ul>
 	{% for post in posts %}
-	<li>{{post.created_date.date}}: <a href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/{{post.created_date.year}}/{{post.created_date.month}}/{{post.created_date.day}}/">{{post.description}}</a></li>
+	<li>{{post.created_date.date}}: <a rel="ibox" href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/{{post.created_date.year}}/{{post.created_date.month}}/{{post.created_date.day}}/">{{post.description}}</a></li>
 	{% endfor %}
 	</ul>
 	</div>
