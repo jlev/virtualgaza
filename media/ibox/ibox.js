@@ -556,6 +556,7 @@ var iBox = function()
   
   var showInit = function(title, params, callback)
   {
+		_pub.hide();
     els.loading.style.display = "block";
     _pub.center(els.loading);
     
@@ -756,8 +757,10 @@ var iBox = function()
             }
             else
             {
-              _pub.html(document.createTextNode('There was an error loading the document.'), params);
-            }
+              //_pub.html(document.createTextNode('Error ' + _pub.http.status + ' loading the document), params);
+							console.log(_pub);
+							_pub.html(_pub.http.responseText, params);
+						}
           }
         }
         _pub.http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
