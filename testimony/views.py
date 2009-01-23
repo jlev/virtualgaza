@@ -29,7 +29,7 @@ def authors_by_neighborhood(request):
 def author_by_full_name(request, firstName, lastName):
 	"""Gets author by full name"""
 	author = get_object_or_404(Author, first_name__iexact=deslug(firstName), last_name__iexact=deslug(lastName))
-	posts = author.text_set.all().order_by('created_date')
+	posts = author.text_set.all().order_by('-created_date')
 	return render_to_response('testimony/author_detail.html',dict(mapDict,
 				author=author,posts=posts,
 				point_layer_name=author,
@@ -60,7 +60,7 @@ def posts_by_author(request, firstName, lastName):
 	first = deslug(firstName)
 	last = deslug(lastName)
 	posts=Text.objects.all().filter(author__first_name__iexact=first,
-					author__last_name__iexact=last,approved=1).order_by('created_date')
+					author__last_name__iexact=last,approved=1).order_by('-created_date')
 
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
@@ -71,7 +71,7 @@ def posts_by_author_and_year(request, firstName, lastName, year):
 	first = deslug(firstName)
 	last = deslug(lastName)
 	posts=Text.objects.all().filter(author__first_name__iexact=first,
-					author__last_name__iexact=last,created_date__year=year,approved=1).order_by('created_date')
+					author__last_name__iexact=last,created_date__year=year,approved=1).order_by('-created_date')
 
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
@@ -85,7 +85,7 @@ def posts_by_author_and_month(request, firstName, lastName, year, month):
 	posts=Text.objects.all().filter(author__first_name__iexact=first,
 					author__last_name__iexact=last,
 					created_date__year=year,created_date__month=month,
-					approved=1).order_by('created_date')
+					approved=1).order_by('-created_date')
 
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
@@ -101,7 +101,7 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 					created_date__year=year,
 					created_date__month=month,
 					created_date__day=day,
-					approved=1).order_by('created_date')
+					approved=1).order_by('-created_date')
 					
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
@@ -110,7 +110,7 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 				context_instance = RequestContext(request))
 			
 def posts_by_recent(request, num_latest):
-	posts=Text.objects.all().filter(approved=1).order_by('created_date')[:num_latest]
+	posts=Text.objects.all().filter(approved=1).order_by('-created_date')[:num_latest]
 	#abuse the name and year fields of the template for title display
 	return render_to_response('testimony/post_list.html',
 				{'first_name':'Most','last_name':'Recent','year':num_latest,
