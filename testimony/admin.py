@@ -9,6 +9,7 @@ class AuthorAdmin(admin.ModelAdmin):
 	]
 	
 class TextAdmin(admin.ModelAdmin):
+	list_display = ('author','description','created_date','uploaded_date', 'approved')
 	fieldsets = [
 	    (None, {'fields': ['author']}),
 	    ('Date', {'fields': ['created_date']}),
@@ -17,6 +18,7 @@ class TextAdmin(admin.ModelAdmin):
 	]
 	
 class PhotoAlbumAdmin(admin.ModelAdmin):
+	list_display = ('author','description','created_date','uploaded_date', 'approved')
 	fieldsets = [
 	    (None, {'fields': ['author']}),
 	    ('Date', {'fields': ['created_date']}),
@@ -28,6 +30,7 @@ class PhotoAdmin(admin.ModelAdmin):
 	fields = ['album','photo']
 
 class VideoAdmin(admin.ModelAdmin):
+	list_display = ('author','description','created_date','uploaded_date', 'approved')
 	fieldsets = [
 	    (None, {'fields': ['author']}),
 	    ('Date', {'fields': ['created_date']}),
@@ -36,6 +39,7 @@ class VideoAdmin(admin.ModelAdmin):
 	]	
 
 class AudioAdmin(admin.ModelAdmin):
+	list_display = ('author','description','created_date','uploaded_date', 'approved')
 	fieldsets = [
 	    (None, {'fields': ['author']}),
 	    ('Date', {'fields': ['created_date']}),
