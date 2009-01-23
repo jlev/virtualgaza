@@ -7,5 +7,6 @@
 	<h1>{{ post.description }}</h1> 
 	<h2>{{ post.author }}, {{ post.created_date.date }}</h2>
 	{{ post.text|linebreaks}}
+	<hr>
 {% endfor %}
 {% endblock %}
