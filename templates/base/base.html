@@ -26,10 +26,9 @@
   <body onload="init()">
 
 	<div id="logo-left">
-		<a href="/"><img src="/media/vgaza_red_150.png"></a>
+		<a href="/"><img src="{{ MEDIA_URL }}/vgaza_red_150.png"></a>
 	</div>
 	<div id="logo-right">
-<!--	<a href="/"><img src="/media/vgaza_arabic_red_150.png"></a> -->
 	</div>
 	
 	<div id="menu-left">
@@ -58,6 +57,13 @@
 
 	<div id="centered">
 		<div id="map">
+			<div id="js-hidden">
+				Because your browser does not support javascript, you cannot use the interactive map.<br>
+				Please upgrade to <a href="http://www.getfirefox.com">a modern browser</a>.
+			</div>
+			<script type="text/javascript">
+			document.getElementById('js-hidden').style.display = 'none';
+			</script>
 			{% block map %}{% endblock %}
 		</div>
 		<div id="mapKey">
