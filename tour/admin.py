@@ -8,6 +8,7 @@ gaza_sm = gaza.clone()
 gaza_sm.transform_to(SpatialReference('EPSG:900913')) #convert to google spherical mercator
 
 class NeighborhoodAdmin(tour.widgets.GoogleAdmin):
+	list_display = ['name']
 	fields = ['name','population','bounds']
 	default_lon = gaza_sm.coords[0]
 	default_lat = gaza_sm.coords[1]
@@ -15,6 +16,7 @@ class NeighborhoodAdmin(tour.widgets.GoogleAdmin):
 	debug = True
 	
 class LocationAdmin(tour.widgets.GoogleAdmin):
+	list_display = ['name']
 	fields = ['name','coords']
 	default_lon = gaza_sm.coords[0]
 	default_lat = gaza_sm.coords[1]

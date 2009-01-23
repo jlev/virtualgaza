@@ -2,6 +2,7 @@ from django.contrib import admin
 import testimony.models
 
 class AuthorAdmin(admin.ModelAdmin):
+	list_display = ('first_name','last_name','gender','neighborhood')
 	fieldsets = [
 	 	('Personal', {'fields':['first_name','last_name','gender','picture']}),
 		('Contact', {'fields':['email','phone_number']}),
