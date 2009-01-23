@@ -8,7 +8,7 @@
 	{% for neighborhood in authors_sorted %}
 		<li>{{neighborhood.grouper}}</li>
 		<ul>
-		{% for author in neighborhood.list %}
+		{% for author in neighborhood.list|dictsort:"last_name" %}
 		<li><a rel="ibox" href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>
 		{% endfor %}
 		</ul>
