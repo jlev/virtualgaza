@@ -150,6 +150,12 @@ a h1{
 	color:#606060;
 }
 
+
+#js-hidden {
+	/* display:none set inline by js */
+	margin-top:300px;
+	text-align:center;
+}
 .rtl {
 	text-align:right;
 }
