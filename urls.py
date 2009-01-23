@@ -11,6 +11,7 @@ import virtualgaza.tour.views
 
 admin.autodiscover()
 
+databrowse.site.register(virtualgaza.testimony.models.Author)
 databrowse.site.register(virtualgaza.testimony.models.Text)
 databrowse.site.register(virtualgaza.testimony.models.Video)
 databrowse.site.register(virtualgaza.testimony.models.Audio)
