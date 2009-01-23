@@ -14,7 +14,7 @@ def deslug(name):
 	bits[0] = bits[0].capitalize()
 	return " ".join(bits)
 
-def authors_by_neighborhood(requst):
+def authors_by_neighborhood(request):
 	theList = []
 	neighborhood_list = Neighborhood.objects.all()
 	for n in neighborhood_list:
