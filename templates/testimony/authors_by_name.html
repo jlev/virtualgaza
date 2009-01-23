@@ -3,7 +3,7 @@
 
 {% block content %}
 	<ul>
-	{% for author in author_list %}
+	{% for author in author_list|dictsort:"last_name" %}
 	<li>{{author.get_full_name}},{{ author.neighborhood.name }}</li>
 	{% endfor %}
 	</ul>
