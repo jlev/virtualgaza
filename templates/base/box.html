@@ -1,6 +1,13 @@
 <html><head>
 <title>VirtualGaza | {% block title %}{{ pageTitle }}{% endblock %}</title>
-<link rel="stylesheet" href="/media/style.css" type="text/css"/>
+<link rel="stylesheet" href="{{ MEDIA_URL }}/style.css" type="text/css"/>
+<link rel="stylesheet" href="{{ MEDIA_URL }}/ibox/skins/lightbox/lightbox.css" type="text/css" media="screen"/>
+<script type="text/javascript" src="{{ MEDIA_URL }}/ibox/ibox.js"></script>
+<script type="text/javascript">
+	iBox.default_width = 600;
+	iBox.fade_in_speed = 0;
+	iBox.setPath('{{ MEDIA_URL }}/ibox/');
+</script>
 </head>
 
 <body>
