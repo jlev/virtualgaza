@@ -1,0 +1,16 @@
+{% extends "base/tab.html" %}
+
+{% block tab-title %}{{ first_name }} {{ last_name }} {{ year }} {{ month }} {{ day }}{% endblock %}
+
+{% block tab-content %}
+{% if postList %}
+	{% for post in postList %}
+		<div class="postList">
+			<a class="loadInModal" href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>: <div class="author">{{ post.author }}</div>, <div class="date">{{ post.created_date.date }}</div>
+		</div>
+	{%endfor%}
+{% else %}
+Sorry, no posts yet.
+{%endif%}
+
+{% endblock %}
