@@ -31,13 +31,14 @@ urlpatterns = patterns('virtualgaza.tour.views',
 
 #AUTHOR URLS
 urlpatterns += patterns('virtualgaza.testimony.views',
-	(r'^recent/$','posts_by_recent',{'num_latest':15}),
+	(r'^recent/$','posts_by_recent',{'num_latest':10}),
 	(r'^author/$','authors_by_neighborhood'),
 	(r'^author/(?P<id>)/$','author_by_id'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/$','author_by_full_name'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/$', 'posts_by_author_and_year'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/(?P<month>\w{1,2})/$', 'posts_by_author_and_month'),
-	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$', 'posts_by_author_and_date')
+	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$', 'posts_by_author_and_date'),
+	(r'^search/$','search_for_author'),
 )
 
 #ADMIN URLS
