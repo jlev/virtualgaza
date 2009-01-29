@@ -22,7 +22,7 @@ class Location(models.Model):
 		json['type']='Feature'
 		json['geometry'] = eval(self.coords.geojson)
 		json['properties'] = {'name':str(self.name),'displayName':str(firstName + " " + lastName),
-					'link':str("/author/%s" % slugify(self.name))}
+					'link':str("/author/%s/" % slugify(self.name))}	
 		return str(json)
 	def __unicode__(self):
 		return self.name

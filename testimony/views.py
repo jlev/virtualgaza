@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
 from django.template import RequestContext 
 from django.conf import settings
@@ -112,8 +113,13 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 def posts_by_recent(request, num_latest):
 	posts=Text.objects.all().filter(approved=1).order_by('-created_date')[:num_latest]
 	#abuse the name and year fields of the template for title display
-	return render_to_response('testimony/post_list.html',
-				{'first_name':'Most','last_name':'Recent','year':num_latest,
+	return render_to_response('testimony/post_titles.html',
+				{'first_name':'Most','last_name':'Recent',
 					'postList':posts},
 				context_instance = RequestContext(request))
-
+				
+		
+def search_for_author(request):
+	#make this searchable
+	html = "<html><body>Click an author on the map to see their posts here</body></html>"
+	return HttpResponse(html)
