@@ -1,7 +1,7 @@
-{% extends "base/box.html" %}
-{% block title %}VirtualGaza Author{% endblock %}
+{% extends "base/tab.html" %}
+{% block tab-title %}VirtualGaza Author{% endblock %}
 
-{% block content %}
+{% block tab-content %}
 	<ul>
 	{% for author in author_list|dictsort:"last_name" %}
 	<li>{{author.get_full_name}},{{ author.neighborhood.name }}</li>

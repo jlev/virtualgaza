@@ -1,19 +1,18 @@
-{% extends "base/box.html" %}
-{% block title %}{{author.get_full_name}}{% endblock %}
+{% extends "base/tab.html" %}
+{% block tab-title %}{{author.get_full_name}}{% endblock %}
 
-{% block map %}
-{% endblock %}
-
-{% block content %}	
-	<img id="profile_pic" src="{{author.picture}}"</img>
+{% block tab-content %}	
+	<!--<img id="profile_pic" src="{{author.picture}}"</img>-->
 	<div id="profile_text">
 	{{author.get_full_name}}, {{ author.neighborhood.name }}<br>
-	Joined: {{author.date_joined.date}}<br>
-	<br />
+	{% if posts %}
 	<ul>
 	{% for post in posts %}
-	<li>{{post.created_date.date}}: <a rel="ibox" href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/{{post.created_date.year}}/{{post.created_date.month}}/{{post.created_date.day}}/">{{post.description}}</a></li>
+	<li>{{post.created_date.date}}: <a class="loadInModal" href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/{{post.created_date.year}}/{{post.created_date.month}}/{{post.created_date.day}}/">{{post.description}}</a></li>
 	{% endfor %}
 	</ul>
+	{% else %}
+	Sorry, no posts yet.
+	{%endif%}
 	</div>
 {% endblock %}

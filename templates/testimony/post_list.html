@@ -1,11 +1,10 @@
-{% extends "base/box.html" %}
+{% extends "base/tab.html" %}
 
-{% block title %}{{ first_name }} {{ last_name }} | {{ year }} {{ month }} {{ day }}{% endblock %}
+{% block title %}{{ first_name }} {{ last_name }} | {{ year }}-{{ month }}-{{ day }}{% endblock %}
 
-{% block content %}
+{% block tab-content %}
 {% for post in postList %}
-	<h1>{{ post.description }}</h1> 
-	<h2>{{ post.author }}, {{ post.created_date.date }}</h2>
+	<h2>{{ post.description }}</h2>
 	{{ post.text|linebreaks}}
 	<hr>
 {% endfor %}
