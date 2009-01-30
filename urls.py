@@ -15,8 +15,6 @@ databrowse.site.register(virtualgaza.testimony.models.Author)
 databrowse.site.register(virtualgaza.testimony.models.Text)
 databrowse.site.register(virtualgaza.testimony.models.Video)
 databrowse.site.register(virtualgaza.testimony.models.Audio)
-databrowse.site.register(virtualgaza.testimony.models.PhotoAlbum)
-databrowse.site.register(virtualgaza.testimony.models.Photograph)
 
 databrowse.site.register(virtualgaza.tour.models.Neighborhood)
 databrowse.site.register(virtualgaza.tour.models.Building)
@@ -41,12 +39,18 @@ urlpatterns += patterns('virtualgaza.testimony.views',
 	(r'^search/$','search_for_author'),
 )
 
+#PHOTO URLS
+urlpatterns += patterns('',
+	(r'^photologue/', include('photologue.urls')),
+)
+
 #ADMIN URLS
 urlpatterns += patterns('',
 	(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 	(r'^admin/(.*)', admin.site.root),
 	(r'^db/(.*)', login_required(databrowse.site.root)),
 	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+	(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL + 'favicon.ico'}),
 )
 
 
