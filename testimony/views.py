@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
 from django.template import RequestContext 
 from django.conf import settings
-from testimony.models import Author,Text,Photograph,Video,Audio
+from testimony.models import Author,Text,Video,Audio
 from tour.models import Neighborhood
 
 mapDict = { 'mapType':'G_SATELLITE_MAP',

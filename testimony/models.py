@@ -72,21 +72,6 @@ class Text(Diary):
 	class Meta:
 		verbose_name = "diary"
 		verbose_name_plural = "diaries"
-	
-class PhotoAlbum(Diary):
-	num_photos = models.IntegerField("Number of Photographs",default=0)
-	class Meta:
-		verbose_name = "photo album"
-		verbose_name_plural = "photo albums"
-		
-	def increase_photocount(self):
-		self.num_photos += 1
-	
-class Photograph(models.Model):
-	album = models.ForeignKey(PhotoAlbum)
-	photo = models.ImageField(upload_to='photos/%Y/%m/%d')
-	class Meta:
-		verbose_name_plural = "photos"
 
 class Video(Diary):
 	video = models.FileField(upload_to='video/%Y/%m/%d')
