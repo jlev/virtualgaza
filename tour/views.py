@@ -41,7 +41,7 @@ def all_neighborhoods(request):
 	#recents = posts_by_recent(request,20)
 	#del recents['Content-Type']
 		#remove Content-Type, because we are inlining this response
-	return render_to_response('base/base.html', dict(mapDict,
+	return render_to_response('base/frontpage.html', dict(mapDict,
 								pageTitle="Break the Information Blockade",
 								vectorLayers=layer_list,
 								tooltipLayerName="Authors",
