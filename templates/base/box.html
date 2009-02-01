@@ -4,26 +4,7 @@
 <html><head>
 <title>VirtualGaza | {% block title %}{{ pageTitle }}{% endblock %}</title>
 <link rel="stylesheet" href="{{ MEDIA_URL }}style.css" type="text/css"/>
-<link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}floatbox/floatbox.css" />
-<script type="text/javascript" src="{{ MEDIA_URL }}floatbox/floatbox.js"></script>
-<script type="text/javascript">
-  fbPageOptions = {
-	urlGraphics:'{{ MEDIA_URL }}floatbox/graphics',
-	urlLanguages:   '{{ MEDIA_URL }}floatbox/languages/' ,
-    theme: 'auto',
-	doAnimations: false,
-    navType: 'both',
-	sameBox: false
-  };
-</script>
-<script type="text/javascript">
-function back_onclick(href) { // headline onclick handler for floatbox
-  var rev = 'sameBox:true width:94% height:90% caption:' +
-  '`<a href="" onclick="fb.goBack(); return false;">Back</a>`';
-  parent.fb.loadAnchor(href, rev);
-  return false;
-};
-</script>
+
 </head>
 
 <body>
@@ -44,4 +25,3 @@ pageTracker._trackPageview();
 } catch(err) {}
 </script>
 </body></html>
-
