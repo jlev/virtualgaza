@@ -6,7 +6,8 @@ function init() {
 		maxResolution : 156543.0339,
 		maxExtent : new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508), //whole world
 		restrictedExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
-		minZoomLevel: 11});
+		minZoomLevel: 11,
+		maxZoomLevel: 17});
 //	map.addControl(new OpenLayers.Control.MousePosition());
 //	map.addControl(new OpenLayers.Control.Permalink('permalink'));
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
@@ -29,6 +30,10 @@ function init() {
 				{pointRadius: 10,
 				fillOpacity:1,
 				externalGraphic:"{{MEDIA_URL}}pins/male.png"});
+	var bombingStyleMap = new OpenLayers.StyleMap(
+			{pointRadius: 10,
+			fillOpacity:1,
+			externalGraphic:"{{MEDIA_URL}}pins/hospital.png"});
 	var lineStyleMap = new OpenLayers.StyleMap(
 					{strokeWidth:3,
 					strokeColor:'#FFFF00'});
@@ -74,7 +79,7 @@ function toolTipsOut(feature){
 var tooltips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : true, opacity : 0.50});
 map.addControl(tooltips);
 var pointSelectControl = new OpenLayers.Control.newSelectFeature({{tooltipLayerName}}_layer,
-				{onClickSelect:gotoTabLink, onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
+				{onClickSelect:gotoWindowLink, onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 map.addControl(pointSelectControl);
 pointSelectControl.activate();
 } //end init

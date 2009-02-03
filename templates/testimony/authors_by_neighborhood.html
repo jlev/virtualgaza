@@ -1,16 +1,16 @@
-{% extends "base/tab.html" %}
-{% block tab-title %}VirtualGaza Authors{% endblock %}
+{% extends "base/base.html" %}
+{% block title %}Authors{% endblock %}
 
-{% block tab-content %}
+{% block content %}
 	{% if author_list %}
 		<ul>
 		{% regroup author_list|dictsort:"neighborhood" by neighborhood as authors_sorted %}
 	
 		{% for neighborhood in authors_sorted %}
-			<li>{{neighborhood.grouper}}</li>
+			<li type="none">{{neighborhood.grouper}}</li>
 			<ul>
 			{% for author in neighborhood.list|dictsort:"last_name" %}
-			<li><a class="loadInAuthorTab" href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>
+			<li type="circle"><a  href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>
 			{% endfor %}
 			</ul>
 		{% endfor %}

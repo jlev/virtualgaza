@@ -1,4 +1,8 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
+
+	{%block css %}
+		<link rel="stylesheet" href="{{ MEDIA_URL }}styles/frontpage.css" type="text/css"/>
+	{%endblock%}
 
 	{% block scripts%}
 	<script src='http://maps.google.com/maps?file=api&amp;v={{ googleAPIVersion }}&amp;key={{ googleAPIKey }}' type="text/javascript"></script>
@@ -14,6 +18,8 @@
 	{%endblock%}
 
 {%block content%}
+
+	{%block map %}
 	<table border="0" width="100%">
 	<tr>
 		<td align="left" width="500px">
@@ -27,20 +33,45 @@
 			</div>
 
 			<div id="mapKey">
-				{% block mapKey %}{%endblock%}
+				{% block mapKey %}{%endblock mapKey%}
 			</div>
 		</td>
-	
+	{%endblock map%}
+
+{%block recents%}	
 	<td align="left" valign="top">
-			<div id="tabs">
-				<ul>
-					<li><a href="/recent/"><span>Recent Posts</span></a></li>
-					<li><a href="/author/"><span>Contributors</span></a></li>
-					<li><a href="/search/"><span>Author</span></a></li> 
-					<!--This link URL is overridden in map.js goToTabLink function.-->
-				</ul>
+		<div id="recent">
+			<div class="posts">
+			<h2>Recent Testimony</h2>
+			{% for post in posts %}
+					<div ><a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>:<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/">{{ post.author }}</a>, {{ post.created_date.date }}
+				<br>
+			{%endfor%}
 			</div>
+			
+			<div class="photos">
+			<h2>Recent Photographs</h2>
+			{% for gallery in photos %}
+				<div class="gallery">
+				<a href="{{ gallery.get_absolute_url }}">{{ gallery.title }}</a><br>
+					{% for photo in gallery.sample|slice:":4" %}
+					<div class="gallery-photo">
+					<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_frontpage_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+					</div>
+				{%endfor%}
+				</div>
+			{%endfor%}
+			</div>
+			
+			<div class="videos">
+			<h2></h2>
+				
+			</div>
+			
+		</div>
 	</td>
 	</tr>
 	</table>
-{%endblock%}
+	{%endblock recents%}
+
+{%endblock content %}

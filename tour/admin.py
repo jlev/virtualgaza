@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.contrib.gis.gdal import SpatialReference,CoordTransform,OGRGeometry
+from django import forms
+from django.contrib.gis.gdal import SpatialReference,OGRGeometry
 import tour.models
 import tour.widgets
 
@@ -28,23 +29,23 @@ class BuildingAdmin(tour.widgets.GoogleAdmin):
 	default_lon = gaza_sm.coords[0]
 	default_lat = gaza_sm.coords[1]
 	default_zoom = 12
-	
-class EventAdmin(tour.widgets.GoogleAdmin):
-	fields = ['time','kind','casualties','verified','coords']
-	default_lon = gaza_sm.coords[0]
-	default_lat = gaza_sm.coords[1]
-	default_zoom = 12
-	
+
+
 class BorderAdmin(tour.widgets.GoogleAdmin):
 	fields = ['name','line']
 	default_lon = gaza_sm.coords[0]
 	default_lat = gaza_sm.coords[1]
 	default_zoom = 11
 	debug = True
+	
+class BombingAdmin(admin.ModelAdmin):
+	fields = ['name','time','latitude','longitude','kind','description','casualties','verified']
+	#don't display coords, we'll fill it in ourselves in the save method
+
 
 admin.site.register(tour.models.Border,BorderAdmin)
 admin.site.register(tour.models.Neighborhood, NeighborhoodAdmin)
 admin.site.register(tour.models.Location, LocationAdmin)
 admin.site.register(tour.models.Building, BuildingAdmin)
 admin.site.register(tour.models.BuildingType)
-admin.site.register(tour.models.Event, EventAdmin)
+admin.site.register(tour.models.Bombing, BombingAdmin)

@@ -18,18 +18,19 @@ databrowse.site.register(virtualgaza.testimony.models.Audio)
 
 databrowse.site.register(virtualgaza.tour.models.Neighborhood)
 databrowse.site.register(virtualgaza.tour.models.Building)
-databrowse.site.register(virtualgaza.tour.models.Event)
+databrowse.site.register(virtualgaza.tour.models.Bombing)
 
 #MAP URLS
 urlpatterns = patterns('virtualgaza.tour.views',
-	(r'^$','all_neighborhoods'),
+	(r'^$','frontpage'),
 	(r'^neighborhood/$','all_neighborhoods'),
 	(r'^neighborhood/(?P<nameSlug>[\w-]+)/$','one_neighborhood'),
 )
 
 #AUTHOR URLS
 urlpatterns += patterns('virtualgaza.testimony.views',
-	(r'^recent/$','posts_by_recent',{'num_latest':10}),
+	(r'^recent/$','posts_by_recent',{'num_latest':25}),
+	(r'^testimony/$','all_posts'),
 	(r'^author/$','authors_by_neighborhood'),
 	(r'^author/(?P<id>)/$','author_by_id'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/$','author_by_full_name'),

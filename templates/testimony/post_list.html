@@ -1,11 +1,37 @@
-{% extends "base/tab.html" %}
+{% extends "base/base.html" %}
 
-{% block title %}{{ first_name }} {{ last_name }} | {{ year }}-{{ month }}-{{ day }}{% endblock %}
+{% block title %}{{ first_name }} {{ last_name }} | {{ year }} {{ month }} {{ day }}{% endblock %}
 
-{% block tab-content %}
+{%block css%}
+<link rel="stylesheet" href="{{ MEDIA_URL }}/styles/posts.css" type="text/css"/>
+{%endblock%}
+
+{% block content %}
 {% for post in postList %}
 	<h2>{{ post.description }}</h2>
+	<h3>{{ post.created_date.date }}</h3>
 	{{ post.text|linebreaks}}
 	<hr>
 {% endfor %}
+
+<table>
+<tr>
+
+<td id="prevLink">
+	{% if prev%}
+	<a href={{prev}}>Previous {{dateType}}</a>
+	{% else %}
+	First
+	{%endif%}
+</td>
+<td id="allLink"><a href="/author/{{first_name|slugify}}_{{last_name|slugify}}/">All</a></td>
+<td id="nextLink">
+	{%if next %}
+	<a href={{next}}>Next {{dateType}}</a>
+	{%else%}
+	Last
+	{%endif%}
+</td>
+</tr>
+</table>
 {% endblock %}

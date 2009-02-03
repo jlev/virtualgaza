@@ -58,7 +58,7 @@ STATIC_DOC_ROOT = MEDIA_ROOT
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://virtualgaza.media.mit.edu:81/media/'
+MEDIA_URL = "/media/"
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -106,6 +106,7 @@ INSTALLED_APPS = (
     'virtualgaza.testimony',
 )
 
+GALLERY_SAMPLE_SIZE = 4
 AUTH_PROFILE_MODULE = 'testimony.UserProfile'
 
 GOOGLE_MAPS_API_KEYS = {

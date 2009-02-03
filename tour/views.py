@@ -1,9 +1,9 @@
 from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
 from django.template import RequestContext 
 from django.conf import settings
-from tour.models import Neighborhood,Location,Border
-from testimony.models import Author
-from testimony.views import posts_by_recent
+from tour.models import Neighborhood,Location,Border,Bombing
+from testimony.models import Author,Text,Video
+from photologue.models import Gallery
 
 mapDict = { 'mapType':'G_SATELLITE_MAP',
 			'googleAPIVersion':'2.x',
@@ -15,6 +15,24 @@ def deslug(name):
 	bits = name.split('-')
 	bits[0] = bits[0].capitalize()
 	return " ".join(bits)
+
+def frontpage(request):
+	layer_list = all_neighborhoods(request)
+	
+	recent_text = Text.objects.all().filter(approved=True).order_by('-created_date')[:10]
+	recent_galleries = Gallery.objects.filter(is_public=True).order_by('-date_added')[:3]
+	recent_videos = Video.objects.all().filter(approved=True).order_by('-created_date')[:4]
+	
+	return render_to_response('base/frontpage.html', dict(mapDict,
+								pageTitle="Break the Information Blockade",
+								vectorLayers=layer_list,
+								tooltipLayerName="Authors",
+								posts=recent_text,
+								photos=recent_galleries,
+								videos=recent_videos,
+								captionText="This site is currently under construction. We will add more data layers in the coming days."),
+								context_instance = RequestContext(request)
+							)
 
 def all_neighborhoods(request):
 	borderList = Border.objects.all()
@@ -32,22 +50,19 @@ def all_neighborhoods(request):
 		authorList = Author.objects.filter(neighborhood__name__iexact=deslug(n.name))
 		for a in authorList:
 			authors.append(a.location.getJSON())
+		
+	bombingList = Bombing.objects.all()
+	bombings = []
+	for b in bombingList:
+		bombings.append(b.getJSON())
 	
-	layer_list = [{'name':'Border','list':borders,'styleName':'lineStyleMap'},
-								{'name':'Neighborhoods','list':neighborhoods,'styleName':'polygonStyleMap'},
+	layer_list = [{'name':'Neighborhoods','list':neighborhoods,'styleName':'polygonStyleMap'},
 								{'name':'Authors','list':authors,'styleName':'pointStyleMap'},
+							#	{'name':'Bombings','list':bombings,'styleName':'bombingStyleMap'},
+								{'name':'Border','list':borders,'styleName':'lineStyleMap'},
 							]
+	return layer_list
 	
-	#recents = posts_by_recent(request,20)
-	#del recents['Content-Type']
-		#remove Content-Type, because we are inlining this response
-	return render_to_response('base/frontpage.html', dict(mapDict,
-								pageTitle="Break the Information Blockade",
-								vectorLayers=layer_list,
-								tooltipLayerName="Authors",
-								captionText="This site is currently under construction. We will add more data layers in the coming days."),
-								context_instance = RequestContext(request)
-							)
 
 def one_neighborhood(request,nameSlug):
 	humanName = deslug(nameSlug)

@@ -13,11 +13,11 @@
 </div>
 {% if object.public_galleries %}
 <h2>This photo is found in the following galleries:</h2>
-<ol>
+<ul type="none">
 {% for gallery in object.public_galleries %}
     <li>{%previous_in_gallery object gallery%} <a href="{{ gallery.get_absolute_url }}">{{ gallery.title }}</a> {%next_in_gallery object gallery%}</li>
 {% endfor %}
-</ol>
+</ul>
 {% endif %}
 
 {% endblock %}

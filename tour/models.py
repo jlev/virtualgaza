@@ -1,5 +1,10 @@
+# coding=utf8
+#for the unicode strings in Bombing.save()
+
 from django.contrib.gis.db import models
 from django.template.defaultfilters import slugify
+from django.contrib.gis.gdal import SpatialReference,OGRGeometry
+import geopy
 
 theSRID = 900913
 
@@ -111,16 +116,44 @@ class Building(models.Model):
 	def __unicode__(self):
 		return self.name
 
-class Event(models.Model):
+class Bombing(models.Model):
 	KIND_CHOICES = (
-		('AIR_BOMB','Aerial Bombing'),
-		('GROUND','Ground Incursion'),
-		('BUILDING','Building Destroyed'),
+		('AERIAL','Aerial Bombardment'),
+		('GROUND','Artillery Shelling'),
+		('PHOSPHOROUS','White Phosphorous'),
+		('DIME','Dense Inert Metal Explosive'),
+		('OTHER','Other')
 	)
-	coords = models.PointField(srid=theSRID,blank=True)
+	name = models.CharField(max_length=25)
+	description = models.TextField()
+	latitude = models.CharField(max_length=20) #displayed
+	longitude = models.CharField(max_length=20) #displayed
+	coords = models.PointField(srid=theSRID,blank=True,null=True) #hidden
 	casualties = models.IntegerField(blank=True)
-	time = models.DateTimeField(auto_now=False)
-	kind = models.CharField(max_length=10, choices=KIND_CHOICES,blank=True)
+	time = models.DateTimeField(auto_now=False,blank=True)
+	kind = models.CharField(max_length=10, choices=KIND_CHOICES)
 	verified = models.BooleanField('Verified')
 	def __unicode__(self):
-		return self.time + "," + self.kind
+		return str(self.name) + " " + str(self.time.date()) + " - " + str(self.kind)
+
+	def getJSON(self):
+		json = {}
+		json['type']='Feature'
+		json['geometry'] = eval(self.coords.geojson)
+		json['properties'] = {'name':str(self.name),'displayName':str(self.name),
+					'icon':str("%s.png" % self.kind)}	
+		return str(json)
+	
+	def save(self):
+		#Override default save to convert lat/lon in DMS to the right SRID
+		#example input ''' 31°30'33"N   34°27'43"E '''
+
+		self.latitude.replace(u'\xc2\xb0',' ') #clear strange characters
+		self.longitude.replace(u'\xc2\xb0',' ')
+		point = geopy.Point("%s %s" % (self.latitude,self.longitude)) #convert to decimal degrees
+		wkt = 'POINT (%s %s)' % (point.longitude,point.latitude)
+		gsm = OGRGeometry(wkt,4326) #create OGR geometry
+		gsm.transform_to(SpatialReference('EPSG:%s' % theSRID)) #convert to the db srid
+		self.coords = str(gsm)
+
+		self.save_base(force_insert=False, force_update=False)

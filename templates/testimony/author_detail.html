@@ -1,7 +1,7 @@
-{% extends "base/tab.html" %}
-{% block tab-title %}{{author.get_full_name}}{% endblock %}
+{% extends "base/base.html" %}
+{% block title %}{{author.get_full_name}}{% endblock %}
 
-{% block tab-content %}	
+{% block content %}	
 	<!--<img id="profile_pic" src="{{author.picture}}"</img>-->
 	<div id="profile_text">
 	{{author.get_full_name}}, {{ author.neighborhood.name }}<br>

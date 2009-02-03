@@ -1,7 +1,9 @@
-from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
-from django.template import RequestContext 
 from django.conf import settings
+from django.http import HttpResponse,Http404
+from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
+from django.template import RequestContext 
+
 from testimony.models import Author,Text,Video,Audio
 from tour.models import Neighborhood
 
@@ -74,10 +76,14 @@ def posts_by_author_and_year(request, firstName, lastName, year):
 	posts=Text.objects.all().filter(author__first_name__iexact=first,
 					author__last_name__iexact=last,created_date__year=year,approved=1).order_by('-created_date')
 
+	nextLink= "/author/%s_%s/%s/" % (firstName,lastName,int(year)+1)
+	prevLink = "/author/%s_%s/%s/" % (firstName,lastName,int(year)-1)
+
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
 						'year':year,
-						'postList':posts},
+						'postList':posts,
+						'next':nextLink,'prev':prevLink,'dateType':'year'},
 					context_instance = RequestContext(request))
 
 def posts_by_author_and_month(request, firstName, lastName, year, month):
@@ -88,10 +94,14 @@ def posts_by_author_and_month(request, firstName, lastName, year, month):
 					created_date__year=year,created_date__month=month,
 					approved=1).order_by('-created_date')
 
+	nextLink= "/author/%s_%s/%s/%s/" % (firstName,lastName,year,int(month)+1)
+	prevLink = "/author/%s_%s/%s/%s/" % (firstName,lastName,year,int(month)-1)
+
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
 						'year':year,'month':month,
-						'postList':posts},
+						'postList':posts,
+						'next':nextLink,'prev':prevLink,'dateType':'month'},
 					context_instance = RequestContext(request))
 
 def posts_by_author_and_date(request, firstName, lastName, year, month, day):
@@ -103,18 +113,49 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 					created_date__month=month,
 					created_date__day=day,
 					approved=1).order_by('-created_date')
-					
+	
+	num_posts = posts.count()
+	if num_posts == 0:
+		raise Http404
+	if num_posts > 1:
+		lastPostToday = posts[num_posts-1]
+		firstPostToday = posts[0]
+	else:
+		firstPostToday = posts[0]
+		lastPostToday = posts[0]
+		
+	try:
+		nextPost = lastPostToday.get_next_by_created_date(author__first_name__iexact=first,author__last_name__iexact=last)
+		nextLink= "/author/%s_%s/%s/%s/%s/" % (firstName,lastName,nextPost.created_date.year,nextPost.created_date.month,nextPost.created_date.day)
+	except ObjectDoesNotExist:
+		nextLink = ""
+		
+	try:
+		prevPost = firstPostToday.get_previous_by_created_date(author__first_name__iexact=first,author__last_name__iexact=last)
+		prevLink = "/author/%s_%s/%s/%s/%s/" % (firstName,lastName,prevPost.created_date.year,prevPost.created_date.month,prevPost.created_date.day)
+	except ObjectDoesNotExist:
+		prevLink = ""
+
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
 						'year':year,'month':month,'day':day,
-						'postList':posts},
+						'postList':posts,
+						'next':nextLink,'prev':prevLink,'dateType':'day'},
 				context_instance = RequestContext(request))
 			
 def posts_by_recent(request, num_latest):
 	posts=Text.objects.all().filter(approved=1).order_by('-created_date')[:num_latest]
 	#abuse the name and year fields of the template for title display
 	return render_to_response('testimony/post_titles.html',
-				{'first_name':'Most','last_name':'Recent',
+				{'first_name':'Most','last_name':'Recent','year':num_latest,
+					'postList':posts},
+				context_instance = RequestContext(request))
+
+def all_posts(request):
+	posts=Text.objects.all().filter(approved=1).order_by('-created_date')
+	#abuse the name and year fields of the template for title display
+	return render_to_response('testimony/post_titles.html',
+				{'first_name':'All','last_name':'Testimony',
 					'postList':posts},
 				context_instance = RequestContext(request))
 				
