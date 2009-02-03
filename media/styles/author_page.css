@@ -1,0 +1,11 @@
+#profile-pic {
+	position:relative;
+	float:left;
+	margin-right:10px;
+}
+
+#profile-text {
+	/* doesn't float properly, fix before launch */
+	position:relative;
+	float:right;
+}

@@ -1,0 +1,41 @@
+#map {
+	height:600px;
+	width:600px;
+	border:solid 1px;
+}
+
+#mapKey {
+	text-align:left;
+	width:600px;
+}
+
+#recent {
+	padding-left:5px;
+	font-size:10pt;
+	text-align:left;
+	height:600px;
+	overflow:auto;
+}
+
+#recent h2 {
+	font-size:12pt;
+	text-transform: uppercase;
+}
+
+#recent .postList .description {
+	display:inline;
+	font-weight:italic;
+}
+
+#recent .postList .author {
+	display:inline;
+	font-style:bold;
+}
+
+#recent .postList .date {
+	display:inline;
+}
+
+#recent .gallery {
+	padding-top:5px;
+}

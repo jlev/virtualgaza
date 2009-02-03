@@ -16,69 +16,42 @@ a:hover {
 	text-decoration:none;
 }
 
+table#header {
+	color:white;
+	background:black;
+	font-weight:bold;
+	padding-top:15px;
+	padding-bottom:5px;
+	width:100%;
+	border:0;
+}
+
 table#header a {
-	color:black;
+	color:white;
 	font-weight:bold;
 	padding-left:5px;
 }
 
-a#logo img {
+table#header a#logo img {
 	border:none;
+	padding-left:10px;
 }
 
-#map {
-	height:600px;
-	width:600px;
-	border:solid 1px;
+table#header td#links-english {
+	font-size:9pt;
+	text-align:right;
+	padding-right:10px;
 }
 
-#mapKey {
-	text-align:left;
-	width:600px;
+table#header td#links-arabic {
+	font-size:9pt;
+	text-align:right;
+	padding-right:10px;
 }
 
-#tabs {
-	font-size:12pt;
-	text-align:left;
-	height:600px;
-}
-
-.tab-content a {
-	color:blue;
-}
-
-.tab-content a:hover {
-	color:black;
-}
-
-.tab-content .postList {
-	padding-bottom:5px;
-}
-
-.tab-content .postList .description {
+.gallery-photo {
 	display:inline;
-	font-weight:italic;
-}
-
-.tab-content .postList .author {
-	display:inline;
-	font-style:bold;
-}
-
-.tab-content .postList .date {
-	display:inline;
-}
-
-#profile-pic {
-	position:relative;
-	float:left;
-	margin-right:10px;
-}
-
-#profile-text {
-	/* doesn't float properly, fix before launch */
-	position:relative;
-	float:right;
+	padding-left:5px;
 }
 
 #credits{
