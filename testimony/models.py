@@ -75,8 +75,17 @@ class Text(Diary):
 
 class Video(Diary):
 	video = models.FileField(upload_to='video/%Y/%m/%d')
+	thumbnail = models.ImageField(upload_to='video/%Y/%m/%d/',blank=True,null=True)
 	class Meta:
 		verbose_name_plural = "videos"
+	def save(self):
+		#TODO: convert to flv
+		#generate thumbnail
+		import os
+		cmd = "ffmpeg  -itsoffset -10 -y -i %s -vcodec mjpeg -vframes 1 -an -f rawvideo -s 100x100 %s" % (self.video.path,self.video.path + ".jpg")
+		os.popen(cmd)	
+		#save to thumbnail field?	
+		self.save_base(force_insert=False, force_update=False)
 
 class Audio(Diary):
 	audio = models.FileField(upload_to='audio/%Y/%m/%d')
