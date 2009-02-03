@@ -64,8 +64,12 @@
 			</div>
 			
 			<div class="videos">
-			<h2></h2>
-				
+			<h2>Recent Videos</h2>
+				{% for v in videos %}
+					<div class="video">
+						<a href="/video/{{v.created_date.year}}/{{v.created_date.month}}/{{v.created_date.day}}/"><img src="{{ v.video.url }}.jpg" alt="{{v.description}}"/></a>
+					</div>
+				{%endfor%}
 			</div>
 			
 		</div>
