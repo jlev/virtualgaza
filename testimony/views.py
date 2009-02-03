@@ -118,8 +118,8 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 	if num_posts == 0:
 		raise Http404
 	if num_posts > 1:
-		lastPostToday = posts[num_posts-1]
 		firstPostToday = posts[0]
+		lastPostToday = posts[num_posts-1]
 	else:
 		firstPostToday = posts[0]
 		lastPostToday = posts[0]
@@ -164,3 +164,21 @@ def search_for_author(request):
 	#make this searchable
 	html = "<html><body>Click an author on the map to see their posts here</body></html>"
 	return HttpResponse(html)
+	
+def all_videos(request):
+	videos=Video.objects.all().filter(approved=1).order_by('-created_date')
+	return render_to_response('testimony/video.html',{'videoList':videos},
+				context_instance = RequestContext(request))
+				
+def recent_videos(request, num_latest):
+	videos=Video.objects.all().filter(approved=1).order_by('-created_date')[:num_latest]
+	return render_to_response('testimony/video.html',{'videoList':videos},
+				context_instance = RequestContext(request))
+				
+def video_by_date(request, year, month, day):
+	videos=Video.objects.all().filter(created_date__year=year,
+					created_date__month=month,created_date__day=day,approved=1).order_by('-created_date')
+	if videos.count() == 0 :
+		raise Http404
+	return render_to_response('testimony/video.html',{'videoList':videos},
+				context_instance = RequestContext(request))

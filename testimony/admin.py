@@ -23,7 +23,7 @@ class VideoAdmin(admin.ModelAdmin):
 	fieldsets = [
 	    (None, {'fields': ['author']}),
 	    ('Date', {'fields': ['created_date']}),
-	    ('Content', {'fields': ['description','video']}),
+	    ('Content', {'fields': ['description','video','thumbnail']}),
 		('Publication', {'fields': ['approved']}),
 	]	
 
