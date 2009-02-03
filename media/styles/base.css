@@ -16,6 +16,10 @@ a:hover {
 	text-decoration:none;
 }
 
+a img {
+	border:none;
+}
+
 table#header {
 	color:white;
 	background:black;
