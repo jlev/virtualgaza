@@ -45,6 +45,13 @@ urlpatterns += patterns('',
 	(r'^photologue/', include('photologue.urls')),
 )
 
+#VIDEO URLS
+urlpatterns += patterns('virtualgaza.testimony.views',
+	(r'^video/recent/$', 'recent_videos'),
+	(r'^video/$', 'all_videos'),
+	(r'^video/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$', 'video_by_date'),
+)
+
 #ADMIN URLS
 urlpatterns += patterns('',
 	(r'^admin/doc/', include('django.contrib.admindocs.urls')),
