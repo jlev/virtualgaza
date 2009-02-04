@@ -4,7 +4,6 @@
 from django.contrib.gis.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.gis.gdal import SpatialReference,OGRGeometry
-import geopy
 
 theSRID = 900913
 
@@ -129,10 +128,15 @@ class Bombing(models.Model):
 	latitude = models.CharField(max_length=20) #displayed
 	longitude = models.CharField(max_length=20) #displayed
 	coords = models.PointField(srid=theSRID,blank=True,null=True) #hidden
-	casualties = models.IntegerField(blank=True)
+	casualties = models.IntegerField(blank=True,null=True)	
 	time = models.DateTimeField(auto_now=False,blank=True)
 	kind = models.CharField(max_length=10, choices=KIND_CHOICES)
 	verified = models.BooleanField('Verified')
+	
+	testimony = models.ForeignKey('testimony.Text',null=True)
+	video = models.ForeignKey('testimony.Video',null=True)
+	gallery = models.ForeignKey('photologue.Gallery',null=True)
+	
 	def __unicode__(self):
 		return str(self.name) + " " + str(self.time.date()) + " - " + str(self.kind)
 
@@ -145,6 +149,7 @@ class Bombing(models.Model):
 		return str(json)
 	
 	def save(self):
+		import geopy
 		#Override default save to convert lat/lon in DMS to the right SRID
 		#example input ''' 31°30'33"N   34°27'43"E '''
 

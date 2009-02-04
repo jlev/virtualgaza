@@ -39,7 +39,7 @@ class BorderAdmin(tour.widgets.GoogleAdmin):
 	debug = True
 	
 class BombingAdmin(admin.ModelAdmin):
-	fields = ['name','time','latitude','longitude','kind','description','casualties','verified']
+	exclude = ['coords']
 	#don't display coords, we'll fill it in ourselves in the save method
 
 
