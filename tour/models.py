@@ -133,9 +133,9 @@ class Bombing(models.Model):
 	kind = models.CharField(max_length=10, choices=KIND_CHOICES)
 	verified = models.BooleanField('Verified')
 	
-	testimony = models.ForeignKey('testimony.Text',null=True)
-	video = models.ForeignKey('testimony.Video',null=True)
-	gallery = models.ForeignKey('photologue.Gallery',null=True)
+	testimony = models.ForeignKey('testimony.Text',blank=True,null=True)
+	video = models.ForeignKey('testimony.Video',blank=True,null=True)
+	gallery = models.ForeignKey('photologue.Gallery',blank=True,null=True)
 	
 	def __unicode__(self):
 		return str(self.name) + " " + str(self.time.date()) + " - " + str(self.kind)
