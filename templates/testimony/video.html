@@ -4,12 +4,17 @@
 
 {%block css%}
 <link rel="stylesheet" href="{{ MEDIA_URL }}styles/posts.css" type="text/css"/>
+
+<style type="text/css">
+  	.video { display:inline; }
+ </style>
+
 {%endblock%}
 
 {%block scripts%}
 <script src="{{MEDIA_URL}}flowplayer/flowplayer-3.0.5.min.js"></script>
 <script language="JavaScript">
-	flowplayer("a.video", "{{MEDIA_URL}}flowplayer/flowplayer-3.0.5.swf",
+	flowplayer("a.player", "{{MEDIA_URL}}flowplayer/flowplayer-3.0.5.swf",
 		{
 			clip: { autoPlay: false, },
 			plugins:  { 
@@ -25,17 +30,18 @@
 {%endblock%}
 
 {% block content %}
-
 	
 	{% for v in videoList %}
+	<div class="video">
 		<a href="{{ v.video.url }}" 
 			style="display:block;width:425px;height:300px;" 
-			class="video">
+			class="player">
 		</a>
 		
 		<p>{{ v.description }}<br>
 		{{v.created_date.date}}<br>
 		{{v.author.get_full_name}}</p>
+	</div>
 	{%endfor%}
 	
 	
