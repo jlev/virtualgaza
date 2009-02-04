@@ -4,7 +4,7 @@
 {% block content %}	
 	<!--<img id="profile_pic" src="{{author.picture}}"</img>-->
 	<div id="profile_text">
-	{{author.get_full_name}}, {{ author.neighborhood.name }}<br>
+	{{author.get_full_name}}, <a href="/neighborhood/{{ author.neighborhood.name|slugify }}">{{author.neighborhood.name}}</a><br>
 	{% if posts %}
 	<ul>
 	{% for post in posts %}

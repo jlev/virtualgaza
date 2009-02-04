@@ -1,4 +1,4 @@
-function init() {
+function mapInit() {
 	var map = new OpenLayers.Map('map', {
 		projection : new OpenLayers.Projection("EPSG:900913"),
 		displayProjection : new OpenLayers.Projection("EPSG:900913"), //EPSG:4326
@@ -13,33 +13,28 @@ function init() {
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
 	activeColor:'silver'}));
 	
-	//could pass these in from views, but easy enough to just define them here...
-	var polygonStyleDefault = new OpenLayers.Style({strokeWidth:0,
-					strokeColor:'#FF6600',
-					fillColor:'#FF6600',
-					fillOpacity:0,
-					pointerEvents: "visiblePainted",
-					label : "${name}",
-					fontColor: "white",
-					fontSize: "10px",
-					fontFamily: "Arial, sans-serif",
-					fontWeight: "bold",
-					labelAlign: "center"});
-	var polygonStyleSelect = new OpenLayers.Style({strokeWidth:1,
-					strokeColor:'#FF6600',
-					fillColor:'#FF6600',
-					fillOpacity:0.5,
-					pointerEvents: "visiblePainted",
-					label : "${name}",
-					fontColor: "white",
-					fontSize: "10px",
-					fontFamily: "Arial, sans-serif",
-					fontWeight: "bold",
-					labelAlign: "center"});
-	
+	//could pass these in from views, but easy enough to just define them here...	
 	var polygonStyleMap = new OpenLayers.StyleMap(
-					{"default":polygonStyleDefault, 
-					"select":polygonStyleSelect});
+					{"default":new OpenLayers.Style({strokeWidth:0,
+									fillOpacity:0,
+									pointerEvents: "visiblePainted",
+									label : "${name}",
+									fontColor: "white",
+									fontSize: "10px",
+									fontFamily: "Arial, sans-serif",
+									fontWeight: "bold",
+									labelAlign: "center"}), 
+					"select":new OpenLayers.Style({strokeWidth:0,
+									strokeColor:'#FF6600',
+									fillColor:'#FF6600',
+									fillOpacity:{{polygonRolloverFillOpacity}},
+									pointerEvents: "visiblePainted",
+									label : "${name}",
+									fontColor: "white",
+									fontSize: "10px",
+									fontFamily: "Arial, sans-serif",
+									fontWeight: "bold",
+									labelAlign: "center"})});
 	var pointStyleMap = new OpenLayers.StyleMap(
 				{pointRadius: 10,
 				fillOpacity:1,

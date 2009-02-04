@@ -7,7 +7,7 @@
 		{% regroup author_list|dictsort:"neighborhood" by neighborhood as authors_sorted %}
 	
 		{% for neighborhood in authors_sorted %}
-			<li type="none">{{neighborhood.grouper}}</li>
+			<li type="none"><a href="/neighborhood/{{neighborhood.grouper|slugify}}">{{neighborhood.grouper}}</a></li>
 			<ul>
 			{% for author in neighborhood.list|dictsort:"last_name" %}
 			<li type="circle"><a  href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>
