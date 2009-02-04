@@ -44,12 +44,18 @@ table#header a#logo img {
 table#header td#links-english {
 	font-size:9pt;
 	text-align:right;
+}
+
+table#header td#links-english a {
 	padding-right:10px;
 }
 
 table#header td#links-arabic {
-	font-size:9pt;
+	font-size:12pt;
 	text-align:right;
+}
+
+table#header td#links-arabic a {
 	padding-right:10px;
 }
 
