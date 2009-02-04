@@ -15,10 +15,10 @@ function init() {
 	
 	//could pass these in from views, but easy enough to just define them here...
 	var polygonStyleMap = new OpenLayers.StyleMap(
-					{strokeWidth:1,
+					{strokeWidth:0,
 					strokeColor:'#FF6600',
 					fillColor:'#FF6600',
-					fillOpacity:0.1,
+					fillOpacity:0,
 					pointerEvents: "visiblePainted",
 					label : "${name}",
 					fontColor: "white",
