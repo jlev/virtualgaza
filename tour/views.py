@@ -22,11 +22,10 @@ def frontpage(request):
 	
 	recent_text = Text.objects.all().filter(approved=True).order_by('-created_date')[:10]
 	recent_galleries = Gallery.objects.filter(is_public=True).order_by('-date_added')[:2]
-	recent_videos = Video.objects.all().filter(approved=True).order_by('-created_date')[:4]
+	recent_videos = Video.objects.all().filter(approved=True).order_by('-created_date')[:3]
 	
-	return render_to_response('base/frontpage.html', dict(mapDict,
+	return render_to_response('base/frontpage.html', dict(mapDict,useMap="True",
 								pageTitle="Break the Information Blockade",
-								polygonRolloverFillOpacity=0.5,
 								vectorLayers=layer_list,
 								tooltipLayerName="Authors",
 								polygonLayerName="Neighborhoods",
@@ -43,7 +42,7 @@ def neighborhood_page(request,nameSlug):
 	authorList = Author.objects.filter(neighborhood__name__iexact=humanName).select_related()
 	layerList = mapObjects(deslug(nameSlug))
 
-	return render_to_response('tour/neighborhood_authors.html', dict(mapDict,
+	return render_to_response('tour/neighborhood_authors.html', dict(mapDict,useMap="True",
 						pageTitle=humanName,
 						theNeighborhood=humanName,
 						authorList=authorList,
