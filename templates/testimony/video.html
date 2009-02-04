@@ -9,9 +9,16 @@
 {%block scripts%}
 <script src="{{MEDIA_URL}}flowplayer/flowplayer-3.0.5.min.js"></script>
 <script language="JavaScript">
-	flowplayer("video", "{{MEDIA_URL}}flowplayer/flowplayer-3.0.5.swf",
+	flowplayer("a.video", "{{MEDIA_URL}}flowplayer/flowplayer-3.0.5.swf",
 		{
-			clip: { autoPlay: false, }
+			clip: { autoPlay: false, },
+			plugins:  { 
+			        controls: { 
+			            all: false,  
+			            play: true,  
+			            scrubber: true 
+			        }         
+			    }
 		}
 	);
 </script>
@@ -23,7 +30,7 @@
 	{% for v in videoList %}
 		<a href="{{ v.video.url }}" 
 			style="display:block;width:425px;height:300px;" 
-			id="video">
+			class="video">
 		</a>
 		
 		<p>{{ v.description }}<br>
