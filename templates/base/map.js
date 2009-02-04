@@ -14,8 +14,7 @@ function init() {
 	activeColor:'silver'}));
 	
 	//could pass these in from views, but easy enough to just define them here...
-	var polygonStyleMap = new OpenLayers.StyleMap(
-					{strokeWidth:0,
+	var polygonStyleDefault = new OpenLayers.Style({strokeWidth:0,
 					strokeColor:'#FF6600',
 					fillColor:'#FF6600',
 					fillOpacity:0,
@@ -26,6 +25,21 @@ function init() {
 					fontFamily: "Arial, sans-serif",
 					fontWeight: "bold",
 					labelAlign: "center"});
+	var polygonStyleSelect = new OpenLayers.Style({strokeWidth:1,
+					strokeColor:'#FF6600',
+					fillColor:'#FF6600',
+					fillOpacity:0.5,
+					pointerEvents: "visiblePainted",
+					label : "${name}",
+					fontColor: "white",
+					fontSize: "10px",
+					fontFamily: "Arial, sans-serif",
+					fontWeight: "bold",
+					labelAlign: "center"});
+	
+	var polygonStyleMap = new OpenLayers.StyleMap(
+					{"default":polygonStyleDefault, 
+					"select":polygonStyleSelect});
 	var pointStyleMap = new OpenLayers.StyleMap(
 				{pointRadius: 10,
 				fillOpacity:1,
@@ -33,7 +47,7 @@ function init() {
 	var bombingStyleMap = new OpenLayers.StyleMap(
 			{pointRadius: 10,
 			fillOpacity:1,
-			externalGraphic:"{{MEDIA_URL}}pins/hospital.png"});
+			externalGraphic:"{{MEDIA_URL}}pins/bombing.png"});
 	var lineStyleMap = new OpenLayers.StyleMap(
 					{strokeWidth:3,
 					strokeColor:'#FFFF00'});
@@ -52,8 +66,9 @@ function init() {
 			{{layer.name}}_layer.addFeatures({{layer.name}}_{{forloop.counter}});
 		{% endfor %}
 		map.addLayer({{layer.name}}_layer);
-		map.zoomToExtent({{layer.name}}_layer.getDataExtent());
 	{%endfor%}
+	
+	map.zoomToExtent({{zoomLayer}}_layer.getDataExtent());
 
 //event handlers
 function gotoFloatboxLink(feature) {
@@ -74,6 +89,12 @@ function toolTipsOver(feature) {
 function toolTipsOut(feature){
 	tooltips.hide();
 }
+function polygonOver(feature) {
+	feature.style = polygonStyleMap["select"];
+}
+function polygonOut(feature) {
+	feature.style = polygonStyleMap["default"];
+}
 
 //select controls
 var tooltips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : true, opacity : 0.50});
@@ -82,4 +103,9 @@ var pointSelectControl = new OpenLayers.Control.newSelectFeature({{tooltipLayerN
 				{onClickSelect:gotoWindowLink, onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 map.addControl(pointSelectControl);
 pointSelectControl.activate();
+
+var polygonSelectControl = new OpenLayers.Control.newSelectFeature(Neighborhoods_layer,
+				{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
+map.addControl(polygonSelectControl);
+polygonSelectControl.activate();
 } //end init
