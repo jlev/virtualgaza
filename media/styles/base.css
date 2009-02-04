@@ -7,7 +7,7 @@ body {
 }
 
 a {
-	color:blue;
+	color:#424242;
 	text-decoration:none;
 }
 
@@ -38,25 +38,15 @@ table#header a {
 
 table#header a#logo img {
 	border:none;
-	padding-left:10px;
 }
 
-table#header td#links-english {
+table#header a.links-english {
 	font-size:9pt;
-	text-align:right;
+	text-align:left;
 }
 
-table#header td#links-english a {
-	padding-right:10px;
-}
-
-table#header td#links-arabic {
-	font-size:12pt;
-	text-align:right;
-}
-
-table#header td#links-arabic a {
-	padding-right:10px;
+table#header a.links-arabic {
+	font-size:9pt;
 }
 
 .gallery-photo {
