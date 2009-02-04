@@ -66,11 +66,13 @@
 			
 			<h2>Recent Videos</h2>
 				<div class="box">
+				<div class="gallery">
 				{% for v in videos %}
 					<div class="gallery-video">
 						<a href="/video/{{v.created_date.year}}/{{v.created_date.month}}/{{v.created_date.day}}/"><img src="{{ v.video.url }}.jpg" alt="{{v.description}}"/></a>
 					</div>
 				{%endfor%}
+			</div>
 			</div>
 			
 		</div>
