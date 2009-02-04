@@ -49,9 +49,13 @@ table#header a.links-arabic {
 	font-size:9pt;
 }
 
-.gallery-photo {
-	display:inline;
-	padding-left:5px;
+#contentBox {
+	position:relative;
+	top:10px;
+	margin:auto;
+	padding:5px;
+	border:1px solid #2E2E2E;
+	width:1000px;
 }
 
 #credits{

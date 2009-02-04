@@ -1,3 +1,7 @@
+.frontpageColumn {
+	margin:0px;
+}
+
 #map {
 	height:600px;
 	width:600px;
@@ -9,11 +13,25 @@
 	width:600px;
 }
 
+#layersDiv {
+	font-size:10pt;
+}
+
+#dataLbl {
+	display:inline;
+	padding-right:5px;
+}
+
+#dataLayersDiv {
+	display:inline;
+	padding-right:5px;
+}
+
 #recent {
 	padding-left:5px;
 	font-size:10pt;
 	text-align:left;
-	height:600px;
+	height:670px;
 	overflow:auto;
 }
 
@@ -23,7 +41,8 @@
 }
 
 #recent .box {
-	padding:5px;
+	padding-left:5px;
+	padding-right:5px;
 	border:1px solid #2E2E2E;
 	width:350px;
 }
@@ -43,5 +62,10 @@
 }
 
 #recent .gallery {
-	padding-top:5px;
+	text-align:center;
+}
+
+.gallery-photo {
+	display:inline;
+	padding-left:5px;
 }

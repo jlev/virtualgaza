@@ -492,8 +492,8 @@ OpenLayers.Control.customLayerSwitcher =
 
         // layers list div        
         this.layersDiv = document.createElement("div");
-        this.layersDiv.id = this.id + "_layersDiv";
-        this.layersDiv.style.paddingTop = "5px";
+        this.layersDiv.id = "layersDiv";
+        this.layersDiv.style.paddingTop = "0px";
         this.layersDiv.style.paddingLeft = "10px";
         this.layersDiv.style.paddingBottom = "5px";
         this.layersDiv.style.paddingRight = "75px";
@@ -523,14 +523,11 @@ OpenLayers.Control.customLayerSwitcher =
                      
 
         this.dataLbl = document.createElement("div");
-        this.dataLbl.innerHTML = OpenLayers.i18n("Layers"); //Data label name
-        this.dataLbl.style.marginTop = "3px";
-        this.dataLbl.style.marginLeft = "3px";
-        this.dataLbl.style.marginBottom = "3px";
+				this.dataLbl.id = "dataLbl";
+        this.dataLbl.innerHTML = OpenLayers.i18n("Layers:"); //Data label name
         
         this.dataLayersDiv = document.createElement("div");
-        this.dataLayersDiv.style.paddingLeft = "10px";
-        this.dataLayersDiv.style.display = "inline";
+				this.dataLayersDiv.id = "dataLayersDiv";
 
 
         if (this.ascending) {
