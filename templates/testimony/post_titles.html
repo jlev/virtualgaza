@@ -6,17 +6,16 @@
 {%endblock%}
 
 {% block content %}
+	<h2>{{ first_name }} {{ last_name }} {{ year }} {{ month }} {{ day }}</h2>
 
-<h2>{{ first_name }} {{ last_name }} {{ year }} {{ month }} {{ day }}</h2>
-
-{% if postList %}
-	{% for post in postList %}
-		<div class="postList">
-			<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>: {{ post.author }}, {{ post.created_date.date }}
-		</div>
-	{%endfor%}
-{% else %}
-Sorry, no posts yet.
-{%endif%}
+	{% if postList %}
+		{% for post in postList %}
+			<div class="postList">
+				<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>: {{ post.author }}, {{ post.created_date.date }}
+			</div>
+		{%endfor%}
+	{% else %}
+	Sorry, no posts yet.
+	{%endif%}
 
 {% endblock %}
