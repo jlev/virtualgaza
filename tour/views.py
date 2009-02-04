@@ -29,6 +29,7 @@ def frontpage(request):
 								polygonRolloverFillOpacity=0.5,
 								vectorLayers=layer_list,
 								tooltipLayerName="Authors",
+								polygonLayerName="Neighborhoods",
 								zoomLayer="Border",
 								posts=recent_text,
 								photos=recent_galleries,
@@ -44,7 +45,6 @@ def neighborhood_page(request,nameSlug):
 
 	return render_to_response('tour/neighborhood_authors.html', dict(mapDict,
 						pageTitle=humanName,
-						polygonRolloverFillOpacity=0,
 						theNeighborhood=humanName,
 						authorList=authorList,
 						vectorLayers=layerList,

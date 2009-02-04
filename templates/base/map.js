@@ -27,7 +27,7 @@ function mapInit() {
 					"select":new OpenLayers.Style({strokeWidth:0,
 									strokeColor:'#FF6600',
 									fillColor:'#FF6600',
-									fillOpacity:{{polygonRolloverFillOpacity}},
+									fillOpacity:0.5,
 									pointerEvents: "visiblePainted",
 									label : "${name}",
 									fontColor: "white",
@@ -92,15 +92,19 @@ function polygonOut(feature) {
 }
 
 //select controls
+{%if tooltipLayerName %}
 var tooltips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : true, opacity : 0.50});
 map.addControl(tooltips);
 var pointSelectControl = new OpenLayers.Control.newSelectFeature({{tooltipLayerName}}_layer,
 				{onClickSelect:gotoWindowLink, onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 map.addControl(pointSelectControl);
 pointSelectControl.activate();
+{%endif%}
 
-var polygonSelectControl = new OpenLayers.Control.newSelectFeature(Neighborhoods_layer,
+{% if polygonLayerName %}
+var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
 				{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
 map.addControl(polygonSelectControl);
 polygonSelectControl.activate();
+{%endif%}
 } //end init
