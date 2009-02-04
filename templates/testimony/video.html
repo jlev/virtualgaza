@@ -3,20 +3,33 @@
 {% block title %} Videos {{ year }} {{ month }} {{ day }}{% endblock %}
 
 {%block css%}
-<link rel="stylesheet" href="{{ MEDIA_URL }}/styles/posts.css" type="text/css"/>
+<link rel="stylesheet" href="{{ MEDIA_URL }}styles/posts.css" type="text/css"/>
+{%endblock%}
+
+{%block scripts%}
+<script src="{{MEDIA_URL}}flowplayer/flowplayer-3.0.5.min.js"></script>
+<script language="JavaScript">
+	flowplayer("video", "{{MEDIA_URL}}flowplayer/flowplayer-3.0.5.swf",
+		{
+			clip: { autoPlay: false, }
+		}
+	);
+</script>
 {%endblock%}
 
 {% block content %}
 
-	{% load flowplayer %}
+	
 	{% for v in videoList %}
-		<div class="video">
-			{% flowplayer v.video.url %}
-		</div>
+		<a href="{{ v.video.url }}" 
+			style="display:block;width:425px;height:300px;" 
+			id="video">
+		</a>
 		
 		<p>{{ v.description }}<br>
 		{{v.created_date.date}}<br>
 		{{v.author.get_full_name}}</p>
 	{%endfor%}
-
+	
+	
 {% endblock %}
