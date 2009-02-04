@@ -13,18 +13,20 @@ mapDict = { 'mapType':'G_SATELLITE_MAP',
 #stolen from http://code.unicoders.org/browser/hacks/trunk/enrico.py
 def deslug(name):
 	bits = name.split('-')
-	bits[0] = bits[0].capitalize()
+	for i in range(0,len(bits)):
+		bits[i] = bits[i].capitalize()
 	return " ".join(bits)
 
 def frontpage(request):
-	layer_list = all_neighborhoods(request)
+	layer_list = mapObjects("all")
 	
 	recent_text = Text.objects.all().filter(approved=True).order_by('-created_date')[:10]
-	recent_galleries = Gallery.objects.filter(is_public=True).order_by('-date_added')[:3]
+	recent_galleries = Gallery.objects.filter(is_public=True).order_by('-date_added')[:2]
 	recent_videos = Video.objects.all().filter(approved=True).order_by('-created_date')[:4]
 	
 	return render_to_response('base/frontpage.html', dict(mapDict,
 								pageTitle="Break the Information Blockade",
+								polygonRolloverFillOpacity=0.5,
 								vectorLayers=layer_list,
 								tooltipLayerName="Authors",
 								zoomLayer="Border",
@@ -35,13 +37,31 @@ def frontpage(request):
 								context_instance = RequestContext(request)
 							)
 
-def all_neighborhoods(request):
+def neighborhood_page(request,nameSlug):
+	humanName = deslug(nameSlug)
+	authorList = Author.objects.filter(neighborhood__name__iexact=humanName).select_related()
+	layerList = mapObjects(deslug(nameSlug))
+
+	return render_to_response('tour/neighborhood_authors.html', dict(mapDict,
+						pageTitle=humanName,
+						polygonRolloverFillOpacity=0,
+						theNeighborhood=humanName,
+						authorList=authorList,
+						vectorLayers=layerList,
+						tooltipLayerName="Authors",
+						zoomLayer="Neighborhoods"),
+						context_instance = RequestContext(request))
+
+def mapObjects(neighborhoodName):
 	borderList = Border.objects.all()
 	borders = []
 	for b in borderList:
 		borders.append(b.getJSON())
 		
-	neighborhoodList = Neighborhood.objects.all()
+	if neighborhoodName == "all":
+		neighborhoodList = Neighborhood.objects.all()
+	else:
+		neighborhoodList = Neighborhood.objects.all().filter(name__iexact=neighborhoodName)
 	neighborhoods = []
 	for n in neighborhoodList:
 		neighborhoods.append(n.getJSON())
@@ -63,17 +83,3 @@ def all_neighborhoods(request):
 								{'name':'Border','list':borders,'styleName':'lineStyleMap'},
 							]
 	return layer_list
-	
-
-def one_neighborhood(request,nameSlug):
-	humanName = deslug(nameSlug)
-	theNeighborhood = get_object_or_404(Neighborhood,name__iexact=humanName)
-	polygonList = [theNeighborhood.getJSON()]
-	authorList = Author.objects.filter(neighborhood__name__iexact=humanName).select_related()
-	pointList = []
-	for a in authorList:
-		pointList.append(a.location.getJSON())
-	return render_to_response('tour/neighborhood_authors.html', dict(mapDict,
-							vector_layer_name=humanName,poly_list=polygonList,
-							author_layer_name="Authors",author_list=pointList),
-							context_instance = RequestContext(request))

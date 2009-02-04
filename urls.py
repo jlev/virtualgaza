@@ -23,8 +23,7 @@ databrowse.site.register(virtualgaza.tour.models.Bombing)
 #MAP URLS
 urlpatterns = patterns('virtualgaza.tour.views',
 	(r'^$','frontpage'),
-	(r'^neighborhood/$','all_neighborhoods'),
-	(r'^neighborhood/(?P<nameSlug>[\w-]+)/$','one_neighborhood'),
+	(r'^neighborhood/(?P<nameSlug>[\w-]+)/$','neighborhood_page'),
 )
 
 #AUTHOR URLS
