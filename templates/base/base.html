@@ -12,7 +12,11 @@
 	<title>VirtualGaza | {% block title %}{{ pageTitle }}{% endblock %}</title>
 	</head>
 
+{% if useMap %}
   <body onload="mapInit()">
+{% else %}
+	<body>
+{%endif%}
 
 	<table id="header">
 	<tr>
