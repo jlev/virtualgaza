@@ -1,7 +1,6 @@
 from django.db import models
 import datetime
 from django.template.defaultfilters import slugify
-from virtualgaza.tour.models import Neighborhood,Location
 
 GENDER_CHOICES = (
         ('M', 'Male'),
@@ -20,8 +19,8 @@ class Author(models.Model):
 	date_joined = models.DateTimeField('date joined', default=datetime.datetime.now)
 	phone_number = models.CharField(max_length=15,blank=True)
 	picture = models.ImageField(upload_to='authors',blank=True)
-	neighborhood = models.ForeignKey(Neighborhood)
-	location = models.ForeignKey(Location,blank=True,null=True)
+	neighborhood = models.ForeignKey('tour.Neighborhood')
+	location = models.ForeignKey('tour.Location',blank=True,null=True)
 		#only blank or null on first creation, but save method creates proper object
 	num_posts = models.IntegerField(default=0)
 	last_post_time = models.DateTimeField('last post',null=True,blank=True)
@@ -70,8 +69,8 @@ class Diary(models.Model):
 class Text(Diary):
 	text = models.TextField()
 	class Meta:
-		verbose_name = "diary"
-		verbose_name_plural = "diaries"
+		verbose_name = "text"
+		verbose_name_plural = "texts"
 
 class Video(Diary):
 	video = models.FileField(upload_to='video/%Y/%m/%d')
