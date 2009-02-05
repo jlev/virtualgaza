@@ -123,7 +123,7 @@ class Bombing(models.Model):
 		('DIME','Dense Inert Metal Explosive'),
 		('OTHER','Other')
 	)
-	name = models.CharField(max_length=25)
+	name = models.CharField(max_length=50)
 	description = models.TextField()
 	latitude = models.CharField(max_length=20) #displayed
 	longitude = models.CharField(max_length=20) #displayed
