@@ -4,6 +4,8 @@
 from django.contrib.gis.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.gis.gdal import SpatialReference,OGRGeometry
+from testimony.models import Author
+from exceptions import UnicodeEncodeError
 
 theSRID = 900913
 
@@ -56,10 +58,8 @@ class Neighborhood(models.Model):
 		json = {}
 		json['type']='Feature'
 		json['geometry'] = eval(self.bounds.geojson)
-		pop = self.population
-		if pop is None:
-			pop = 0
-		json['properties'] = {'name':str(self.name),'population':pop,
+		numAuthors = Author.objects.filter(neighborhood__name__iexact=self.name).count()
+		json['properties'] = {'name':str(self.name),'numAuthors':str(numAuthors),
 							'link':str("/neighborhood/%s" %slugify(self.name))}
 		return str(json)
 	
@@ -144,7 +144,16 @@ class Bombing(models.Model):
 		json = {}
 		json['type']='Feature'
 		json['geometry'] = eval(self.coords.geojson)
-		json['properties'] = {'name':str(self.name),'displayName':str(self.name),
+		
+		#clear strange characters
+		try:
+			desc = str(self.description)
+		except UnicodeEncodeError,e:
+			print e
+			print self.description
+			desc = "unicode error"
+		
+		json['properties'] = {'name':str(self.name),'displayText':str(desc),
 					'icon':str("%s.png" % self.kind)}	
 		return str(json)
 	

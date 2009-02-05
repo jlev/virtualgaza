@@ -41,6 +41,15 @@
 	</td>
 
 	<td>
+		{% comment %}
+		{{authorList|length}} authors<br>
+		{%load num_range %}
+		{% num_range authorList|length as authorRange %}
+		{% for i in authorRange %}
+			<img src="{{MEDIA_URL}}pins/male.png">
+		{%endfor%}
+		<br>
+		{% endcomment %}
 		<ul>
 		{% for author in authorList|dictsort:"last_name" %}
 			<li type="circle"><a  href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>

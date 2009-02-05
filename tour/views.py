@@ -27,7 +27,7 @@ def frontpage(request):
 	return render_to_response('base/frontpage.html', dict(mapDict,useMap="True",
 								pageTitle="Break the Information Blockade",
 								vectorLayers=layer_list,
-								tooltipLayerName="Authors",
+								tooltipLayerName="Neighborhoods",
 								polygonLayerName="Neighborhoods",
 								zoomLayer="Border",
 								posts=recent_text,
@@ -65,11 +65,11 @@ def mapObjects(neighborhoodName):
 	for n in neighborhoodList:
 		neighborhoods.append(n.getJSON())
 		
-	authors = []
-	for n in neighborhoodList:
-		authorList = Author.objects.filter(neighborhood__name__iexact=deslug(n.name))
-		for a in authorList:
-			authors.append(a.location.getJSON())
+#	authors = []
+#	for n in neighborhoodList:
+#		authorList = Author.objects.filter(neighborhood__name__iexact=deslug(n.name))
+#		for a in authorList:
+#			authors.append(a.location.getJSON())
 		
 	bombingList = Bombing.objects.all()
 	bombings = []
@@ -78,7 +78,7 @@ def mapObjects(neighborhoodName):
 	
 	layer_list = [{'name':'Neighborhoods','list':neighborhoods,'styleName':'polygonStyleMap'},
 								{'name':'Bombings','list':bombings,'styleName':'bombingStyleMap'},
-								{'name':'Authors','list':authors,'styleName':'pointStyleMap'},
+								#{'name':'Authors','list':authors,'styleName':'pointStyleMap'},
 								{'name':'Border','list':borders,'styleName':'lineStyleMap'},
 							]
 	return layer_list

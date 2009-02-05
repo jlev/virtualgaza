@@ -85,13 +85,37 @@ function toolTipsOut(feature){
 	tooltips.hide();
 }
 function polygonOver(feature) {
+	var numAuthors = feature.attributes.numAuthors;
+	
+	if (numAuthors > 0) {
+		var display = "";
+		if (numAuthors == 1) {
+			display += numAuthors + " author<br>";
+		} else {
+			display += numAuthors + " authors<br>";
+		}
+
+		display += '<div class=authorFaces>';
+		var i = 1;
+		for (i=1;i<=numAuthors;i++) {
+			display += '<img src="{{MEDIA_URL}}/pins/male.png">';
+			if ((i % 5) == 0) {
+				display += '<br>';
+			}
+		}
+		display += '</div>';
+	
+		tooltips.show({html:display});
+	}
 	feature.style = polygonStyleMap["select"];
 }
 function polygonOut(feature) {
+	tooltips.hide();
 	feature.style = polygonStyleMap["default"];
 }
 
 //select controls
+/*
 {%if tooltipLayerName %}
 var tooltips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : true, opacity : 0.50});
 map.addControl(tooltips);
@@ -100,8 +124,11 @@ var pointSelectControl = new OpenLayers.Control.newSelectFeature({{tooltipLayerN
 map.addControl(pointSelectControl);
 pointSelectControl.activate();
 {%endif%}
+*/
 
 {% if polygonLayerName %}
+var tooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
+map.addControl(tooltips);
 var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
 				{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
 map.addControl(polygonSelectControl);
