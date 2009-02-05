@@ -32,7 +32,7 @@ def authors_by_neighborhood(request):
 def author_by_full_name(request, firstName, lastName):
 	"""Gets author by full name"""
 	author = get_object_or_404(Author, first_name__iexact=deslug(firstName), last_name__iexact=deslug(lastName))
-	posts = author.text_set.all().order_by('-created_date')
+	posts = author.text_set.all().filter(approved=1).order_by('-created_date')
 	return render_to_response('testimony/author_detail.html',dict(mapDict,
 				author=author,posts=posts,
 				point_layer_name=author,
@@ -125,13 +125,13 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 		lastPostToday = posts[0]
 		
 	try:
-		nextPost = lastPostToday.get_next_by_created_date(author__first_name__iexact=first,author__last_name__iexact=last)
+		nextPost = lastPostToday.get_next_by_created_date(author__first_name__iexact=first,author__last_name__iexact=last,approved=1)
 		nextLink= "/author/%s_%s/%s/%s/%s/" % (firstName,lastName,nextPost.created_date.year,nextPost.created_date.month,nextPost.created_date.day)
 	except ObjectDoesNotExist:
 		nextLink = ""
 		
 	try:
-		prevPost = firstPostToday.get_previous_by_created_date(author__first_name__iexact=first,author__last_name__iexact=last)
+		prevPost = firstPostToday.get_previous_by_created_date(author__first_name__iexact=first,author__last_name__iexact=last,approved=1)
 		prevLink = "/author/%s_%s/%s/%s/%s/" % (firstName,lastName,prevPost.created_date.year,prevPost.created_date.month,prevPost.created_date.day)
 	except ObjectDoesNotExist:
 		prevLink = ""
