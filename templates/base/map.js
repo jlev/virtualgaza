@@ -1,7 +1,6 @@
 function mapInit() {
 	var map = new OpenLayers.Map('map', {
 		controls: [ new OpenLayers.Control.Navigation() ],
-//		controls: [ ],
 		projection : new OpenLayers.Projection("EPSG:900913"),
 		displayProjection : new OpenLayers.Projection("EPSG:900913"), //EPSG:4326
 		units : "m",
@@ -38,12 +37,8 @@ function mapInit() {
 									fontFamily: "Arial, sans-serif",
 									fontWeight: "bold",
 									labelAlign: "center"})});
-	var pointStyleMap = new OpenLayers.StyleMap(
-				{pointRadius: 10,
-				fillOpacity:1,
-				externalGraphic:"{{MEDIA_URL}}pins/male.png"});
 	var bombingStyleMap = new OpenLayers.StyleMap(
-			{pointRadius: 10,
+			{pointRadius: 7,
 			fillOpacity:1,
 			externalGraphic:"{{MEDIA_URL}}pins/bombing.png"});
 	var lineStyleMap = new OpenLayers.StyleMap(
@@ -51,7 +46,7 @@ function mapInit() {
 					strokeColor:'#FFFF00'});
 	
 	var baseLayer = new OpenLayers.Layer.Google(
-		"Google Aerial",{type: {{ mapType }}, numZoomLevels: 20,sphericalMercator:true,displayInLayerSwitcher:false}
+		"Google Aerial",{type: {{ mapType }}, numZoomLevels:7,sphericalMercator:true,displayInLayerSwitcher:false}
 	);
 	map.addLayer(baseLayer);
 	
