@@ -27,7 +27,7 @@ def frontpage(request):
 	return render_to_response('base/frontpage.html', dict(mapDict,useMap="True",
 								pageTitle="Break the Information Blockade",
 								vectorLayers=layer_list,
-								tooltipLayerName="Neighborhoods",
+								popupLayerName="Bombings",
 								polygonLayerName="Neighborhoods",
 								zoomLayer="Border",
 								posts=recent_text,
@@ -47,7 +47,7 @@ def neighborhood_page(request,nameSlug):
 						theNeighborhood=humanName,
 						authorList=authorList,
 						vectorLayers=layerList,
-						tooltipLayerName="Authors",
+						popupLayerName="Bombings",
 						zoomLayer="Neighborhoods"),
 						context_instance = RequestContext(request))
 

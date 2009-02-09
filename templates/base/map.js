@@ -1,10 +1,13 @@
 function mapInit() {
 	var map = new OpenLayers.Map('map', {
+		controls: [ new OpenLayers.Control.Navigation() ],
+//		controls: [ ],
 		projection : new OpenLayers.Projection("EPSG:900913"),
 		displayProjection : new OpenLayers.Projection("EPSG:900913"), //EPSG:4326
 		units : "m",
-		maxResolution : 156543.0339,
-		maxExtent : new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508), //whole world
+		maxResolution : "auto",
+//		maxExtent : new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508), //whole world
+		maxExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
 		restrictedExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
 		minZoomLevel: 11,
 		maxZoomLevel: 17});
@@ -78,12 +81,6 @@ function gotoTabLink(feature) {
 	var linkLocation = new OpenLayers.LonLat(feature.geometry.x,feature.geometry.y);
 	map.moveTo(linkLocation,5); //move and zoom
 }
-function toolTipsOver(feature) {
-	tooltips.show({html:feature.attributes.displayName});
-}
-function toolTipsOut(feature){
-	tooltips.hide();
-}
 function polygonOver(feature) {
 	var numAuthors = feature.attributes.numAuthors;
 	
@@ -105,33 +102,41 @@ function polygonOver(feature) {
 		}
 		display += '</div>';
 	
-		tooltips.show({html:display});
+		polygonTooltips.show({html:display});
 	}
 	feature.style = polygonStyleMap["select"];
 }
 function polygonOut(feature) {
-	tooltips.hide();
+	polygonTooltips.hide();
 	feature.style = polygonStyleMap["default"];
 }
 
+function toolTipsOver(feature) {
+	pointToolTips.show({html:feature.attributes.displayText});
+}
+function toolTipsOut(feature){
+	pointToolTips.hide();
+}
+
 //select controls
-/*
-{%if tooltipLayerName %}
-var tooltips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : true, opacity : 0.50});
-map.addControl(tooltips);
-var pointSelectControl = new OpenLayers.Control.newSelectFeature({{tooltipLayerName}}_layer,
-				{onClickSelect:gotoWindowLink, onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
+//bombings
+{%if popupLayerName %}
+var pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : false, opacity : 0.75,
+widthValue:"200px"});
+map.addControl(pointToolTips);
+var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
+				{onClickSelect:gotoWindowLink,onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 map.addControl(pointSelectControl);
 pointSelectControl.activate();
 {%endif%}
-*/
 
+//neighborhoods
 {% if polygonLayerName %}
-var tooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
-map.addControl(tooltips);
+var polygonTooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
+map.addControl(polygonTooltips);
 var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
 				{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
 map.addControl(polygonSelectControl);
 polygonSelectControl.activate();
 {%endif%}
-} //end init
+} //end mapInit

@@ -146,14 +146,14 @@ class Bombing(models.Model):
 		json['geometry'] = eval(self.coords.geojson)
 		
 		#clear strange characters
-	#	try:
-	#		desc = str(self.description)
-	#	except UnicodeEncodeError,e:
-	#		print e
-	#		print self.description
-	#		desc = "unicode error"
+		try:
+			desc = str(self.description)
+		except UnicodeEncodeError,e:
+			#print e
+			print self.description
+			desc = "unicode error"
 	#	
-		json['properties'] = {'name':str(self.name),#'displayText':str(desc),
+		json['properties'] = {'name':str(self.name),'displayText':str(desc),
 					'icon':str("%s.png" % self.kind)}	
 		return str(json)
 	
