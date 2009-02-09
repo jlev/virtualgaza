@@ -58,7 +58,13 @@ OpenLayers.Control.ToolTips = OpenLayers.Class(OpenLayers.Control, {
      * Property: Padding of the div
      * {String}
      */
-    paddingValue : "2px",
+    paddingValue : "2px 5px 2px 5px",
+
+		/** 
+     * Property: Width of the div
+     * {String}
+     */
+    widthValue : "",
  
     /** 
      * Property: lastXy
@@ -107,7 +113,9 @@ OpenLayers.Control.ToolTips = OpenLayers.Class(OpenLayers.Control, {
 						this.divBgTtips.style.display = "none";
 						this.divBgTtips.style.position = "absolute";
 						this.divBgTtips.style.zIndex = "100000";
-						this.divBgTtips.style.padding = "2px 5px 2px 5px";
+						this.divBgTtips.style.padding = this.paddingValue;
+						this.divBgTtips.style.width = this.widthValue;
+						
 						this.divBgTtipsTx = document.createElement("span");
 						if(this.bold){this.divBgTtipsTx.style.fontWeight="bold";}		
 						this.divBgTtips.appendChild(this.divBgTtipsTx);		
@@ -124,7 +132,8 @@ OpenLayers.Control.ToolTips = OpenLayers.Class(OpenLayers.Control, {
 						this.divTxTtips.style.display = "none";
 						this.divTxTtips.style.position = "absolute";
 						this.divTxTtips.style.zIndex = "100001";
-						this.divTxTtips.style.padding = "2px 5px 2px 5px";
+						this.divTxTtips.style.padding = this.paddingValue;
+						this.divTxTtips.style.width = this.widthValue;
 						if(this.bold){this.divTxTtips.style.fontWeight="bold";}				
 				document.getElementById(this.map.div.id).appendChild(this.divTxTtips); 
 				//this.divTxTtips = this.clone(this.divBgTtips);
