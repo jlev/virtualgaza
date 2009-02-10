@@ -150,7 +150,7 @@ class Bombing(models.Model):
 			desc = str(self.description)
 		except UnicodeEncodeError,e:
 			import sys
-			sys.stderr.write('Unicode Error',e)
+			sys.stderr.write('Unicode Error'+str(e))
 			desc = "unicode error"
 	#	
 		json['properties'] = {'name':str(self.name),'displayText':str(desc),
