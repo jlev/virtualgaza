@@ -19,7 +19,7 @@ function mapInit() {
 	var polygonStyleMap = new OpenLayers.StyleMap(
 					{"default":new OpenLayers.Style({strokeWidth:0,
 									fillOpacity:0,
-									pointerEvents: "visiblePainted",
+									pointerEvents: "all",
 									label : "${name}",
 									fontColor: "white",
 									fontSize: "10px",
@@ -30,7 +30,7 @@ function mapInit() {
 									strokeColor:'#FF6600',
 									fillColor:'#FF6600',
 									fillOpacity:0.5,
-									pointerEvents: "visiblePainted",
+									pointerEvents: "all",
 									label : "${name}",
 									fontColor: "white",
 									fontSize: "10px",
@@ -57,6 +57,21 @@ function mapInit() {
 		{% for object in layer.list %}
 			var {{layer.name}}_{{forloop.counter}} = geojson_format.read({{ object|safe }});
 			{{layer.name}}_layer.addFeatures({{layer.name}}_{{forloop.counter}});
+		{% endfor %}
+		map.addLayer({{layer.name}}_layer);
+	{%endfor%}
+	
+	{% for layer in markerLayers %}
+		{{layer.name}}_layer = new OpenLayers.Layer.Markers("{{layer.name}}",{'styleMap':{{layer.styleName}}});
+		{% for object in layer.list %}
+			var {{layer.name}}_{{forloop.counter}} = geojson_format.read({{ object|safe }});
+			console.log({{layer.name}}_{{forloop.counter}});
+			
+			var size = new OpenLayers.Size(10,17);
+			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+			var icon = new OpenLayers.Icon('http://boston.openguides.org/markers/AQUA.png',size,offset);
+			var lonlat = new OpenLayers.LonLat({{layer.name}}_{{forloop.counter}}.geometry.x,{{layer.name}}_{{forloop.counter}}.geometry.y);
+			{{layer.name}}_layer.addMarker(new OpenLayers.Marker(lonlat,icon.clone()));
 		{% endfor %}
 		map.addLayer({{layer.name}}_layer);
 	{%endfor%}
@@ -120,7 +135,7 @@ var pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"b
 widthValue:"200px"});
 map.addControl(pointToolTips);
 var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
-				{onClickSelect:gotoWindowLink,onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
+				{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 map.addControl(pointSelectControl);
 pointSelectControl.activate();
 {%endif%}
