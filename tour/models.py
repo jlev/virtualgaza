@@ -128,7 +128,7 @@ class Bombing(models.Model):
 	latitude = models.CharField(max_length=20) #displayed
 	longitude = models.CharField(max_length=20) #displayed
 	coords = models.PointField(srid=theSRID,blank=True,null=True) #hidden
-	casualties = models.IntegerField(blank=True,null=True)	
+	casualties = models.IntegerField(blank=True,null=True)
 	time = models.DateTimeField(auto_now=False,blank=True)
 	kind = models.CharField(max_length=10, choices=KIND_CHOICES)
 	verified = models.BooleanField('Verified')
@@ -153,7 +153,8 @@ class Bombing(models.Model):
 			sys.stderr.write('Unicode Error'+str(e))
 			desc = "unicode error"
 	#	
-		json['properties'] = {'name':str(self.name),'displayText':str(desc),
+		json['properties'] = {'name':str(self.name),
+					'description':str(desc),'casualties':str(self.casualties),
 					'icon':str("%s.png" % self.kind)}	
 		return str(json)
 	
