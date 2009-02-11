@@ -2,7 +2,7 @@ function mapInit() {
 	var map = new OpenLayers.Map('map', {
 		controls: [ new OpenLayers.Control.Navigation() ],
 		projection : new OpenLayers.Projection("EPSG:900913"),
-		displayProjection : new OpenLayers.Projection("EPSG:900913"), //EPSG:4326
+		displayProjection : new OpenLayers.Projection("EPSG:4326"), //EPSG:4326
 		units : "m",
 		maxResolution : "auto",
 //		maxExtent : new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508), //whole world
@@ -10,10 +10,10 @@ function mapInit() {
 		restrictedExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
 		minZoomLevel: 11,
 		maxZoomLevel: 17});
-//	map.addControl(new OpenLayers.Control.MousePosition());
-//	map.addControl(new OpenLayers.Control.Permalink('permalink'));
+	map.addControl(new OpenLayers.Control.MousePosition());
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
 	activeColor:'silver'}));
+	map.addControl(new OpenLayers.Control.ScaleLine());
 	
 	//could pass these in from views, but easy enough to just define them here...	
 	var polygonStyleMap = new OpenLayers.StyleMap(
@@ -61,21 +61,6 @@ function mapInit() {
 		map.addLayer({{layer.name}}_layer);
 	{%endfor%}
 	
-	{% for layer in markerLayers %}
-		{{layer.name}}_layer = new OpenLayers.Layer.Markers("{{layer.name}}",{'styleMap':{{layer.styleName}}});
-		{% for object in layer.list %}
-			var {{layer.name}}_{{forloop.counter}} = geojson_format.read({{ object|safe }});
-			console.log({{layer.name}}_{{forloop.counter}});
-			
-			var size = new OpenLayers.Size(10,17);
-			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-			var icon = new OpenLayers.Icon('http://boston.openguides.org/markers/AQUA.png',size,offset);
-			var lonlat = new OpenLayers.LonLat({{layer.name}}_{{forloop.counter}}.geometry.x,{{layer.name}}_{{forloop.counter}}.geometry.y);
-			{{layer.name}}_layer.addMarker(new OpenLayers.Marker(lonlat,icon.clone()));
-		{% endfor %}
-		map.addLayer({{layer.name}}_layer);
-	{%endfor%}
-	
 	map.zoomToExtent({{zoomLayer}}_layer.getDataExtent());
 
 //event handlers
@@ -105,7 +90,7 @@ function polygonOver(feature) {
 		display += '<div class=authorFaces>';
 		var i = 1;
 		for (i=1;i<=numAuthors;i++) {
-			display += '<img src="{{MEDIA_URL}}/pins/male.png">';
+			display += '<img src="{{MEDIA_URL}}pins/male.png">';
 			if ((i % 5) == 0) {
 				display += '<br>';
 			}
@@ -122,7 +107,13 @@ function polygonOut(feature) {
 }
 
 function toolTipsOver(feature) {
-	pointToolTips.show({html:feature.attributes.displayText});
+	var displayText = '';
+	displayText += '<div class="bombingName">' + feature.attributes.name + '</div>';
+	displayText += '<div class="bombingDesc">' + feature.attributes.description + '</div>';
+	if (feature.attributes.casualties != "None") {
+		displayText += '<div class="bombingCasualties">Casualties: ' + feature.attributes.casualties + '</div>';
+	}
+	pointToolTips.show({html:displayText});
 }
 function toolTipsOut(feature){
 	pointToolTips.hide();

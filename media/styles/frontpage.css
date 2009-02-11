@@ -72,3 +72,26 @@
 .gallery-video {
 	display:inline;
 }
+
+.olControlScaleLine {
+	position:absolute;
+	top:10px;
+}
+
+.bombingName {
+	font-style:bold;
+	text-align:center;
+	font-size:10pt;
+}
+
+.bombingDesc {
+	font-style:none;
+	text-align:left;
+	font-size:9pt;
+}
+
+.bombingCasualties {
+	font-style:italic;
+	text-align:left;
+	font-size:9pt;
+}
