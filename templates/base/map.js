@@ -122,24 +122,26 @@ function toolTipsOut(feature){
 //select controls
 //bombings
 {%if popupLayerName %}
-var pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : false, opacity : 0.75,
-widthValue:"200px"});
-map.addControl(pointToolTips);
-var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
-				{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
-map.addControl(pointSelectControl);
-pointSelectControl.activate();
-//set to default unselected
-{{popupLayerName}}_layer.setVisibility(false);
+	var pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : false, opacity : 0.75,
+	widthValue:"200px"});
+	map.addControl(pointToolTips);
+	var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
+					{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
+	map.addControl(pointSelectControl);
+	pointSelectControl.activate();
+	//set bombing visibility
+	{%if hideBombings %}
+		{{popupLayerName}}_layer.setVisibility(false);
+	{%endif%}
 {%endif%}
 
 //neighborhoods
 {% if polygonLayerName %}
-var polygonTooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
-map.addControl(polygonTooltips);
-var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
-				{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
-map.addControl(polygonSelectControl);
-polygonSelectControl.activate();
+	var polygonTooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
+	map.addControl(polygonTooltips);
+	var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
+					{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
+	map.addControl(polygonSelectControl);
+	polygonSelectControl.activate();
 {%endif%}
 } //end mapInit

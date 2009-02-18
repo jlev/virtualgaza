@@ -28,6 +28,7 @@ def frontpage(request):
 								pageTitle="Break the Information Blockade",
 								vectorLayers=layer_list,
 								popupLayerName="Bombings",
+								hideBombings="true",
 								polygonLayerName="Neighborhoods",
 								zoomLayer="Border",
 								posts=recent_text,
@@ -77,8 +78,6 @@ def mapObjects(neighborhoodName):
 		bombings.append(b.getJSON())
 	
 	layer_list = [{'name':'Neighborhoods','list':neighborhoods,'styleName':'polygonStyleMap'},
-								{'name':'Bombings','list':bombings,'styleName':'bombingStyleMap'},
-								#{'name':'Authors','list':authors,'styleName':'pointStyleMap'},
 								{'name':'Border','list':borders,'styleName':'lineStyleMap'},
-							]
+								{'name':'Bombings','list':bombings,'styleName':'bombingStyleMap'}]
 	return layer_list
