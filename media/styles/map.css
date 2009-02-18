@@ -22,6 +22,11 @@
 	padding-right:5px;
 }
 
+.olControlScaleLine {
+	position:absolute;
+	top:10px;
+}
+
 .bombingName {
 	font-style:bold;
 	text-align:center;

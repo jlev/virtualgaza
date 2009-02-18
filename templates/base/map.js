@@ -10,7 +10,7 @@ function mapInit() {
 		restrictedExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
 		minZoomLevel: 11,
 		maxZoomLevel: 17});
-	map.addControl(new OpenLayers.Control.MousePosition());
+//	map.addControl(new OpenLayers.Control.MousePosition());
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
 	activeColor:'silver'}));
 	map.addControl(new OpenLayers.Control.ScaleLine());
