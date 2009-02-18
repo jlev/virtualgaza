@@ -129,6 +129,8 @@ var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerNam
 				{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 map.addControl(pointSelectControl);
 pointSelectControl.activate();
+//set to default unselected
+{{popupLayerName}}_layer.setVisibility(false);
 {%endif%}
 
 //neighborhoods
