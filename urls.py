@@ -58,6 +58,7 @@ urlpatterns += patterns('',
 	(r'^db/(.*)', login_required(databrowse.site.root)),
 	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 	(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL + 'favicon.ico'}),
+	(r'robots.txt$','django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL + 'robots.txt'}),
 )
 
 
