@@ -2,31 +2,6 @@
 	margin:0px;
 }
 
-#map {
-	height:600px;
-	width:600px;
-	border:solid 1px;
-}
-
-#mapKey {
-	text-align:left;
-	width:600px;
-}
-
-#layersDiv {
-	font-size:10pt;
-}
-
-#dataLbl {
-	display:inline;
-	padding-right:5px;
-}
-
-#dataLayersDiv {
-	display:inline;
-	padding-right:5px;
-}
-
 #recent {
 	padding-left:5px;
 	font-size:10pt;
@@ -77,22 +52,4 @@
 .olControlScaleLine {
 	position:absolute;
 	top:10px;
-}
-
-.bombingName {
-	font-style:bold;
-	text-align:center;
-	font-size:10pt;
-}
-
-.bombingDesc {
-	font-style:none;
-	text-align:left;
-	font-size:9pt;
-}
-
-.bombingCasualties {
-	font-style:italic;
-	text-align:left;
-	font-size:9pt;
 }
