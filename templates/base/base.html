@@ -18,18 +18,19 @@
 	<body>
 {%endif%}
 
+<div id="blackbar">
 	<table id="header">
 	<tr>
 		<td rowspan="2" width="150px"><a id="logo" href="/"><img src="{{ MEDIA_URL }}vgaza_white_150.png" alt="VGAZA"/></a></td>
-			<td></td>
-				<td><a class="links-english" href="/about/english/">About</a></td>
-				<td><a class="links-english" href="/author/">Contributors</a></td>
-				<td><a class="links-english" href="/testimony/">Testimony</a></td>
-				<td><a class="links-english" href="/photologue/gallery/">Photographs</a></td>
-				<td><a class="links-english" href="/video/">Video</a></td>
-				<td><a class="links-english" href="/links/english/">Links</a></td>
-				<td><a class="links-english" href="/submit/english/">Submit</a></td>
-				<td><a class="links-english" href="/admin/">Login</a></td>
+			<td id="spacer" width="450px"></td>
+			<td><a class="links-english" href="/about/english/">About</a></td>
+			<td><a class="links-english" href="/author/">Contributors</a></td>
+			<td><a class="links-english" href="/testimony/">Testimony</a></td>
+			<td><a class="links-english" href="/photologue/gallery/">Photographs</a></td>
+			<td><a class="links-english" href="/video/">Video</a></td>
+			<td><a class="links-english" href="/links/english/">Links</a></td>
+			<td><a class="links-english" href="/submit/english/">Submit</a></td>
+			<td><a class="links-english" href="/admin/">Login</a></td>
 		<tr>
 			<td id="spacer" width="450px"></td>
 			<td><a class="links-arabic" href="/about/arabic/">من نحن</a></td>
@@ -43,6 +44,7 @@
 		</tr>
 	</tr>
 	</table>
+</div>
 	
 <div id="contentBox">
 	{%block content%}

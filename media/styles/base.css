@@ -20,14 +20,20 @@ a img {
 	border:none;
 }
 
+#blackbar {
+	width:100%;
+	background:black;
+}
+
 table#header {
 	color:white;
 	background:black;
 	font-weight:bold;
 	padding-top:15px;
 	padding-bottom:5px;
-	width:100%;
+	width:1000px;
 	border:0;
+	margin:auto;
 }
 
 table#header a {

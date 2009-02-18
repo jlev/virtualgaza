@@ -39,6 +39,7 @@
 #recent h2 {
 	font-size:12pt;
 	text-transform: uppercase;
+	margin-bottom:0px;
 }
 
 #recent .box {
