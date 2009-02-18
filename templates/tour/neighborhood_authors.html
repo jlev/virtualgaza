@@ -2,6 +2,7 @@
 {% block title %}{{ pageTitle }}{% endblock %}
 
 {%block css%}
+<link rel="stylesheet" href="{{ MEDIA_URL }}styles/map.css" type="text/css"/>
 <link type="text/css" href="{{MEDIA_URL}}styles/neighborhood_page.css" rel="Stylesheet" />	
 {%endblock%}
 
@@ -40,25 +41,37 @@
 	{% endblock map%}
 	</td>
 
-	<td>
-		{% comment %}
-		{{authorList|length}} authors<br>
-		{%load num_range %}
-		{% num_range authorList|length as authorRange %}
-		{% for i in authorRange %}
-			<img src="{{MEDIA_URL}}pins/male.png">
-		{%endfor%}
-		<br>
-		{% endcomment %}
-		<ul>
+	<td valign="top">
 		{%if authorList %}
+			<script type="text/javascript">
+			var display = "<div id='numAuthors'><b>";
+			var numAuthors = {{authorList|length}};
+			if (numAuthors == 1) {
+				display += numAuthors + " author";
+			} else {
+				display += numAuthors + " authors";
+			}
+			display += ' in {{theNeighborhood}}</b><br>';
+
+			display += '<div class=authorFaces>';
+			var i = 1;
+			for (i=1;i<=numAuthors;i++) {
+				display += '<img src="{{MEDIA_URL}}pins/male.png">';
+				if ((i % 5) == 0) {
+					display += '<br>';
+				}
+			}
+			display += '</div>';
+			document.write(display);
+			</script>
+			<ul>
 			{% for author in authorList|dictsort:"last_name" %}
 				<li type="circle"><a  href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>
 			{% endfor %}
+			</ul>
 		{%else%}
 			There are currently no authors in {{theNeighborhood}}
 		{%endif%}
-		</ul>
 	</td>
 </tr>
 
