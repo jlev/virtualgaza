@@ -129,7 +129,7 @@ class Bombing(models.Model):
 	longitude = models.CharField(max_length=20) #displayed
 	coords = models.PointField(srid=theSRID,blank=True,null=True) #hidden
 	casualties = models.IntegerField(blank=True,null=True)
-	time = models.DateTimeField(auto_now=False,blank=True)
+	time = models.DateTimeField(auto_now=False,blank=True,null=True)
 	kind = models.CharField(max_length=10, choices=KIND_CHOICES)
 	verified = models.BooleanField('Verified')
 	
