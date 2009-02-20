@@ -30,9 +30,9 @@
 
 	{%if alsoOnDate %}
 	<div class="relatedBox">
-		Also on {{year}} {{month}} {{day}}:<br>
+		Also on {{year}}-{{month}}-{{day}}:<br>
 		{% for post in alsoOnDate %}
-		<a href={{post.url}}>{{post.description}}</a><br>
+		{{post.author}}: <a href={{post.url}}>{{post.description}}</a><br>
 		{%endfor%}
 	</div>
 	{%endif%}
@@ -41,7 +41,7 @@
 	<div class="relatedBox">
 	Also in {{theNeighborhood}}:<br>
 		{% for post in alsoInNeighborhood %}
-		<a href={{post.url}}>{{post.description}}</a><br>
+		{{post.author}}: <a href={{post.url}}>{{post.description}}</a><br>
 		{%endfor%}
 	</div>
 	{%endif%}
