@@ -22,7 +22,7 @@ class Author(models.Model):
 	auto_approve = models.BooleanField("Auto Approve",
 		default=False,help_text="Make sure this author is trusted before enabling.")
 	description = models.CharField("Brief Author Biography",max_length=500,null=True,blank=True)
-	description_short = models.CharField("One Sentance Bio",max_length=100,null=True,blank=True)
+	description_short = models.CharField("One Sentence Bio",max_length=100,null=True,blank=True)
 	
 	def get_full_name(self):
 		full_name = u'%s %s' % (self.first_name, self.last_name)
