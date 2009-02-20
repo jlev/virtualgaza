@@ -36,27 +36,21 @@ def author_by_full_name(request, firstName, lastName):
 	return render_to_response('testimony/author_detail.html',dict(mapDict,
 				author=author,posts=posts,
 				point_layer_name=author,
-				point_list=[author.location.getJSON()],
-				poly_list=[]),
+				layer_list=[author.neighborhood.getJSON()]),
 			context_instance = RequestContext(request))
 
 def author_by_id(request, id):
 	"""Gets author by full name"""
 	author = get_object_or_404(Author, id=id)
 	return render_to_response('testimony/author_detail.html',dict(mapDict,
-				author=author,
-				point_list=[author.location.getJSON()]),
+				author=author),
 			context_instance = RequestContext(request))
 	
 def author_by_last_name(request, lastName):
 	author_list = get_list_or_404(Author, last_name__iexact=deslug(lastName))
-	point_list = []
-	for a in author_list:
-		point_list.append(a.location.getJSON())
 	
 	return render_to_response('testimony/authors_by_name.html',dict(mapDict,
-				author_list=author_list,
-				point_list=point_list),
+				author_list=author_list),
 			context_instance = RequestContext(request))
 
 def posts_by_author(request, firstName, lastName):
@@ -74,7 +68,9 @@ def posts_by_author_and_year(request, firstName, lastName, year):
 	first = deslug(firstName)
 	last = deslug(lastName)
 	posts=Text.objects.all().filter(author__first_name__iexact=first,
-					author__last_name__iexact=last,created_date__year=year,approved=1).order_by('-created_date')
+		author__last_name__iexact=last,
+		created_date__year=year,
+		approved=1).order_by('-created_date')
 
 	nextLink= "/author/%s_%s/%s/" % (firstName,lastName,int(year)+1)
 	prevLink = "/author/%s_%s/%s/" % (firstName,lastName,int(year)-1)
@@ -113,6 +109,7 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 					created_date__month=month,
 					created_date__day=day,
 					approved=1).order_by('-created_date')
+	author = get_object_or_404(Author, first_name__iexact=deslug(firstName), last_name__iexact=deslug(lastName))
 	
 	num_posts = posts.count()
 	if num_posts == 0:
@@ -126,21 +123,37 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 		
 	try:
 		nextPost = lastPostToday.get_next_by_created_date(author__first_name__iexact=first,author__last_name__iexact=last,approved=1)
-		nextLink= "/author/%s_%s/%s/%s/%s/" % (firstName,lastName,nextPost.created_date.year,nextPost.created_date.month,nextPost.created_date.day)
 	except ObjectDoesNotExist:
-		nextLink = ""
+		nextPost = None
 		
 	try:
 		prevPost = firstPostToday.get_previous_by_created_date(author__first_name__iexact=first,author__last_name__iexact=last,approved=1)
-		prevLink = "/author/%s_%s/%s/%s/%s/" % (firstName,lastName,prevPost.created_date.year,prevPost.created_date.month,prevPost.created_date.day)
 	except ObjectDoesNotExist:
-		prevLink = ""
+		prevPost = None
+
+	alsoByAuthor = Text.objects.all().filter(author__first_name__iexact=first,
+						author__last_name__iexact=last).order_by('?')[:5]
+
+	alsoOnDate = Text.objects.all().filter(created_date__year=year,
+		created_date__month=month,
+		created_date__day=day,
+		approved=1).exclude(author__first_name__iexact=first,
+		author__last_name__iexact=last).order_by('?')[:5]
+	#all posts on this date not by this author
+	
+	alsoInNeighborhood = Text.objects.all().filter(author__neighborhood=author.neighborhood,approved=1).exclude(author__first_name__iexact=first,
+	author__last_name__iexact=last).order_by('?')[:5]
+	#five posts also in this neighborhood, but not by this author
 
 	return render_to_response('testimony/post_list.html',
 						{'first_name':first,'last_name':last,
 						'year':year,'month':month,'day':day,
 						'postList':posts,
-						'next':nextLink,'prev':prevLink,'dateType':'day'},
+						'alsoByAuthor':alsoByAuthor,
+						'alsoOnDate':alsoOnDate,
+						'alsoInNeighborhood':alsoInNeighborhood,
+						'theNeighborhood':author.neighborhood,
+						'next':nextPost,'prev':prevPost,'dateType':'day'},
 				context_instance = RequestContext(request))
 			
 def posts_by_recent(request, num_latest):
@@ -162,7 +175,7 @@ def all_posts(request):
 		
 def search_for_author(request):
 	#make this searchable
-	html = "<html><body>Click an author on the map to see their posts here</body></html>"
+	html = "Not yet implemented"
 	return HttpResponse(html)
 	
 def all_videos(request):
