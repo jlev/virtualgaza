@@ -62,6 +62,14 @@ class Diary(models.Model):
 
 class Text(Diary):
 	text = models.TextField()
+	
+	def get_absolute_url(self):
+		return "/author/%s_%s/%d/%d/%d" % (slugify(self.author.first_name),
+																			slugify(self.author.last_name),
+																			self.created_date.year,
+																			self.created_date.month,
+																			self.created_date.day)
+	
 	class Meta:
 		verbose_name = "text"
 		verbose_name_plural = "texts"
