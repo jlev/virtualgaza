@@ -1,5 +1,21 @@
+#postContent {
+	width:700px;
+}
+
+#relatedPosts {
+	width:300px;
+	vertical-align:top;
+}
+
+#relatedPosts .relatedBox {
+	border:1px solid black;
+	padding:5px;
+	margin-top:5px;
+}
+
 #prevLink {
 	text-align:left;
+	width:50%;
 }
 
 #allLink {
@@ -8,4 +24,5 @@
 
 #nextLink {
 	text-align:right;
+	width:50%;
 }
