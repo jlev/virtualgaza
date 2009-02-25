@@ -64,6 +64,7 @@
 			display += '</div>';
 			document.write(display);
 			</script>
+			
 			<ul>
 			{% for author in authorList|dictsort:"last_name" %}
 				<li type="circle"><a  href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>
@@ -71,6 +72,22 @@
 			</ul>
 		{%else%}
 			There are currently no authors in {{theNeighborhood}}
+		{%endif%}
+		
+		{%if galleryList %}
+		<b>{{galleryList|length}} galleries in {{theNeighborhood}}</b>
+		{%for gallery in galleryList%}
+			<br>
+			<a href="{{ gallery.get_absolute_url }}"><img src="{{ gallery.sample.0.get_frontpage_thumbnail_url }}" alt="{{ gallery.sample.0.photo.title }}"/></a>
+			{{gallery.title}}
+		{%endfor%}
+		{%endif%}
+		
+		{%if videoList %}
+		<b>{{videoList|length}} videos in {{theNeighborhood}}</b><br>
+		{% for video in videoList %}
+				<a href="/video/{{video.created_date.year}}/{{video.created_date.month}}/{{video.created_date.day}}/"><img src="{{ video.video.url }}.jpg" alt="{{video.description}}"/></a>
+		{%endfor%}
 		{%endif%}
 	</td>
 </tr>
