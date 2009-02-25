@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.conf import settings
 from tour.models import Neighborhood,Location,Border,Bombing
 from testimony.models import Author,Text,Video
-from photologue.models import Gallery
+from photologue.models import Gallery,Photo
 
 mapDict = { 'mapType':'G_SATELLITE_MAP',
 			'googleAPIVersion':'2.x',
@@ -20,9 +20,9 @@ def deslug(name):
 def frontpage(request):
 	layer_list = mapObjects("all")
 	
-	recent_text = Text.objects.all().filter(approved=True).order_by('-created_date')[:10]
+	recent_text = Text.objects.filter(approved=True).order_by('-created_date')[:10]
 	recent_galleries = Gallery.objects.filter(is_public=True).order_by('-date_added')[:2]
-	recent_videos = Video.objects.all().filter(approved=True).order_by('-created_date')[:3]
+	recent_videos = Video.objects.filter(approved=True).order_by('-created_date')[:3]
 	
 	return render_to_response('base/frontpage.html', dict(mapDict,useMap="True",
 								pageTitle="Break the Information Blockade",
@@ -42,12 +42,16 @@ def neighborhood_page(request,nameSlug):
 	humanName = deslug(nameSlug)
 	authorList = Author.objects.filter(neighborhood__name__iexact=humanName).select_related()
 	layerList = mapObjects(deslug(nameSlug))
+	galleryList = Gallery.objects.filter(tags__iexact=u'"%s"' % humanName,is_public=True)
+	videoList = Video.objects.filter(author__neighborhood__name__iexact=humanName,approved=True)
 
 	return render_to_response('tour/neighborhood_authors.html', dict(mapDict,useMap="True",
 						pageTitle=humanName,
 						theNeighborhood=humanName,
 						authorList=authorList,
 						vectorLayers=layerList,
+						galleryList=galleryList,
+						videoList=videoList,
 						popupLayerName="Bombings",
 						zoomLayer="Neighborhoods"),
 						context_instance = RequestContext(request))
