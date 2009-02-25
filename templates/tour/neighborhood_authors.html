@@ -62,9 +62,10 @@
 				}
 			}
 			display += '</div>';
-			document.write(display);
+			//document.write(display);
 			</script>
 			
+			<b>{{authorList|length}} authors in {{theNeighborhood}}</b><br>
 			<ul>
 			{% for author in authorList|dictsort:"last_name" %}
 				<li type="circle"><a  href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>
@@ -82,6 +83,7 @@
 			{{gallery.title}}
 		{%endfor%}
 		{%endif%}
+		<br>
 		
 		{%if videoList %}
 		<b>{{videoList|length}} videos in {{theNeighborhood}}</b><br>
