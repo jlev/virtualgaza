@@ -36,7 +36,7 @@ urlpatterns += patterns('virtualgaza.testimony.views',
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/$', 'posts_by_author_and_year'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/(?P<month>\w{1,2})/$', 'posts_by_author_and_month'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$', 'posts_by_author_and_date'),
-	(r'^search/$','search_for_author'),
+	(r'^search/$','search'),
 )
 
 #PHOTO URLS
@@ -51,10 +51,17 @@ urlpatterns += patterns('virtualgaza.testimony.views',
 	(r'^video/(?P<year>\d{4})/(?P<month>\w{1,2})/(?P<day>\w{1,2})/$', 'video_by_date'),
 )
 
+#FORM URLS
+urlpatterns += patterns('virtualgaza.testimony.forms',
+	(r'^submit/text/$','add_text'),
+	(r'^submit/author/$','add_author'),
+)
+
 #ADMIN URLS
 urlpatterns += patterns('',
 	(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 	(r'^admin/(.*)', admin.site.root),
+	(r'^admin/jsi18n', 'django.views.i18n.javascript_catalog'),
 	(r'^db/(.*)', login_required(databrowse.site.root)),
 	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 	(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL + 'favicon.ico'}),
