@@ -17,18 +17,18 @@ class AuthorAdmin(admin.ModelAdmin):
 	form = AuthorForm
 	
 class TextAdmin(admin.ModelAdmin):
-	list_display = ('author','description','created_date','uploaded_date', 'approved')
+	list_display = ('author','neighborhood','description','created_date','uploaded_date', 'approved')
 	fieldsets = [
-	    (None, {'fields': ['author']}),
+	    (None, {'fields': ['author','neighborhood']}),
 	    ('Date', {'fields': ['created_date']}),
 	    ('Content', {'fields': ['description','text']}),
 		('Publication', {'fields': ['approved']}),
 	]
 
 class VideoAdmin(admin.ModelAdmin):
-	list_display = ('author','description','created_date','uploaded_date', 'approved')
+	list_display = ('author','neighborhood','description','created_date','uploaded_date', 'approved')
 	fieldsets = [
-	    (None, {'fields': ['author']}),
+	    (None, {'fields': ['author','neighborhood']}),
 	    ('Date', {'fields': ['created_date']}),
 	    ('Content', {'fields': ['description','video']}),
 		('Publication', {'fields': ['approved']}),
