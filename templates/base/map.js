@@ -85,11 +85,14 @@ function polygonOver(feature) {
 	var numPhotos = feature.attributes.numPhotos;
 	var numVideos = feature.attributes.numVideos;
 	
-	if (numAuthors > 0) {
+	if ((numAuthors > 0) || (numPosts > 0) || (numPhotos > 0) || (numVideos > 0)) {
 		var display = "";
-		display += numAuthors + " author";
-		if (numAuthors > 1) { display += "s"; }
-		display += "<br>";
+		
+		if (numAuthors > 0) {
+			display += numAuthors + " author";
+			if (numAuthors > 1) { display += "s"; }
+			display += "<br>";	
+		}
 		
 		if (numPosts > 0) {
 			display += numPosts + " post";
