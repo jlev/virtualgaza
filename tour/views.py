@@ -41,14 +41,16 @@ def frontpage(request):
 def neighborhood_page(request,nameSlug):
 	humanName = deslug(nameSlug)
 	authorList = Author.objects.filter(neighborhood__name__iexact=humanName).select_related()
+	recentPosts=Text.objects.all().filter(neighborhood__name__iexact=humanName,approved=1).order_by('-created_date')[:5]
 	layerList = mapObjects(deslug(nameSlug))
 	galleryList = Gallery.objects.filter(tags__iexact=u'"%s"' % humanName,is_public=True)
 	videoList = Video.objects.filter(author__neighborhood__name__iexact=humanName,approved=True)
 
-	return render_to_response('tour/neighborhood_authors.html', dict(mapDict,useMap="True",
+	return render_to_response('tour/neighborhood.html', dict(mapDict,useMap="True",mapNavigate="True",
 						pageTitle=humanName,
 						theNeighborhood=humanName,
 						authorList=authorList,
+						recentPosts=recentPosts,
 						vectorLayers=layerList,
 						galleryList=galleryList,
 						videoList=videoList,

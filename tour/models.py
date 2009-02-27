@@ -4,7 +4,8 @@
 from django.contrib.gis.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.gis.gdal import SpatialReference,OGRGeometry
-from testimony.models import Author
+from testimony.models import Author,Text,Video
+from photologue.models import Gallery,Photo
 from exceptions import UnicodeEncodeError
 
 theSRID = 900913
@@ -59,7 +60,14 @@ class Neighborhood(models.Model):
 		json['type']='Feature'
 		json['geometry'] = eval(self.bounds.geojson)
 		numAuthors = Author.objects.filter(neighborhood__name__iexact=self.name).count()
-		json['properties'] = {'name':str(self.name),'numAuthors':str(numAuthors),
+		numPosts = Text.objects.filter(neighborhood__name__iexact=self.name).count()
+		numPhotos = Gallery.objects.filter(tags__iexact=u'"%s"' % self.name,is_public=True).count()
+		numVideos = Video.objects.filter(neighborhood__name__iexact=self.name,approved=True).count()
+		json['properties'] = {'name':str(self.name),
+							'numAuthors':str(numAuthors),
+							'numPosts':str(numPosts),
+							'numPhotos':str(numPhotos),
+							'numVideos':str(numVideos),
 							'link':str("/neighborhood/%s" %slugify(self.name))}
 		return str(json)
 	
