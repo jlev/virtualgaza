@@ -1,4 +1,5 @@
 from django.db import models
+import photologue.models
 import datetime
 from django.template.defaultfilters import slugify
 
@@ -22,11 +23,15 @@ class Author(models.Model):
 	auto_approve = models.BooleanField("Auto Approve",
 		default=False,help_text="Make sure this author is trusted before enabling.")
 	description = models.CharField("Brief Author Biography",max_length=500,null=True,blank=True)
-	description_short = models.CharField("One Sentence Bio",max_length=100,null=True,blank=True)
+	description_short = models.CharField("One Sentence Description",max_length=100,null=True,blank=True)
 	
 	def get_full_name(self):
 		full_name = u'%s %s' % (self.first_name, self.last_name)
 		return full_name.strip()
+		
+	def get_name_slug(self):
+		slug = u'%s_%s' % (slugify(self.author.first_name), slugify(self.author.last_name))
+		return slug
 		
 	def increase_postcount(self):
 		self.num_posts += 1
@@ -42,9 +47,10 @@ class Diary(models.Model):
 	This should not be registered in the admin site or directly exposed to users
 	'''
 	author = models.ForeignKey(Author)
+	neighborhood = models.ForeignKey('tour.Neighborhood',blank=True,null=True)
 	created_date = models.DateTimeField("Created",auto_now=False)
 	uploaded_date = models.DateTimeField("Uploaded",auto_now=True)
-	description = models.CharField("Description",max_length=250)
+	description = models.CharField("Title",max_length=250)
 	approved = models.BooleanField('Approved',default=False)
 	source = models.CharField("Content Source",max_length=200,null=True,blank=True,help_text="Where did this content come from? Will be displayed on post page, so links allowed.")
 	
@@ -52,6 +58,8 @@ class Diary(models.Model):
 		return self.description
 	
 	def save(self):
+		if (self.neighborhood == None) or (self.neighborhood == ""):
+			self.neighborhood = self.author.neighborhood
 		self.author.increase_postcount()
 		if self.author.auto_approve:
 			approved = True
@@ -64,11 +72,10 @@ class Text(Diary):
 	text = models.TextField()
 	
 	def get_absolute_url(self):
-		return "/author/%s_%s/%d/%d/%d" % (slugify(self.author.first_name),
-																			slugify(self.author.last_name),
-																			self.created_date.year,
-																			self.created_date.month,
-																			self.created_date.day)
+		return "/author/%s/%d/%d/%d" % (self.get_name_slug,
+																		self.created_date.year,
+																		self.created_date.month,
+																		self.created_date.day)
 	
 	class Meta:
 		verbose_name = "text"
@@ -82,8 +89,9 @@ class Video(Diary):
 		#TODO: convert to flv
 		#generate thumbnail
 		import os
-		cmd = "ffmpeg  -itsoffset -10 -y -i %s -vcodec mjpeg -vframes 1 -an -f rawvideo -s 100x100 %s" % (self.video.path,self.video.path + ".jpg")
-		os.popen(cmd)
+		if not os.path.exists("%s.jpg" % self.video.path):
+			cmd = "ffmpeg  -itsoffset -10 -y -i %s -vcodec mjpeg -vframes 1 -an -f rawvideo -s 100x100 %s" % (self.video.path,self.video.path + ".jpg")
+			os.popen(cmd)
 		self.save_base(force_insert=False, force_update=False)
 
 class Audio(Diary):

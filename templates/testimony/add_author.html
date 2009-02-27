@@ -1,0 +1,11 @@
+{% extends "testimony/base_form.html" %}
+{% block title %}Add Author{% endblock %}
+
+{% block content %}
+	<h2>Add a new author</h2>
+
+	<form action="." method="POST">
+		{%include "testimony/form_snippet.html" %}
+	<input type="submit" value="Submit" />
+	</form>
+{% endblock %}

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.http import HttpResponse,Http404
 from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
-from django.template import RequestContext 
+from django.template import RequestContext
 
 from testimony.models import Author,Text,Video,Audio
 from tour.models import Neighborhood
@@ -173,7 +173,7 @@ def all_posts(request):
 				context_instance = RequestContext(request))
 				
 		
-def search_for_author(request):
+def search(request):
 	#make this searchable
 	html = "Not yet implemented"
 	return HttpResponse(html)

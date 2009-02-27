@@ -11,7 +11,7 @@
 	{% if postList %}
 		{% for post in postList %}
 			<div class="postList">
-				<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>: {{ post.author }}, {{ post.created_date.date }}
+				<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>: {{ post.author }}, {{ post.created_date|date:"N jS Y" }}
 			</div>
 		{%endfor%}
 	{% else %}

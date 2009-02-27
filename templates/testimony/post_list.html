@@ -12,7 +12,7 @@
 		<td id="postContent">
 {% for post in postList %}
 	<h2>{{ post.description }}</h2>
-	<h3>{{ post.created_date.date }}</h3>
+	<h3>{{ post.created_date|date:"N jS" }}</h3>
 	{{ post.text|linebreaks}}
 	<hr>
 {% endfor %}
