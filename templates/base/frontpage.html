@@ -46,9 +46,13 @@
 			<h2>Recent Testimony</h2>
 			<div class="box">
 			{% for post in posts %}
-					<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>:<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/">{{ post.author }}</a>, {{ post.created_date.day }}/{{ post.created_date.month }}
+					<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>:<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/">{{ post.author }}</a>, {{ post.created_date|date:"N jS" }}
 				<br>
 			{%endfor%}
+			<div class="more">
+				<a href="/testimony/">More testimony</a><br>
+				<a href="/authors/">More authors</a>
+			</div>
 			</div>
 			
 			<h2>Recent Photographs</h2>
@@ -63,6 +67,9 @@
 				{%endfor%}
 				</div>
 			{%endfor%}
+			<div class="more">
+				<a href="/photologue/gallery/">More photographs</a>
+			</div>
 			</div>
 			
 			<h2>Recent Videos</h2>
@@ -73,6 +80,9 @@
 						<a href="/video/{{v.created_date.year}}/{{v.created_date.month}}/{{v.created_date.day}}/"><img src="{{ v.video.url }}.jpg" alt="{{v.description}}"/></a>
 					</div>
 				{%endfor%}
+				<div class="more">
+					<a href="/video/">More video</a>
+				</div>
 			</div>
 			</div>
 			

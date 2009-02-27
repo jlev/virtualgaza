@@ -1,6 +1,6 @@
 function mapInit() {
 	var map = new OpenLayers.Map('map', {
-		controls: [ new OpenLayers.Control.Navigation() ],
+		controls: [ ],
 		projection : new OpenLayers.Projection("EPSG:900913"),
 		displayProjection : new OpenLayers.Projection("EPSG:4326"), //EPSG:4326
 		units : "m",
@@ -10,7 +10,10 @@ function mapInit() {
 		restrictedExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
 		minZoomLevel: 11,
 		maxZoomLevel: 17});
-//	map.addControl(new OpenLayers.Control.MousePosition());
+
+	{% if mapNavigate %}
+	map.addControl(new OpenLayers.Control.Navigation());
+	{%endif%}
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
 	activeColor:'silver'}));
 	map.addControl(new OpenLayers.Control.ScaleLine());
@@ -78,24 +81,36 @@ function gotoTabLink(feature) {
 }
 function polygonOver(feature) {
 	var numAuthors = feature.attributes.numAuthors;
+	var numPosts = feature.attributes.numPosts;
+	var numPhotos = feature.attributes.numPhotos;
+	var numVideos = feature.attributes.numVideos;
 	
 	if (numAuthors > 0) {
 		var display = "";
-		if (numAuthors == 1) {
-			display += numAuthors + " author<br>";
-		} else {
-			display += numAuthors + " authors<br>";
+		display += numAuthors + " author";
+		if (numAuthors > 1) { display += "s"; }
+		display += "<br>";
+		
+		if (numPosts > 0) {
+			display += numPosts + " post";
+			if (numPosts > 1) { display += "s"; }
+			display += "<br>";	
 		}
-
-		display += '<div class=authorFaces>';
-		var i = 1;
-		for (i=1;i<=numAuthors;i++) {
-			display += '<img src="{{MEDIA_URL}}pins/male.png">';
-			if ((i % 5) == 0) {
-				display += '<br>';
-			}
+		
+		if (numPhotos > 0) {
+			display += '<div class="numPhotos">';
+			display += numPhotos + " photo galler";
+			if (numPhotos == 1) { display += "y"; }
+			else { display += "ies"; }
+			display += "<br>";
 		}
-		display += '</div>';
+		
+		if (numVideos > 0) {
+			display += '<div class="numVideos">';
+			display += numVideos + " video";
+			if (numVideos > 1) { display += "s"; }
+			display += "<br>";
+		}
 	
 		polygonTooltips.show({html:display});
 	}

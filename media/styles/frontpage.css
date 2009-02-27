@@ -48,3 +48,8 @@
 .gallery-video {
 	display:inline;
 }
+
+.more {
+	text-align:right;
+	font-style:italic;
+}
