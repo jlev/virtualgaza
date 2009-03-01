@@ -8,7 +8,7 @@
 }
 
 #recent {
-	margin-top:0px;
+	vertical-align:top;
 	padding-left:5px;
 	font-size:10pt;
 	text-align:left;
@@ -21,12 +21,14 @@
 	font-size:12pt;
 	text-transform: uppercase;
 	margin-bottom:0px;
+	margin-top:0px;
 }
 
 #recent .box {
 	padding-left:5px;
 	border:1px solid #2E2E2E;
 	width:350px;
+	margin-bottom:5px;
 }
 
 #recent .postList .description {
