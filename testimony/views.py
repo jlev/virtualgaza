@@ -23,10 +23,22 @@ def authors_by_neighborhood(request):
 	
 	for a in all_authors:
 		author_list.append({'first_name':a.first_name,'last_name':a.last_name,
+			'slug':a.get_name_slug(),
 			'neighborhood':a.neighborhood.name})
+	#have to do this ugly copying here so that template dictsort works properly
 	
 	return render_to_response('testimony/authors_by_neighborhood.html',dict(mapDict,
 				author_list=author_list),
+			context_instance = RequestContext(request))
+
+def author_by_one_name(request, firstName):
+	"""Gets author by first name. Used for organizations."""
+	author = get_object_or_404(Author, first_name__iexact=deslug(firstName))
+	posts = author.text_set.all().filter(approved=1).order_by('-created_date')
+	return render_to_response('testimony/author_detail.html',dict(mapDict,
+				author=author,posts=posts,
+				point_layer_name=author,
+				layer_list=[author.neighborhood.getJSON()]),
 			context_instance = RequestContext(request))
 
 def author_by_full_name(request, firstName, lastName):
@@ -146,13 +158,12 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 	#five posts also in this neighborhood, but not by this author
 
 	return render_to_response('testimony/post_list.html',
-						{'first_name':first,'last_name':last,
+						{'author':author,
 						'year':year,'month':month,'day':day,
 						'postList':posts,
 						'alsoByAuthor':alsoByAuthor,
 						'alsoOnDate':alsoOnDate,
 						'alsoInNeighborhood':alsoInNeighborhood,
-						'theNeighborhood':author.neighborhood,
 						'next':nextPost,'prev':prevPost,'dateType':'day'},
 				context_instance = RequestContext(request))
 			
