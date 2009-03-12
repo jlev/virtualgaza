@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 
-{% block title %}{{ first_name }} {{ last_name }} | {{ year }} {{ month }} {{ day }}{% endblock %}
+{% block title %}{{author.get_full_name}} | {{ year }} {{ month }} {{ day }}{% endblock %}
 
 {%block css%}
 <link rel="stylesheet" href="{{ MEDIA_URL }}/styles/posts.css" type="text/css"/>
@@ -21,9 +21,9 @@
 <td id="relatedPosts">
 	{%if alsoByAuthor %}
 	<div class="relatedBox">
-		Also by {{first_name}} {{last_name}}:<br>
+		Also by {{author.get_full_name}}:<br>
 		{% for post in alsoByAuthor %}
-		<a href={{post.get_absolute_url}}>{{post.description}}</a><br>
+		<a href="{{post.get_absolute_url}}">{{post.description}}</a><br>
 		{%endfor%}
 	</div>
 	{%endif%}
@@ -32,16 +32,16 @@
 	<div class="relatedBox">
 		Also on {{year}}-{{month}}-{{day}}:<br>
 		{% for post in alsoOnDate %}
-		{{post.author}}: <a href={{post.get_absolute_url}}>{{post.description}}</a><br>
+		{{author.get_full_name}}: <a href="{{post.get_absolute_url}}">{{post.description}}</a><br>
 		{%endfor%}
 	</div>
 	{%endif%}
 
 	{%if alsoInNeighborhood %}
 	<div class="relatedBox">
-	Also in {{theNeighborhood}}:<br>
+	Also in {{author.neighborhood}}:<br>
 		{% for post in alsoInNeighborhood %}
-		{{post.author}}: <a href={{post.get_absolute_url}}>{{post.description}}</a><br>
+		{{author.get_full_name}}: <a href="{{post.get_absolute_url}}">{{post.description}}</a><br>
 		{%endfor%}
 	</div>
 	{%endif%}
@@ -53,15 +53,15 @@
 <tr width=100%>
 <td id="prevLink">
 	{% if prev%}
-	<a href={{prev.get_absolute_url}}>&lt;&lt;</a>
+	<a href="{{prev.get_absolute_url}}">&lt;&lt;</a>
 	{% else %}
 	&lt;&lt;
 	{%endif%}
 </td>
-<td id="allLink"><a href="/author/{{first_name|slugify}}_{{last_name|slugify}}/">All</a></td>
+<td id="allLink"><a href="{{author.get_absolute_url}}">All</a></td>
 <td id="nextLink">
 	{%if next %}
-	<a href={{next.get_absolute_url}}>&gt;&gt;</a>
+	<a href="{{next.get_absolute_url}}">&gt;&gt;</a>
 	{%else%}
 	&gt;&gt;
 	{%endif%}
