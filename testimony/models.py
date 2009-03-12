@@ -28,17 +28,23 @@ class Author(models.Model):
 	def get_full_name(self):
 		full_name = u'%s %s' % (self.first_name, self.last_name)
 		return full_name.strip()
-		
+
 	def get_name_slug(self):
-		slug = u'%s_%s' % (slugify(self.author.first_name), slugify(self.author.last_name))
+		if self.last_name != "":
+			slug = u'%s_%s' % (slugify(self.first_name), slugify(self.last_name))
+		else:
+			slug = u'%s' % (slugify(self.first_name))
 		return slug
-		
+
+	def get_absolute_url(self):
+		return "/author/%s" % (self.get_name_slug())
+
 	def increase_postcount(self):
 		self.num_posts += 1
-	
+
 	def set_last_post_time(self):
 		self.last_post_time = datetime.datetime.now()
-		
+
 	def __unicode__(self):
 		return self.get_full_name()
 
@@ -47,7 +53,8 @@ class Diary(models.Model):
 	This should not be registered in the admin site or directly exposed to users
 	'''
 	author = models.ForeignKey(Author)
-	neighborhood = models.ForeignKey('tour.Neighborhood',blank=True,null=True)
+	neighborhood = models.ForeignKey('tour.Neighborhood',blank=True,null=True,
+				help_text="Set automatically to the author's neighborhood, unless you choose otherwise here.")
 	created_date = models.DateTimeField("Created",auto_now=False)
 	uploaded_date = models.DateTimeField("Uploaded",auto_now=True)
 	description = models.CharField("Title",max_length=250)
@@ -58,8 +65,11 @@ class Diary(models.Model):
 		return self.description
 	
 	def save(self):
-		if (self.neighborhood == None) or (self.neighborhood == ""):
-			self.neighborhood = self.author.neighborhood
+		try:
+			if (self.neighborhood == None) or (self.neighborhood == ""):
+				self.neighborhood = self.author.neighborhood
+		except Neighborhood.DoesNotExist:
+			self.neighborhood = None
 		self.author.increase_postcount()
 		if self.author.auto_approve:
 			approved = True
@@ -72,7 +82,7 @@ class Text(Diary):
 	text = models.TextField()
 	
 	def get_absolute_url(self):
-		return "/author/%s/%d/%d/%d" % (self.get_name_slug,
+		return "/author/%s/%d/%d/%d" % (self.author.get_name_slug(),
 																		self.created_date.year,
 																		self.created_date.month,
 																		self.created_date.day)
