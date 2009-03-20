@@ -7,19 +7,17 @@
 		{% regroup author_list|dictsort:"neighborhood" by neighborhood as authors_sorted %}
 	
 		{% for neighborhood in authors_sorted %}
-			<li type="none"><a href="/neighborhood/{{neighborhood.grouper|slugify}}">{{neighborhood.grouper}}</a></li>
+		{% ifnotequal neighborhood.grouper "Unmapped" %}
+			<li type="none">
+			<a href="/neighborhood/{{neighborhood.grouper|slugify}}/">{{neighborhood.grouper}}</a>
+			</li>
 			<ul>
 			{% for author in neighborhood.list|dictsort:"last_name" %}
-			<li type="circle"><a  href="/author/{{author.first_name|slugify}}_{{author.last_name|slugify}}/">{{author.first_name}} {{author.last_name}} </a>
+			<li type="circle"><a  href="/author/{{author.slug}}/">{{author.first_name}} {{author.last_name}} </a>
 			{% endfor %}
+		{%endifnotequal%}
 			</ul>
 		{% endfor %}
 		</ul>
 	{%endif%}
 {% endblock %}
-
-<script type="text/javascript">
-$(document).ready(function($){
-    $("a#loadInAuthorTab").tabs("url", 2, a.href).tabs("load",2);
-  });
-</script>

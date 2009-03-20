@@ -1,3 +1,8 @@
+//Global variables
+var pointToolTips, polygonToolTips;
+var polygonStyleMap;
+
+
 function mapInit() {
 	var map = new OpenLayers.Map('map', {
 		controls: [ ],
@@ -17,9 +22,12 @@ function mapInit() {
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
 	activeColor:'silver'}));
 	map.addControl(new OpenLayers.Control.ScaleLine());
+	map.addControl(new OpenLayers.Control.Attribution({"separator":","}));
 	
-	//could pass these in from views, but easy enough to just define them here...	
-	var polygonStyleMap = new OpenLayers.StyleMap(
+	map.addControl(new OpenLayers.Control.Legend({}));
+	
+	//this first one is global so rollover functions can access it
+	polygonStyleMap = new OpenLayers.StyleMap(
 					{"default":new OpenLayers.Style({strokeWidth:0,
 									fillOpacity:0,
 									pointerEvents: "all",
@@ -49,14 +57,62 @@ function mapInit() {
 					strokeColor:'#FFFF00'});
 	
 	var baseLayer = new OpenLayers.Layer.Google(
-		"Google Aerial",{type: {{ mapType }}, numZoomLevels:7,sphericalMercator:true,displayInLayerSwitcher:false}
-	);
+		"Google Aerial",{type: {{ mapType }},
+			numZoomLevels:7,
+			sphericalMercator:true,
+			displayInLayerSwitcher:false,
+		});
 	map.addLayer(baseLayer);
+	
+	var osmLayer = new OpenLayers.Layer.OSM.Mapnik("Street Map",
+	{
+		type: 'png', getURL: osm_getTileURL,
+		displayOutsideMaxExtent: true, opacity: 0.5,
+		isBaseLayer: false, visibility: true,
+		attribution:"OpenStreetMap (cc)",
+		visibility:false,
+	});
+	map.addLayer(osmLayer);
+	
+	/*
+	//Transparent OSM data
+	var osmLayer = new OpenLayers.Layer.TMS("Street Map",
+	["http://t1-overlay.hypercube.telascience.org/tiles/1.0.0/osm-merc-google-hybrid/",
+	"http://t3-overlay.hypercube.telascience.org/tiles/1.0.0/osm-merc-google-hybrid/",
+	"http://t2-overlay.hypercube.telascience.org/tiles/1.0.0/osm-merc-google-hybrid/"],
+	{
+		type: 'png', getURL: osm_getTileURL,
+		displayOutsideMaxExtent: true, opacity: 0.5,
+		isBaseLayer: false, visibility: true,
+	});
+	*/
+	
+	unosat_buildings = new OpenLayers.Layer.GML("Damage", "{{MEDIA_URL}}openlayers/unosat/doc.kml", 
+	{
+		format: OpenLayers.Format.KML, 
+		projection: map.displayProjection,
+		formatOptions: {
+			extractStyles: true, 
+			extractAttributes: true
+		},
+		attribution:"Damage Analysis: UNITAR-UNOSAT",
+		legend:"<img src='{{MEDIA_URL}}openlayers/unosat/destroyed.png'> Building Likely Destroyed<br>"+
+				"<img src='{{MEDIA_URL}}openlayers/unosat/damaged.png'> Building Likely Severely Damaged<br>"+
+				"<img src='{{MEDIA_URL}}openlayers/unosat/impact_field.png'> Impact Crater (Field)<br>"+
+				"<img src='{{MEDIA_URL}}openlayers/unosat/impact_road.png'> Impact Crater (Road)",
+		visibility:false,
+	});
+	map.addLayer(unosat_buildings);
+
 	
 	var geojson_format = new OpenLayers.Format.GeoJSON();
 	
 	{% for layer in vectorLayers %}
-		var {{layer.name}}_layer = new OpenLayers.Layer.Vector("{{layer.name}}",{'styleMap':{{layer.styleName}}});
+		var {{layer.name}}_layer = new OpenLayers.Layer.Vector("{{layer.name}}",
+			{'styleMap':{{layer.styleName}},
+			{%if layer.attribution %}'attribution':"{{layer.attribution}}",{%endif%}
+			{%if layer.legend%}'legend':"{{layer.legend}}",{%endif%}
+		});
 		{% for object in layer.list %}
 			var {{layer.name}}_{{forloop.counter}} = geojson_format.read({{ object|safe }});
 			{{layer.name}}_layer.addFeatures({{layer.name}}_{{forloop.counter}});
@@ -65,6 +121,49 @@ function mapInit() {
 	{%endfor%}
 	
 	map.zoomToExtent({{zoomLayer}}_layer.getDataExtent());
+
+	//select controls
+	//bombings
+	{%if popupLayerName %}
+		pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : false, opacity : 0.75,
+		widthValue:"200px"});
+		map.addControl(pointToolTips);
+		var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
+						{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
+		map.addControl(pointSelectControl);
+		pointSelectControl.activate();
+		//set bombing visibility
+		{%if hideBombings %}
+			{{popupLayerName}}_layer.setVisibility(false);
+		{%endif%}
+		{{popupLayerName}}_layer.attribution = "Bombing Tabulation: Alireza Doostdar (cc)";
+	{%endif%}
+
+	//neighborhoods
+	{% if polygonLayerName %}
+		polygonTooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
+		map.addControl(polygonTooltips);
+		var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
+						{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
+		map.addControl(polygonSelectControl);
+		polygonSelectControl.activate();
+	{%endif%}
+} //end mapInit
+
+//OSM
+function osm_getTileURL (bounds) {
+	var res = this.map.getResolution();
+	var x = Math.round ((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
+	var y = Math.round ((this.maxExtent.top - bounds.top) / (res * this.tileSize.h));
+	var z = this.map.getZoom();
+
+	var path = (z+this.map.baseLayer.minZoomLevel) + "/" + x + "/" + y + "." + this.type; 
+	var url = this.url;
+	if (url instanceof Array) {
+	    url = this.selectUrl(path, url);
+	}
+	return url + path;
+}
 
 //event handlers
 function gotoFloatboxLink(feature) {
@@ -136,30 +235,3 @@ function toolTipsOver(feature) {
 function toolTipsOut(feature){
 	pointToolTips.hide();
 }
-
-//select controls
-//bombings
-{%if popupLayerName %}
-	var pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : false, opacity : 0.75,
-	widthValue:"200px"});
-	map.addControl(pointToolTips);
-	var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
-					{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
-	map.addControl(pointSelectControl);
-	pointSelectControl.activate();
-	//set bombing visibility
-	{%if hideBombings %}
-		{{popupLayerName}}_layer.setVisibility(false);
-	{%endif%}
-{%endif%}
-
-//neighborhoods
-{% if polygonLayerName %}
-	var polygonTooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
-	map.addControl(polygonTooltips);
-	var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
-					{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
-	map.addControl(polygonSelectControl);
-	polygonSelectControl.activate();
-{%endif%}
-} //end mapInit
