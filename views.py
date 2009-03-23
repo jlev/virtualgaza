@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 import urllib2
 
-def proxy(request,url):
+def proxy(request,theURL):
 	"""This is a blind proxy that we use to get around browser
 	restrictions that prevent the Javascript from loading pages not on the
 	same server as the Javascript.  This has several problems: it's less
@@ -23,8 +23,11 @@ def proxy(request,url):
 	response = HttpResponse()
 
 	#fix URL percent encoding
-	url.replace("%2F","/")
-	url.replace("%3A",":")
+	url = theURL.replace('%2F','/')
+	url.replace('%3A',':')
+	
+	print "theURL:",theURL
+	print "url:",url
 
 	if url == "":
 		url = "http://www.example.com"

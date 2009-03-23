@@ -66,7 +66,7 @@ urlpatterns += patterns('',
 	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 	(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL + 'favicon.ico'}),
 	(r'robots.txt$','django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL + 'robots.txt'}),
-	(r'proxy/(?P<url>.*)$','virtualgaza.views.proxy'),
+	(r'proxy/(?P<theURL>.*)$','virtualgaza.views.proxy'),
 )
 
 
