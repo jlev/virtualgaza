@@ -8,11 +8,9 @@ def proxy(request,url):
 	efficient, it might break some sites, and it's a security risk because
 	people can use this proxy to browse the web and possibly do bad stuff
 	with it.  It only loads pages via http and https, but it can load any
-	content type. It supports GET and POST requests."""
-	
+	content type. It supports GET requests."""
 	
 	# Designed to prevent Open Proxy type stuff.
-	
 	allowedHosts = ['www.openlayers.org', 'openlayers.org', 
 					'labs.metacarta.com', 'world.freemap.in', 
 					'prototype.openmnnd.org', 'geo.openplans.org',
@@ -23,6 +21,9 @@ def proxy(request,url):
 	]
 	
 	response = HttpResponse()
+
+	if url == "":
+		url = "http://www.example.com"
 
 	try:		
 		host = url.split("/")[2]
