@@ -22,6 +22,10 @@ def proxy(request,url):
 	
 	response = HttpResponse()
 
+	#fix URL percent encoding
+	url.replace("%2F","/")
+	url.replace("%3A",":")
+
 	if url == "":
 		url = "http://www.example.com"
 
