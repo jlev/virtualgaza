@@ -4,6 +4,9 @@ var polygonStyleMap;
 
 
 function mapInit() {
+	//OpenLayers.ProxyHost = "/proxy/";
+	//don't use proxyHost function, it does url encoding that breaks the django proxy
+
 	var map = new OpenLayers.Map('map', {
 		controls: [ ],
 		projection : new OpenLayers.Projection("EPSG:900913"),
@@ -72,7 +75,7 @@ function mapInit() {
 		attribution:"OpenStreetMap (cc)",
 		visibility:false,
 	});
-	map.addLayer(osmLayer);
+//	map.addLayer(osmLayer);
 	
 	/*
 	//Transparent OSM data
@@ -87,7 +90,7 @@ function mapInit() {
 	});
 	*/
 	
-	unosat_buildings = new OpenLayers.Layer.GML("Damage", "{{MEDIA_URL}}openlayers/unosat/doc.kml", 
+	unosat_buildings = new OpenLayers.Layer.GML("Damage", "/proxy/{{MEDIA_URL}}openlayers/unosat/doc.kml", 
 	{
 		format: OpenLayers.Format.KML, 
 		projection: map.displayProjection,
