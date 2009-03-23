@@ -67,7 +67,7 @@ function mapInit() {
 	var osmLayer = new OpenLayers.Layer.OSM.Mapnik("Street Map",
 	{
 		type: 'png', getURL: osm_getTileURL,
-		displayOutsideMaxExtent: true, opacity: 0.5,
+		displayOutsideMaxExtent: true, opacity: 1,
 		isBaseLayer: false, visibility: true,
 		attribution:"OpenStreetMap (cc)",
 		visibility:false,

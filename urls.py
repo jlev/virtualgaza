@@ -31,7 +31,7 @@ urlpatterns += patterns('virtualgaza.testimony.views',
 	(r'^recent/$','posts_by_recent',{'num_latest':25}),
 	(r'^testimony/$','all_posts'),
 	(r'^author/$','authors_by_neighborhood'),
-	(r'^author/(?P<id>)/$','author_by_id'),
+	(r'^author/(?P<firstName>[A-Za-z-]+)/$','author_by_one_name'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/$','author_by_full_name'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/$', 'posts_by_author_and_year'),
 	(r'^author/(?P<firstName>[\w-]+)_(?P<lastName>[\w-]+)/(?P<year>\d{4})/(?P<month>\w{1,2})/$', 'posts_by_author_and_month'),
@@ -66,6 +66,7 @@ urlpatterns += patterns('',
 	(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 	(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL + 'favicon.ico'}),
 	(r'robots.txt$','django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL + 'robots.txt'}),
+	(r'proxy/(?P<url>.*)$','virtualgaza.views.proxy'),
 )
 
 
