@@ -24,6 +24,7 @@
 <![endif]-->
 {% endblock %}
 <span id="{{ id }}_admin_map">
+{% block extrascript %}{%endblock%}
 <script type="text/javascript">
 //<![CDATA[
 {% block openlayers %}{% include "gis/admin/openlayers.js" %}{% endblock %}

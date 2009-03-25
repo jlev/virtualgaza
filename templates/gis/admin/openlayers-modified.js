@@ -162,3 +162,6 @@
       {{ module }}.enableDrawing();
     }
 }
+
+{%block extrafunctions%}
+{%endblock%}
