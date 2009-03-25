@@ -1,5 +1,5 @@
 {% extends "gis/admin/openlayers-modified.js" %}
-{% block base_layer %}new OpenLayers.Layer.Google("Google Base Layer", {'type': G_HYBRID_MAP, 'sphericalMercator' : true, 'layerswitcher':true});
+{% block base_layer %}new OpenLayers.Layer.Google("Google Base Layer", {'type': G_SATELLITE_MAP, 'sphericalMercator' : true, 'layerswitcher':true});
 {% endblock %}
 
 {% block extra_layers %}
@@ -7,7 +7,7 @@
 var osmLayer = new OpenLayers.Layer.OSM.Mapnik("Street Map",
 {
 	type: 'png', getURL: osm_getTileURL,
-	displayOutsideMaxExtent: true, opacity: 1,
+	displayOutsideMaxExtent: true, opacity: 0.75,
 	isBaseLayer: false, visibility: true,
 	attribution:"OpenStreetMap (cc)",
 	visibility:false,
