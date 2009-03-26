@@ -76,8 +76,8 @@
 		<b>{{galleryList|length}} photo galler{{galleryList|length|pluralize:"y,ies"}} in {{theNeighborhood}}</b>
 		{%for gallery in galleryList%}
 			<br>
-			<a href="{{ gallery.get_absolute_url }}"><img src="{{ gallery.sample.0.get_frontpage_thumbnail_url }}" alt="{{ gallery.sample.0.photo.title }}"/></a>
-			{{gallery.title}}
+			<div class="gallery-photo"><a href="{{ gallery.get_absolute_url }}"><img src="{{ gallery.sample.0.get_frontpage_thumbnail_url }}" alt="{{ gallery.sample.0.photo.title }}"/></a></div>
+			<div class="gallery-title">{{gallery.title}}</div>
 		{%endfor%}
 		{%endif%}
 		<br>
