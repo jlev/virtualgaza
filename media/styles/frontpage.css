@@ -7,6 +7,10 @@
 	padding:0px;
 }
 
+#share-button {
+	text-align:right;
+}
+
 #recent {
 	vertical-align:top;
 	padding-left:5px;

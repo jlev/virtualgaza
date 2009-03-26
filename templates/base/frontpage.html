@@ -8,6 +8,8 @@
 {% include "gis/map.html" %}
 {%endblock%}
 
+{% load get_range %}
+
 {%block content%}
 
 	{%block map %}
@@ -30,6 +32,13 @@
 			<div id="caption">
 				{{captionText|safe}}
 			</div>
+			
+			<div id="share-button">
+			<!-- AddThis Button BEGIN -->
+			<script type="text/javascript">var addthis_pub="jlev";</script>
+			<a href="http://www.addthis.com/bookmark.php?v=20" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()"><img src="http://s7.addthis.com/static/btn/sm-share-en.gif" width="83" height="16" alt="Bookmark and Share" style="border:0"/></a><script type="text/javascript" src="http://s7.addthis.com/js/200/addthis_widget.js"></script>
+			<!-- AddThis Button END -->
+			</div>
 		</td>
 	{%endblock map%}
 
@@ -51,18 +60,18 @@
 			
 			<h2>Recent Photographs</h2>
 			<div class="box">
-				{% for gallery in photos %}
+				{% for a in albums.all %}
 				<div class="gallery">
-				<a href="{{ gallery.get_absolute_url }}">{{ gallery.title }}</a><br>
-					{% for photo in gallery.sample|slice:":4" %}
+				<a href="">{{ a.albumname }}</a><br>
+					{% for photo in a.sample %}
 					<div class="gallery-photo">
-					<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_frontpage_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+					<a href="{{ photo.photopage_url }}"><img src="{{ photo.thumbnail_url }}" width="100" alt="{{ photo.title }} by {{photo.owner}}"/></a>
 					</div>
 				{%endfor%}
 				</div>
 			{%endfor%}
 			<div class="more">
-				<a href="/photologue/gallery/">More photographs</a>
+				<a href="/photos/">More photographs</a>
 			</div>
 			</div>
 			
@@ -71,7 +80,7 @@
 				<div class="gallery">
 				{% for v in videos %}
 					<div class="gallery-video">
-						<a href="/video/{{v.created_date.year}}/{{v.created_date.month}}/{{v.created_date.day}}/"><img src="{{ v.video.url }}.jpg" alt="{{v.description}}"/></a>
+						<a href="{{v.url}}"><img src="{{ v.thumbnail_url }}" alt="{{v.description}}" height="100"/></a>
 					</div>
 				{%endfor%}
 				<div class="more">
