@@ -26,7 +26,6 @@ function mapInit() {
 	activeColor:'silver'}));
 	map.addControl(new OpenLayers.Control.ScaleLine());
 	map.addControl(new OpenLayers.Control.Attribution({"separator":","}));
-	
 	map.addControl(new OpenLayers.Control.Legend({}));
 	
 	//this first one is global so rollover functions can access it
@@ -75,7 +74,7 @@ function mapInit() {
 		attribution:"OpenStreetMap (cc)",
 		visibility:false,
 	});
-//	map.addLayer(osmLayer);
+	map.addLayer(osmLayer);
 	
 	/*
 	//Transparent OSM data
@@ -106,6 +105,10 @@ function mapInit() {
 		visibility:false,
 	});
 	map.addLayer(unosat_buildings);
+	
+	{% if showDamage %}
+	unosat_buildings.setVisibility(true);
+	{%endif%}
 
 	
 	var geojson_format = new OpenLayers.Format.GeoJSON();
@@ -135,10 +138,8 @@ function mapInit() {
 						{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 		map.addControl(pointSelectControl);
 		pointSelectControl.activate();
-		//set bombing visibility
-		{%if hideBombings %}
-			{{popupLayerName}}_layer.setVisibility(false);
-		{%endif%}
+		//hide bombings by default
+		{{popupLayerName}}_layer.setVisibility(false);
 		{{popupLayerName}}_layer.attribution = "Bombing Tabulation: Alireza Doostdar (cc)";
 	{%endif%}
 
