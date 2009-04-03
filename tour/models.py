@@ -28,8 +28,7 @@ class Location(models.Model):
 		json = {}
 		json['type']='Feature'
 		json['geometry'] = eval(self.coords.geojson)
-		json['properties'] = {'name':str(self.name),'displayName':str(firstName + " " + lastName),
-					'link':str("/author/%s/" % slugify(self.name))}	
+		json['properties'] = {'name':str(self.name),'displayName':str(firstName + " " + lastName)}	
 		return str(json)
 	def __unicode__(self):
 		return self.name
@@ -55,19 +54,24 @@ class Neighborhood(models.Model):
 	population = models.IntegerField(blank=True,null=True)
 	objects = models.GeoManager()
 	
+	def numPosts(self):
+		return Text.objects.filter(neighborhood__name__iexact=self.name).count()
+	def numPhotos(self):
+		return Gallery.objects.filter(tags__iexact=u'"%s"' % self.name,is_public=True).count()
+	def numVideos(self):
+		return Video.objects.filter(neighborhood__name__iexact=self.name,approved=True).count()
+	def numAuthors(self):
+		return Author.objects.filter(neighborhood__name__iexact=self.name).count()
+	
 	def getJSON(self):
 		json = {}
 		json['type']='Feature'
 		json['geometry'] = eval(self.bounds.geojson)
-		numAuthors = Author.objects.filter(neighborhood__name__iexact=self.name).count()
-		numPosts = Text.objects.filter(neighborhood__name__iexact=self.name).count()
-		numPhotos = Gallery.objects.filter(tags__iexact=u'"%s"' % self.name,is_public=True).count()
-		numVideos = Video.objects.filter(neighborhood__name__iexact=self.name,approved=True).count()
 		json['properties'] = {'name':str(self.name),
-							'numAuthors':str(numAuthors),
-							'numPosts':str(numPosts),
-							'numPhotos':str(numPhotos),
-							'numVideos':str(numVideos),
+							'numAuthors':str(self.numAuthors()),
+							'numPosts':str(self.numPosts()),
+							'numPhotos':str(self.numPhotos()),
+							'numVideos':str(self.numVideos()),
 							'link':str("/neighborhood/%s" %slugify(self.name))}
 		return str(json)
 	
