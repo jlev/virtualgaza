@@ -1,0 +1,18 @@
+<ul>
+	{% for n in neighborhoodList %}	
+		{%comment%}
+		CACHE ALL THE NUM* SO WE DON'T HAVE TO HIT THE FOR EACH USE
+		{%endcomment%}
+	
+		{% with n.numPosts as numPosts %}
+		{% with n.numPhotos as numPhotos %}
+		{% with n.numVideos as numVideos %}
+			<li type="circle">{{n.name}} 
+				{%ifnotequal numPosts 0 %}: {{numPosts}} posts by {{n.numAuthors}} authors {% endifnotequal %}
+				{%ifnotequal numPhotos 0 %}, {{numPhotos}} photo{{numPhotos|pluralize}} {%endifnotequal%}
+				{%ifnotequal numVideos 0 %}, {{numVideos}} video{{numVideos|pluralize}} {%endifnotequal%}
+		{%endwith%}
+		{%endwith%}
+		{%endwith%}
+	{% endfor %}
+</ul>

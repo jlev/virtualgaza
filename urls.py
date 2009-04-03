@@ -26,6 +26,11 @@ urlpatterns = patterns('virtualgaza.tour.views',
 	(r'^neighborhood/(?P<nameSlug>[\w-]+)/$','neighborhood_page'),
 )
 
+urlpatterns = patterns('virtualgaza.tour.test-views',
+	(r'^test/$','test_frontpage'),
+	(r'^test/neighborhoods_within_bounds/$','neighborhoods_within_bounds'),
+)
+
 #AUTHOR URLS
 urlpatterns += patterns('virtualgaza.testimony.views',
 	(r'^recent/$','posts_by_recent',{'num_latest':25}),
