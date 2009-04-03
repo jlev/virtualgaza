@@ -25,9 +25,6 @@ def proxy(request,theURL):
 	#fix URL percent encoding
 	url = theURL.replace('%2F','/')
 	url.replace('%3A',':')
-	
-	print "theURL:",theURL
-	print "url:",url
 
 	if url == "":
 		url = "http://www.example.com"
