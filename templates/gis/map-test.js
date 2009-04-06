@@ -4,9 +4,6 @@ $j = jQuery.noConflict();
 //ROLLOVER VARIABLES
 var polygonToolTips;
 
-//TIMERS
-mapMoveStartTime = new Date();
-
 //STYLE MAPS
 polygonStyleMap = new OpenLayers.StyleMap(
 				{"default":new OpenLayers.Style({strokeWidth:0,
@@ -165,61 +162,56 @@ function polygonOut(feature) {
 }
 	
 function onMapMoveStart() {
-	mapMoveStartTime = new Date();
 }
 
 function onMapMoveEnd() {
-	mapMoveEndTime = new Date();
-	var mapMoveElapsed = new Date();
-	mapMoveElapsed.setTime(mapMoveEndTime.getTime() - mapMoveStartTime.getTime());
-	
-	var neighborhoodQueryStartTime = new Date();
 	$j.post("/test/neighborhoods_within_bounds/", 
 		{bounds:map.calculateBounds().toGeometry().toString()},
 		function(data) {
 			$j("div").filter("#neighborhoods").html(data);
 		}
 	);
-	var neighborhoodQueryEndTime = new Date();
-	var neighborhoodQueryElapsed = new Date();
-	neighborhoodQueryElapsed.setTime(neighborhoodQueryEndTime.getTime() - neighborhoodQueryStartTime.getTime());
 	
 	if(unosat_buildings.visibility) {
-		var damageCalcStartTime = new Date();
 		calculateVisibleDamage();
-		var damageCalcEndTime = new Date();
-		var damageCalcElapsed = new Date();
-		damageCalcElapsed.setTime(damageCalcEndTime.getTime() - damageCalcStartTime.getTime());
-		
-		$j("div").filter("#timing").html( "" +
-			"MapMove:" + mapMoveElapsed.getMilliseconds() + " ms<br>" +
-			"NeighborhoodQuery:" + neighborhoodQueryElapsed.getMilliseconds() + " ms<br>" +
-			"DamageCalc:" + damageCalcElapsed.getMilliseconds() + " ms<br>"
-			);
 	}
 }
 
 function calculateVisibleDamage() {
-	var numDestroyed = 0;
-	var numDamaged = 0;
-	var numImpact = 0;
-	
+	var counts = {
+		"#destroyed":0,
+		"#damaged":0,
+		"#impact_field":0,
+		"#impact_road":0,
+		};
+
+	var map_extent = map.getExtent();
+	var minx = map_extent.left,
+	   maxx = map_extent.right,
+	   miny = map_extent.bottom,
+	   maxy = map_extent.top;
+
 	for(var i = 0; i < unosat_buildings.features.length; i++) {
-		b = unosat_buildings.features[i];
-		//first few features have null geometry, check for them
-		if((b.geometry != null) && (b.onScreen())) {
-			if (b.attributes.styleUrl == "#destroyed") { numDestroyed++; }
-			if (b.attributes.styleUrl == "#damaged") { numDamaged++; }
-			if ((b.attributes.styleUrl == "#impact_field") ||
-					(b.attributes.styleUrl == "#impact_road")) { numImpact++; }
+		var b = unosat_buildings.features[i];
+		if (b.geometry != null) {
+			var x = b.geometry.x,
+			    y = b.geometry.y;
+			//calculate onScreen manually, instead of using Feature.onScreen(), way faster
+			if (x >= minx && x <= maxx && y >= miny && y <= maxy) {
+				counts[b.attributes.styleUrl]++;
+			}
 		}
 	}
 	
-	$j("div").filter("#buildings").html( "" +
-		"Buildings Destroyed:" + numDestroyed + "<br>" + 
-		"Buildings Damaged:" + numDamaged + "<br>" + 
+	var numDestroyed = counts["#destroyed"],
+	   numDamaged = counts["#damaged"],
+	   numImpact = counts["#impact_field"] + counts["#impact_road"];
+
+	$j("div").filter("#damage").html( "Damage Analysis:<br>" +
+		"Buildings Destroyed:" + numDestroyed + "<br>" +
+		"Buildings Damaged:" + numDamaged + "<br>" +
 		"Impact Craters:" + numImpact
-	);
+		);
 }
 
 function onDamageVisibiltyChanged(layer) {
