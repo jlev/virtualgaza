@@ -44,7 +44,7 @@ def neighborhoods_within_bounds(request):
 		for n in neighborhoodList:
 			photos = photos | Gallery.objects.filter(tags__iexact=u'"%s"' % n.name,is_public=True)
 		
-		photos.order_by('-date_added')[:2]
+		photos = photos.order_by('-date_added')[:2]
 		#list concat turned into SQL, so won't raise error
 
 		videos = Video.objects.filter(neighborhood__in=neighborhoodList).order_by('-created_date')[:3]
