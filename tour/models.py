@@ -62,6 +62,12 @@ class Neighborhood(models.Model):
 		return Video.objects.filter(neighborhood__name__iexact=self.name,approved=True).count()
 	def numAuthors(self):
 		return Author.objects.filter(neighborhood__name__iexact=self.name).count()
+
+	def hasContent(self):
+		if ((self.numPosts() == 0) and (self.numPhotos() == 0) and (self.numVideos() == 0)):
+			return False
+		else:
+			return True
 	
 	def getJSON(self):
 		json = {}
