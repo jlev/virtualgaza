@@ -43,6 +43,9 @@ def neighborhoods_within_bounds(request):
 		photos = Gallery.objects.none()
 		for n in neighborhoodList:
 			photos = photos | Gallery.objects.filter(tags__iexact=u'"%s"' % n.name,is_public=True)
+		
+		if len(photos) > 1:
+			photos.order_by('-date_added')[:2]
 
 		videos = Video.objects.filter(neighborhood__in=neighborhoodList).order_by('-created_date')[:3]
 		return render_to_response('tour/test_ajax_request.html',locals())
