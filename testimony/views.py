@@ -151,7 +151,7 @@ def posts_by_author_and_date(request, firstName, lastName, year, month, day):
 		created_date__day=day,
 		approved=1).exclude(author__first_name__iexact=first,
 		author__last_name__iexact=last).order_by('?')[:5]
-	#all posts on this date not by this author
+	#five posts on this date not by this author
 	
 	alsoInNeighborhood = Text.objects.all().filter(author__neighborhood=author.neighborhood,approved=1).exclude(author__first_name__iexact=first,
 	author__last_name__iexact=last).order_by('?')[:5]
