@@ -236,7 +236,7 @@ function calculateVisibleDamage() {
 		"Buildings Destroyed:" + numDestroyed + "<br>" +
 		"Buildings Damaged:" + numDamaged + "<br>" +
 		"Impact Craters:" + numImpact +
-		"<div id='note'>Analysis released by UNITAR January 9, 2008. Due to the reduced resolution of available satellite imagery, it underestimates the reality at the time.</div>"
+		"<div id='note'>Analysis released by UNITAR January 9, 2008. Due to the reduced resolution of available satellite imagery, it underestimates the damage extent in dense areas.</div>"
 		);
 }
 
