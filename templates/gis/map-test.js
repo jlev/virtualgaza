@@ -1,11 +1,14 @@
 //DECONFLICT JQUERY AND OPENLAYERS
 $j = jQuery.noConflict();
 
+//SELECT CONTROLS
+var polygonSelectControl,pointSelectControl;
+
 //ROLLOVER VARIABLES
-var polygonToolTips;
+var polygonToolTips,pointToolTips;
 
 //STYLE MAPS
-polygonStyleMap = new OpenLayers.StyleMap(
+var polygonStyleMap = new OpenLayers.StyleMap(
 				{"default":new OpenLayers.Style({strokeWidth:0,
 								fillOpacity:0,
 								pointerEvents: "all",
@@ -25,9 +28,13 @@ polygonStyleMap = new OpenLayers.StyleMap(
 								fontFamily: "Arial, sans-serif",
 								fontWeight: "bold",
 								labelAlign: "center"})});
-lineStyleMap = new OpenLayers.StyleMap(
+var lineStyleMap = new OpenLayers.StyleMap(
 				{strokeWidth:3,
 				strokeColor:'#FFFF00'});
+var bombingStyleMap = new OpenLayers.StyleMap(
+		{pointRadius: 7,
+		fillOpacity:1,
+		externalGraphic:"{{MEDIA_URL}}pins/bombing.png"});
 
 function mapInit() {
 	map = new OpenLayers.Map('map', {
@@ -42,6 +49,8 @@ function mapInit() {
 		maxZoomLevel: 17});
 
 	map.addControl(new OpenLayers.Control.Navigation());
+	map.addControl(new OpenLayers.Control.KeyboardDefaults());
+	map.addControl(new OpenLayers.Control.PanZoomBar());
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
 	activeColor:'silver'}));
 	map.addControl(new OpenLayers.Control.ScaleLine());
@@ -102,11 +111,25 @@ function mapInit() {
 		map.addLayer({{layer.name}}_layer);
 	{%endfor%}
 	
+	//BOMBING LAYER
+	{%if popupLayerName %}
+		pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : false, opacity : 0.75,
+		widthValue:"200px"});
+		map.addControl(pointToolTips);
+		pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
+						{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
+		map.addControl(pointSelectControl);
+		pointSelectControl.activate();
+		//hide bombings by default
+		{{popupLayerName}}_layer.setVisibility(false);
+		{{popupLayerName}}_layer.attribution = "Bombing Tabulation: Alireza Doostdar (cc)";
+	{%endif%}
+	
 	//NEIGHBORHOOD CONTROLS
 	{% if polygonLayerName %}
 		polygonTooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
 		map.addControl(polygonTooltips);
-		var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
+		polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
 		{onClickSelect:zoomToNeighborhood,
 			onHoverSelect:polygonOver,
 			onHoverUnselect:polygonOut});
@@ -142,18 +165,9 @@ function osm_getTileURL (bounds) {
 
 //EVENT HANDLERS
 function zoomToNeighborhood(feature) {
-	view = map.getExtent();
-	bounds = feature.geometry.bounds;
-//	console.log(view);
-//	console.log(bounds);
-//doesn't work yet
-	if (bounds.contains(view)) {
-		//we're too close, don't zoom
-		return;
-	} else {
-		map.zoomToExtent(bounds);	
-	}
+	map.zoomToExtent(feature.geometry.bounds);
 }
+
 function polygonOver(feature) {
 	feature.style = polygonStyleMap["select"];
 }
@@ -165,8 +179,9 @@ function onMapMoveStart() {
 }
 
 function onMapMoveEnd() {
+	view = map.calculateBounds().toGeometry();
 	$j.post("/test/neighborhoods_within_bounds/", 
-		{bounds:map.calculateBounds().toGeometry().toString()},
+		{bounds:view.toString()},
 		function(data) {
 			$j("div").filter("#neighborhoods").html(data);
 		}
@@ -174,6 +189,16 @@ function onMapMoveEnd() {
 	
 	if(unosat_buildings.visibility) {
 		calculateVisibleDamage();
+	}
+	
+	//if close, deactivate polygonSelectControl
+	//hard coding is probably not the best solution
+	if(map.zoom >= 2) {
+		polygonSelectControl.deactivate();
+		pointSelectControl.activate();
+	} else {
+		polygonSelectControl.activate();
+		pointSelectControl.deactivate();
 	}
 }
 
@@ -207,10 +232,11 @@ function calculateVisibleDamage() {
 	   numDamaged = counts["#damaged"],
 	   numImpact = counts["#impact_field"] + counts["#impact_road"];
 
-	$j("div").filter("#damage").html( "Damage Analysis:<br>" +
+	$j("div").filter("#damage").html( "<h3>Damage Analysis</h3>" +
 		"Buildings Destroyed:" + numDestroyed + "<br>" +
 		"Buildings Damaged:" + numDamaged + "<br>" +
-		"Impact Craters:" + numImpact
+		"Impact Craters:" + numImpact +
+		"<div id='note'>Analysis released by UNITAR January 9, 2008. Due to the reduced resolution of available satellite imagery, it underestimates the reality at the time.</div>"
 		);
 }
 
@@ -218,9 +244,22 @@ function onDamageVisibiltyChanged(layer) {
 	if (layer.object.visibility){
 		//wait a little bit for the kml to render
 		setTimeout('calculateVisibleDamage()',250);
-		$j("div").filter("#buildings").show();
+		$j("div").filter("#damage").show();
 	} else {
-		$j("div").filter("#buildings").hide();
+		$j("div").filter("#damage").hide();
 	}
+}
+
+function toolTipsOver(feature) {
+	var displayText = '';
+	displayText += '<div class="bombingName">' + feature.attributes.name + '</div>';
+	displayText += '<div class="bombingDesc">' + feature.attributes.description + '</div>';
+	if (feature.attributes.casualties != "None") {
+		displayText += '<div class="bombingCasualties">Casualties: ' + feature.attributes.casualties + '</div>';
+	}
+	pointToolTips.show({html:displayText});
+}
+function toolTipsOut(feature){
+	pointToolTips.hide();
 }
 

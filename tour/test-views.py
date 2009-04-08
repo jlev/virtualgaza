@@ -4,6 +4,8 @@ from django.conf import settings
 
 from django.contrib.gis.geos import *
 from tour.models import Neighborhood
+from testimony.models import Author,Text,Video
+from photologue.models import Gallery
 
 from virtualgaza.tour.views import mapObjects
 
@@ -14,18 +16,33 @@ mapDict = { 'mapType':'G_SATELLITE_MAP',
 
 def test_frontpage(request):
 	layer_list = mapObjects("all")
+	
 	return render_to_response('tour/test_frontpage.html',
 					dict(mapDict,useMap="True",
 							pageTitle="Test Frontpage",
 							vectorLayers=layer_list,
 							polygonLayerName="Neighborhoods",
+							popupLayerName="Bombings",
 							),
 							context_instance = RequestContext(request))
 
 def neighborhoods_within_bounds(request):
 	if request.is_ajax() and request.method == 'POST':
-		#print request.POST
 		bnds = fromstr(request.POST.get('bounds'))
-		neighborhoodList = Neighborhood.objects.filter(bounds__intersects=bnds)
-		#print neighborhoodList
-	return render_to_response('tour/test_ajax_request.html',locals())
+		neighborhoodsWithinBounds = Neighborhood.objects.filter(bounds__intersects=bnds)
+		
+		neighborhoodList = []
+		for n in neighborhoodsWithinBounds:
+			if n.hasContent():
+				neighborhoodList.append(n)
+		
+		recentPosts = Text.objects.filter(approved=True,neighborhood__in=neighborhoodList).order_by('-created_date')[:5]
+		
+		#because gallery neighborhood lookups use tags, we can't use the neighborhood__in syntax
+		#have to concat QuerySets manually
+		photos = Gallery.objects.none()
+		for n in neighborhoodList:
+			photos = photos | Gallery.objects.filter(tags__iexact=u'"%s"' % n.name,is_public=True)
+
+		videos = Video.objects.filter(neighborhood__in=neighborhoodList).order_by('-created_date')[:3]
+		return render_to_response('tour/test_ajax_request.html',locals())
