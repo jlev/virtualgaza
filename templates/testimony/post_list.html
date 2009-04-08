@@ -36,7 +36,7 @@
 	<div class="relatedBox">
 		Also on {{year}}-{{month}}-{{day}}:<br>
 		{% for post in alsoOnDate %}
-		{{author.get_full_name}}: <a href="{{post.get_absolute_url}}">{{post.description}}</a><br>
+		{{post.author.get_full_name}}: <a href="{{post.get_absolute_url}}">{{post.description}}</a><br>
 		{%endfor%}
 	</div>
 	{%endif%}
@@ -45,7 +45,7 @@
 	<div class="relatedBox">
 	Also in {{author.neighborhood}}:<br>
 		{% for post in alsoInNeighborhood %}
-		{{author.get_full_name}}: <a href="{{post.get_absolute_url}}">{{post.description}}</a><br>
+		{{post.author.get_full_name}}: <a href="{{post.get_absolute_url}}">{{post.description}}</a><br>
 		{%endfor%}
 	</div>
 	{%endif%}
