@@ -36,16 +36,23 @@ def neighborhoods_within_bounds(request):
 			if n.hasContent():
 				neighborhoodList.append(n)
 		
-		recentPosts = Text.objects.filter(approved=True,neighborhood__in=neighborhoodList).order_by('-created_date')[:5]
+		posts = Text.objects.filter(approved=True,neighborhood__in=neighborhoodList).order_by('-created_date')
 		
 		#because gallery neighborhood lookups use tags, we can't use the neighborhood__in syntax
 		#have to concat QuerySets manually
 		photos = Gallery.objects.none()
 		for n in neighborhoodList:
 			photos = photos | Gallery.objects.filter(tags__iexact=u'"%s"' % n.name,is_public=True)
-		
-		photos = photos.order_by('-date_added')[:2]
-		#list concat turned into SQL, so won't raise error
+		photos = photos.order_by('-date_added')
 
-		videos = Video.objects.filter(neighborhood__in=neighborhoodList).order_by('-created_date')[:3]
+		videos = Video.objects.filter(neighborhood__in=neighborhoodList).order_by('-created_date')
+		
+		#slice lists if we have a lot of neighborhoods
+		if (len(neighborhoodList) > 3):
+			posts = posts[:5]
+			photos = photos[:3]
+			videos = videos[:3]
+			neighborhoodList = neighborhoodList[:3]
+			neighborhoodList.append("...")
+		
 		return render_to_response('tour/test_ajax_request.html',locals())
