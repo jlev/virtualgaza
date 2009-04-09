@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext 
 from django.conf import settings
 
-from django.contrib.gis.geos import *
+from django.contrib.gis import geos
 from tour.models import Neighborhood
 from testimony.models import Author,Text,Video
 from photologue.models import Gallery
@@ -28,7 +28,7 @@ def test_frontpage(request):
 
 def neighborhoods_within_bounds(request):
 	if request.is_ajax() and request.method == 'POST':
-		bnds = fromstr(request.POST.get('bounds'))
+		bnds = geos.fromstr(request.POST.get('bounds'))
 		neighborhoodsWithinBounds = Neighborhood.objects.filter(bounds__intersects=bnds)
 		
 		neighborhoodList = []
@@ -50,7 +50,7 @@ def neighborhoods_within_bounds(request):
 		#slice lists if we have a lot of neighborhoods
 		if (len(neighborhoodList) > 3):
 			posts = posts[:5]
-			photos = photos[:3]
+			photos = photos[:2]
 			videos = videos[:3]
 			neighborhoodList = neighborhoodList[:3]
 			neighborhoodList.append("...")

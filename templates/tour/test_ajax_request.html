@@ -2,13 +2,11 @@
 <div class="box" id="posts">
 	<h3>Recent Posts from 
 	{% for n in neighborhoodList %}
-		{%if n.hasContent %}
 			{{n.name}}{%if not forloop.last %},{%endif%}
-		{%endif%}
 	{% endfor %}
 	</h3>
 
-{% for post in recentPosts %}
+{% for post in posts %}
 	<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>:<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/">{{ post.author }}</a>, {{ post.created_date|date:"N jS" }}
 	<br>
 {%endfor%}
