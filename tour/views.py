@@ -57,7 +57,7 @@ def neighborhoods_within_bounds(request):
 			photos = photos[:2]
 			videos = videos[:3]
 			neighborhoodList = neighborhoodList[:4]
-			neighborhoodList[4].name = "..."
+			neighborhoodList[3].name = "..."
 
 		return render_to_response('tour/neighborhood_ajax_request.html',locals())
 
