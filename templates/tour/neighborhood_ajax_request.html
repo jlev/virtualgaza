@@ -38,8 +38,7 @@
 <h3>Recent Videos</h3>
 {% for v in videos %}
 	<div class="gallery-video">
-	       <a href="/video/{{v.created_date.year}}/{{v.created_date.mont
-	h}}/{{v.created_date.day}}/"><img src="{{ v.video.url }}.jpg" alt="{{v.description}}"/></a>
+	       <a href="/video/{{v.created_date.year}}/{{v.created_date.month}}/{{v.created_date.day}}/"><img src="{{ v.video.url }}.jpg" alt="{{v.description}}"/></a>
 	</div>
 {%endfor%}
 <div class="more">
