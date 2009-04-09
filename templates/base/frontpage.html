@@ -8,8 +8,6 @@
 {% include "gis/map.html" %}
 {%endblock%}
 
-{% load get_range %}
-
 {%block content%}
 
 	{%block map %}
@@ -42,57 +40,13 @@
 		</td>
 	{%endblock map%}
 
-{%block recents%}	
-	<td class="frontpageColumn" align="left" valign="top">
-		<div id="recent">
-			<div class="posts">
-			<h2>Recent Testimony</h2>
-			<div class="box">
-			{% for post in posts %}
-					<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>:<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/">{{ post.author }}</a>, {{ post.created_date|date:"N jS" }}
-				<br>
-			{%endfor%}
-			<div class="more">
-				<a href="/testimony/">More testimony</a><br>
-				<a href="/author/">More authors</a>
-			</div>
-			</div>
-			
-			<h2>Recent Photographs</h2>
-			<div class="box">
-				{% for a in albums.all %}
-				<div class="gallery">
-				<a href="">{{ a.albumname }}</a><br>
-					{% for photo in a.sample %}
-					<div class="gallery-photo">
-					<a href="{{ photo.photopage_url }}"><img src="{{ photo.thumbnail_url }}" width="100" alt="{{ photo.title }} by {{photo.owner}}"/></a>
-					</div>
-				{%endfor%}
-				</div>
-			{%endfor%}
-			<div class="more">
-				<a href="/photos/">More photographs</a>
-			</div>
-			</div>
-			
-			<h2>Recent Videos</h2>
-				<div class="box">
-				<div class="gallery">
-				{% for v in videos %}
-					<div class="gallery-video">
-						<a href="{{v.url}}"><img src="{{ v.thumbnail_url }}" alt="{{v.description}}" height="100"/></a>
-					</div>
-				{%endfor%}
-				<div class="more">
-					<a href="/video/">More video</a>
-				</div>
-			</div>
-			</div>
-			
+	<td valign="top">
+		<div id="neighborhoods">
 		</div>
+		
+		<div class="box" id="damage"></div>
 	</td>
-	</tr>
-	</table>
-	{%endblock recents%}
+</tr>
+</table>
 
 {%endblock content %}

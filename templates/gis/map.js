@@ -1,63 +1,63 @@
-//Global variables
-var pointToolTips, polygonToolTips;
-var polygonStyleMap;
+//DECONFLICT JQUERY AND OPENLAYERS
+$j = jQuery.noConflict();
 
+//SELECT CONTROLS
+var polygonSelectControl,pointSelectControl;
+
+//ROLLOVER VARIABLES
+var polygonToolTips,pointToolTips;
+
+//STYLE MAPS
+var polygonStyleMap = new OpenLayers.StyleMap(
+				{"default":new OpenLayers.Style({strokeWidth:0,
+								fillOpacity:0,
+								pointerEvents: "all",
+								label : "${name}",
+								fontColor: "white",
+								fontSize: "10px",
+								fontFamily: "Arial, sans-serif",
+								fontWeight: "bold",
+								labelAlign: "center"}), 
+				"select":new OpenLayers.Style({strokeWidth:1,
+								strokeColor:'#FF6600',
+								fillOpacity:0,
+								pointerEvents: "all",
+								label : "${name}",
+								fontColor: "white",
+								fontSize: "10px",
+								fontFamily: "Arial, sans-serif",
+								fontWeight: "bold",
+								labelAlign: "center"})});
+var lineStyleMap = new OpenLayers.StyleMap(
+				{strokeWidth:3,
+				strokeColor:'#FFFF00'});
+var bombingStyleMap = new OpenLayers.StyleMap(
+		{pointRadius: 7,
+		fillOpacity:1,
+		externalGraphic:"{{MEDIA_URL}}pins/bombing.png"});
 
 function mapInit() {
-	//OpenLayers.ProxyHost = "/proxy/";
-	//don't use proxyHost function, it does url encoding that breaks the django proxy
-
-	var map = new OpenLayers.Map('map', {
+	map = new OpenLayers.Map('map', {
 		controls: [ ],
 		projection : new OpenLayers.Projection("EPSG:900913"),
 		displayProjection : new OpenLayers.Projection("EPSG:4326"), //EPSG:4326
 		units : "m",
 		maxResolution : "auto",
-//		maxExtent : new OpenLayers.Bounds(-20037508,-20037508,20037508,20037508), //whole world
 		maxExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
 		restrictedExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
 		minZoomLevel: 11,
 		maxZoomLevel: 17});
 
-	{% if mapNavigate %}
 	map.addControl(new OpenLayers.Control.Navigation());
-	{%endif%}
+	map.addControl(new OpenLayers.Control.KeyboardDefaults());
+	map.addControl(new OpenLayers.Control.PanZoomBar());
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
 	activeColor:'silver'}));
 	map.addControl(new OpenLayers.Control.ScaleLine());
 	map.addControl(new OpenLayers.Control.Attribution({"separator":","}));
 	map.addControl(new OpenLayers.Control.Legend({}));
 	
-	//this first one is global so rollover functions can access it
-	polygonStyleMap = new OpenLayers.StyleMap(
-					{"default":new OpenLayers.Style({strokeWidth:0,
-									fillOpacity:0,
-									pointerEvents: "all",
-									label : "${name}",
-									fontColor: "white",
-									fontSize: "10px",
-									fontFamily: "Arial, sans-serif",
-									fontWeight: "bold",
-									labelAlign: "center"}), 
-					"select":new OpenLayers.Style({strokeWidth:0,
-									strokeColor:'#FF6600',
-									fillColor:'#FF6600',
-									fillOpacity:0.5,
-									pointerEvents: "all",
-									label : "${name}",
-									fontColor: "white",
-									fontSize: "10px",
-									fontFamily: "Arial, sans-serif",
-									fontWeight: "bold",
-									labelAlign: "center"})});
-	var bombingStyleMap = new OpenLayers.StyleMap(
-			{pointRadius: 7,
-			fillOpacity:1,
-			externalGraphic:"{{MEDIA_URL}}pins/bombing.png"});
-	var lineStyleMap = new OpenLayers.StyleMap(
-					{strokeWidth:3,
-					strokeColor:'#FFFF00'});
-	
+	//BASE LAYER
 	var baseLayer = new OpenLayers.Layer.Google(
 		"Google Aerial",{type: {{ mapType }},
 			numZoomLevels:7,
@@ -66,6 +66,7 @@ function mapInit() {
 		});
 	map.addLayer(baseLayer);
 	
+	//STREET MAP LAYER
 	var osmLayer = new OpenLayers.Layer.OSM.Mapnik("Street Map",
 	{
 		type: 'png', getURL: osm_getTileURL,
@@ -76,20 +77,8 @@ function mapInit() {
 	});
 	map.addLayer(osmLayer);
 	
-	/*
-	//Transparent OSM data
-	var osmLayer = new OpenLayers.Layer.TMS("Street Map",
-	["http://t1-overlay.hypercube.telascience.org/tiles/1.0.0/osm-merc-google-hybrid/",
-	"http://t3-overlay.hypercube.telascience.org/tiles/1.0.0/osm-merc-google-hybrid/",
-	"http://t2-overlay.hypercube.telascience.org/tiles/1.0.0/osm-merc-google-hybrid/"],
-	{
-		type: 'png', getURL: osm_getTileURL,
-		displayOutsideMaxExtent: true, opacity: 0.5,
-		isBaseLayer: false, visibility: true,
-	});
-	*/
-	
-	unosat_buildings = new OpenLayers.Layer.GML("Damage", "/proxy/{{MEDIA_URL}}openlayers/unosat/doc.kml", 
+	//UNOSAT LAYER
+	unosat_buildings = new OpenLayers.Layer.GML("Damage", "{{MEDIA_URL}}openlayers/unosat/doc.kml", 
 	{
 		format: OpenLayers.Format.KML, 
 		projection: map.displayProjection,
@@ -105,14 +94,10 @@ function mapInit() {
 		visibility:false,
 	});
 	map.addLayer(unosat_buildings);
+	unosat_buildings.events.register('visibilitychanged', this, onDamageVisibiltyChanged);
 	
-	{% if showDamage %}
-	unosat_buildings.setVisibility(true);
-	{%endif%}
-
-	
+	//VECTOR LAYERS
 	var geojson_format = new OpenLayers.Format.GeoJSON();
-	
 	{% for layer in vectorLayers %}
 		var {{layer.name}}_layer = new OpenLayers.Layer.Vector("{{layer.name}}",
 			{'styleMap':{{layer.styleName}},
@@ -126,15 +111,12 @@ function mapInit() {
 		map.addLayer({{layer.name}}_layer);
 	{%endfor%}
 	
-	map.zoomToExtent({{zoomLayer}}_layer.getDataExtent());
-
-	//select controls
-	//bombings
+	//BOMBING LAYER
 	{%if popupLayerName %}
 		pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : false, opacity : 0.75,
 		widthValue:"200px"});
 		map.addControl(pointToolTips);
-		var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
+		pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
 						{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 		map.addControl(pointSelectControl);
 		pointSelectControl.activate();
@@ -142,16 +124,28 @@ function mapInit() {
 		{{popupLayerName}}_layer.setVisibility(false);
 		{{popupLayerName}}_layer.attribution = "Bombing Tabulation: Alireza Doostdar (cc)";
 	{%endif%}
-
-	//neighborhoods
+	
+	//NEIGHBORHOOD CONTROLS
 	{% if polygonLayerName %}
 		polygonTooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
 		map.addControl(polygonTooltips);
-		var polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
-						{onClickSelect:gotoWindowLink, onHoverSelect:polygonOver, onHoverUnselect:polygonOut});
+		polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
+		{onClickSelect:zoomToNeighborhood,
+			onHoverSelect:polygonOver,
+			onHoverUnselect:polygonOut});
 		map.addControl(polygonSelectControl);
 		polygonSelectControl.activate();
 	{%endif%}
+
+	map.zoomToExtent(map.restrictedExtent);
+
+	//REGISTER LISTENERS
+	map.events.register('movestart',map,onMapMoveStart);
+	map.events.register('moveend',map,onMapMoveEnd);
+	
+	//TRIGGER A MOVE EVENT ON INIT
+	//to get visible neighborhoods
+	map.events.triggerEvent('moveend');
 } //end mapInit
 
 //OSM
@@ -169,62 +163,91 @@ function osm_getTileURL (bounds) {
 	return url + path;
 }
 
-//event handlers
-function gotoFloatboxLink(feature) {
-	fb.loadAnchor(feature.attributes.link,'title');
+//EVENT HANDLERS
+function zoomToNeighborhood(feature) {
+	map.zoomToExtent(feature.geometry.bounds);
 }
-function gotoWindowLink(feature) {
-	window.location.href = feature.attributes.link;
-}
-function gotoTabLink(feature) {
-	//tabs array is zero based
-	jQuery("#tabs").tabs("url", 2, feature.attributes.link).tabs("select", 2).tabs("load", 2);
-	var linkLocation = new OpenLayers.LonLat(feature.geometry.x,feature.geometry.y);
-	map.moveTo(linkLocation,5); //move and zoom
-}
+
 function polygonOver(feature) {
-	var numAuthors = feature.attributes.numAuthors;
-	var numPosts = feature.attributes.numPosts;
-	var numPhotos = feature.attributes.numPhotos;
-	var numVideos = feature.attributes.numVideos;
-	
-	if ((numAuthors > 0) || (numPosts > 0) || (numPhotos > 0) || (numVideos > 0)) {
-		var display = "";
-		
-		if (numAuthors > 0) {
-			display += numAuthors + " author";
-			if (numAuthors > 1) { display += "s"; }
-			display += "<br>";	
-		}
-		
-		if (numPosts > 0) {
-			display += numPosts + " post";
-			if (numPosts > 1) { display += "s"; }
-			display += "<br>";	
-		}
-		
-		if (numPhotos > 0) {
-			display += '<div class="numPhotos">';
-			display += numPhotos + " photo galler";
-			if (numPhotos == 1) { display += "y"; }
-			else { display += "ies"; }
-			display += "<br>";
-		}
-		
-		if (numVideos > 0) {
-			display += '<div class="numVideos">';
-			display += numVideos + " video";
-			if (numVideos > 1) { display += "s"; }
-			display += "<br>";
-		}
-	
-		polygonTooltips.show({html:display});
-	}
 	feature.style = polygonStyleMap["select"];
 }
 function polygonOut(feature) {
-	polygonTooltips.hide();
 	feature.style = polygonStyleMap["default"];
+}
+	
+function onMapMoveStart() {
+}
+
+function onMapMoveEnd() {
+	view = map.calculateBounds().toGeometry();
+	$j.post("/ajax/neighborhoods_within_bounds/", 
+		{bounds:view.toString()},
+		function(data) {
+			$j("div").filter("#neighborhoods").html(data);
+		}
+	);
+	
+	if(unosat_buildings.visibility) {
+		calculateVisibleDamage();
+	}
+	
+	//if close, deactivate polygonSelectControl
+	//hard coding is probably not the best solution
+	if(map.zoom >= 2) {
+		polygonSelectControl.deactivate();
+		pointSelectControl.activate();
+	} else {
+		polygonSelectControl.activate();
+		pointSelectControl.deactivate();
+	}
+}
+
+function calculateVisibleDamage() {
+	var counts = {
+		"#destroyed":0,
+		"#damaged":0,
+		"#impact_field":0,
+		"#impact_road":0,
+		};
+
+	var map_extent = map.getExtent();
+	var minx = map_extent.left,
+	   maxx = map_extent.right,
+	   miny = map_extent.bottom,
+	   maxy = map_extent.top;
+
+	for(var i = 0; i < unosat_buildings.features.length; i++) {
+		var b = unosat_buildings.features[i];
+		if (b.geometry != null) {
+			var x = b.geometry.x,
+			    y = b.geometry.y;
+			//calculate onScreen manually, instead of using Feature.onScreen(), way faster
+			if (x >= minx && x <= maxx && y >= miny && y <= maxy) {
+				counts[b.attributes.styleUrl]++;
+			}
+		}
+	}
+	
+	var numDestroyed = counts["#destroyed"],
+	   numDamaged = counts["#damaged"],
+	   numImpact = counts["#impact_field"] + counts["#impact_road"];
+
+	$j("div").filter("#damage").html( "<h3>Damage Analysis</h3>" +
+		"Buildings Destroyed:" + numDestroyed + "<br>" +
+		"Buildings Damaged:" + numDamaged + "<br>" +
+		"Impact Craters:" + numImpact +
+		"<div id='note'>Analysis released by UNITAR January 9, 2008. Due to the reduced resolution of available satellite imagery, it underestimates the damage extent in dense areas.</div>"
+		);
+}
+
+function onDamageVisibiltyChanged(layer) {
+	if (layer.object.visibility){
+		//wait a little bit for the kml to render
+		setTimeout('calculateVisibleDamage()',250);
+		$j("div").filter("#damage").show();
+	} else {
+		$j("div").filter("#damage").hide();
+	}
 }
 
 function toolTipsOver(feature) {
@@ -239,3 +262,4 @@ function toolTipsOver(feature) {
 function toolTipsOut(feature){
 	pointToolTips.hide();
 }
+
