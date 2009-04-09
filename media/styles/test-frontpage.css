@@ -19,6 +19,27 @@
 	text-align:left;
 }
 
+#posts {
+	max-height:300px;
+	overflow:auto;
+}
+
+#photos {
+	max-height:300px;
+	overflow:auto;
+}
+
+#videos {
+	height:140px;
+	overflow:auto;
+}
+
+#note {
+	margin-top:2px;
+	font-size:10pt;
+	font-style:italic;
+}
+
 .postList .description {
 	display:inline;
 	font-weight:italic;
@@ -47,11 +68,5 @@
 
 .more {
 	text-align:right;
-	font-style:italic;
-}
-
-#note {
-	margin-top:2px;
-	font-size:10pt;
 	font-style:italic;
 }
