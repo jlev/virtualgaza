@@ -10,46 +10,63 @@
 #share-button {
 	text-align:right;
 }
-
-#recent {
-	vertical-align:top;
-	padding-left:5px;
-	font-size:10pt;
-	text-align:left;
-	width:100%;
-/*	height:670px; */
-	overflow:auto;
+#share-button {
+	text-align:right;
 }
 
-#recent h2 {
-	font-size:12pt;
+.box h3 {
 	text-transform: uppercase;
+	font-size:12pt;
 	margin-bottom:0px;
 	margin-top:0px;
 }
 
-#recent .box {
+.box {
 	padding-left:5px;
 	border:1px solid #2E2E2E;
 	width:350px;
 	margin-bottom:5px;
+	vertical-align:top;
+	font-size:10pt;
+	text-align:left;
 }
 
-#recent .postList .description {
+#posts {
+	max-height:300px;
+	overflow:auto;
+}
+
+#photos {
+	max-height:300px;
+	overflow:auto;
+}
+
+#videos {
+	max-height:140px;
+	overflow:auto;
+}
+
+#note {
+	margin-top:2px;
+	font-size:10pt;
+	font-style:italic;
+}
+
+.postList .description {
 	display:inline;
 	font-weight:italic;
 }
 
-#recent .postList .author {
+.postList .author {
 	display:inline;
 	font-style:bold;
 }
 
-#recent .postList .date {
+.postList .date {
 	display:inline;
 }
 
-#recent .gallery {
+.gallery {
 	text-align:center;
 }
 
