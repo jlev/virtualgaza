@@ -35,7 +35,7 @@ div.olLayerDiv {
     font-size: smaller;
 }
 .olControlScaleLine {
-   left: 10px;
+/*   left: 10px;*/
    bottom: 15px;
    font-size: xx-small;
 }
