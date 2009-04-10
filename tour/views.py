@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response, get_list_or_404,get_object_or_404
+from django.http import HttpResponse
 from django.template import RequestContext 
 from django.conf import settings
 from tour.models import Neighborhood,Location,Border,Bombing
@@ -32,7 +33,11 @@ def frontpage(request):
 
 def neighborhoods_within_bounds(request):
 	if request.is_ajax() and request.method == 'POST':
-		bnds = geos.fromstr(request.POST.get('bounds'))
+		try:
+			bnds = geos.fromstr(request.POST.get('bounds'))
+		except (TypeError,ValueError),error:
+			msg = "Didn't get a valid bounds in POST." + str(error)
+			return HttpResponse(msg)
 		neighborhoodsWithinBounds = Neighborhood.objects.filter(bounds__intersects=bnds)
 
 		neighborhoodList = []
@@ -60,7 +65,9 @@ def neighborhoods_within_bounds(request):
 			neighborhoodList[3].name = "..."
 
 		return render_to_response('tour/neighborhood_ajax_request.html',locals())
-
+	else:
+		msg = "Didn't get AJAX request. You are probably a robot; move along."
+		return HttpResponse(msg)
 
 def neighborhood_page(request,nameSlug):
 	humanName = deslug(nameSlug)

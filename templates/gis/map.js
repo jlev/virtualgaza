@@ -182,9 +182,9 @@ function onMapMoveStart() {
 }
 
 function onMapMoveEnd() {
-	var view = this.calculateBounds();
+	var viewGeom = this.calculateBounds().toGeometry();
 	$j.post("/ajax/neighborhoods_within_bounds/", 
-		{bounds:view.toGeometry().toString()},
+		{bounds:viewGeom.toString()},
 		function(data) {
 			$j("div").filter("#neighborhoods").html(data);
 		}
