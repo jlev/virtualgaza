@@ -168,7 +168,7 @@ function osm_getTileURL (bounds) {
 
 //EVENT HANDLERS
 function zoomToNeighborhood(feature) {
-	map.zoomToExtent(feature.geometry.bounds);
+	this.map.zoomToExtent(feature.geometry.bounds);
 }
 
 function polygonOver(feature) {
@@ -191,7 +191,7 @@ function onMapMoveEnd() {
 	);
 	
 	if(unosat_buildings.visibility) {
-		calculateVisibleDamage(this.getExtent());
+		calculateVisibleDamage();
 	}
 	
 	//if close, deactivate polygonSelectControl
@@ -205,7 +205,7 @@ function onMapMoveEnd() {
 	}
 }
 
-function calculateVisibleDamage(map_extent) {
+function calculateVisibleDamage() {
 	var counts = {
 		"#destroyed":0,
 		"#damaged":0,
@@ -213,10 +213,11 @@ function calculateVisibleDamage(map_extent) {
 		"#impact_road":0
 		};
 
-	var minx = map_extent.left,
-	   maxx = map_extent.right,
-	   miny = map_extent.bottom,
-	   maxy = map_extent.top;
+	map_extent = this.map.getExtent();
+	var minx = map_extent.left;
+	var maxx = map_extent.right;
+	var miny = map_extent.bottom;
+	var maxy = map_extent.top;
 
 	for(var i = 0; i < unosat_buildings.features.length; i++) {
 		var b = unosat_buildings.features[i];
