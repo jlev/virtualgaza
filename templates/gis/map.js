@@ -7,6 +7,9 @@ var polygonSelectControl,pointSelectControl;
 //ROLLOVER VARIABLES
 var polygonToolTips,pointToolTips;
 
+//the map
+var map;
+
 //STYLE MAPS
 var polygonStyleMap = new OpenLayers.StyleMap(
 				{"default":new OpenLayers.Style({strokeWidth:0,
@@ -62,7 +65,7 @@ function mapInit() {
 		"Google Aerial",{type: {{ mapType }},
 			numZoomLevels:7,
 			sphericalMercator:true,
-			displayInLayerSwitcher:false,
+			displayInLayerSwitcher:false
 		});
 	map.addLayer(baseLayer);
 	
@@ -73,12 +76,12 @@ function mapInit() {
 		displayOutsideMaxExtent: true, opacity: 1,
 		isBaseLayer: false, visibility: true,
 		attribution:"OpenStreetMap (cc)",
-		visibility:false,
+		visibility:false
 	});
 	map.addLayer(osmLayer);
 	
 	//UNOSAT LAYER
-	unosat_buildings = new OpenLayers.Layer.GML("Damage", "{{MEDIA_URL}}openlayers/unosat/doc.kml", 
+	unosat_buildings = new OpenLayers.Layer.GML("Damage", "/proxy/{{MEDIA_URL}}openlayers/unosat/doc.kml", 
 	{
 		format: OpenLayers.Format.KML, 
 		projection: map.displayProjection,
@@ -91,7 +94,7 @@ function mapInit() {
 				"<img src='{{MEDIA_URL}}openlayers/unosat/damaged.png'> Building Likely Severely Damaged<br>"+
 				"<img src='{{MEDIA_URL}}openlayers/unosat/impact_field.png'> Impact Crater (Field)<br>"+
 				"<img src='{{MEDIA_URL}}openlayers/unosat/impact_road.png'> Impact Crater (Road)",
-		visibility:false,
+		visibility:false
 	});
 	map.addLayer(unosat_buildings);
 	unosat_buildings.events.register('visibilitychanged', this, onDamageVisibiltyChanged);
@@ -100,9 +103,9 @@ function mapInit() {
 	var geojson_format = new OpenLayers.Format.GeoJSON();
 	{% for layer in vectorLayers %}
 		var {{layer.name}}_layer = new OpenLayers.Layer.Vector("{{layer.name}}",
-			{'styleMap':{{layer.styleName}},
-			{%if layer.attribution %}'attribution':"{{layer.attribution}}",{%endif%}
-			{%if layer.legend%}'legend':"{{layer.legend}}",{%endif%}
+			{ {%if layer.attribution %}'attribution':"{{layer.attribution}}",{%endif%}
+				{%if layer.legend%}'legend':"{{layer.legend}}",{%endif%}
+				'styleMap':{{layer.styleName}}
 		});
 		{% for object in layer.list %}
 			var {{layer.name}}_{{forloop.counter}} = geojson_format.read({{ object|safe }});
@@ -179,21 +182,21 @@ function onMapMoveStart() {
 }
 
 function onMapMoveEnd() {
-	view = map.calculateBounds().toGeometry();
+	var view = this.calculateBounds();
 	$j.post("/ajax/neighborhoods_within_bounds/", 
-		{bounds:view.toString()},
+		{bounds:view.toGeometry().toString()},
 		function(data) {
 			$j("div").filter("#neighborhoods").html(data);
 		}
 	);
 	
 	if(unosat_buildings.visibility) {
-		calculateVisibleDamage();
+		calculateVisibleDamage(this.getExtent());
 	}
 	
 	//if close, deactivate polygonSelectControl
 	//hard coding is probably not the best solution
-	if(map.zoom >= 2) {
+	if(this.zoom >= 2) {
 		polygonSelectControl.deactivate();
 		pointSelectControl.activate();
 	} else {
@@ -202,15 +205,14 @@ function onMapMoveEnd() {
 	}
 }
 
-function calculateVisibleDamage() {
+function calculateVisibleDamage(map_extent) {
 	var counts = {
 		"#destroyed":0,
 		"#damaged":0,
 		"#impact_field":0,
-		"#impact_road":0,
+		"#impact_road":0
 		};
 
-	var map_extent = map.getExtent();
 	var minx = map_extent.left,
 	   maxx = map_extent.right,
 	   miny = map_extent.bottom,
