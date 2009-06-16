@@ -265,16 +265,17 @@ function onDamageVisibiltyChanged(layer) {
 
 function onStreetMapVisibilityChanged(layer) {
   {% if polygonLayerName %}
+    var unselected = {{polygonLayerName}}_layer.styleMap.styles["default"];
+    var selected = {{polygonLayerName}}_layer.styleMap.styles["select"];
     if (layer.object.visibility){
       //streetmap on, neighborhood labels off
-  		{{polygonLayerName}}_layer.styleMap.styles.default.defaultStyle.fontSize = "0px";
-  		{{polygonLayerName}}_layer.styleMap.styles.select.defaultStyle.fontSize = "0px";
+  	  unselected.defaultStyle.label="";
+  	  selected.defaultStyle.label="";
   	} else {
   	  //streetmap off, neighborhood labels on
-  		{{polygonLayerName}}_layer.styleMap.styles.default.defaultStyle.fontSize = "10px";
-  		{{polygonLayerName}}_layer.styleMap.styles.select.defaultStyle.fontSize = "10px";
+  	  unselected.defaultStyle.label="${name}";
+  	  selected.defaultStyle.label="${name}";
   	}
-  	//console.log({{polygonLayerName}}_layer.styleMap.styles);
   	{{polygonLayerName}}_layer.redraw();
 	{%endif%}
 }
