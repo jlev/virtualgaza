@@ -40,14 +40,19 @@ var bombingStyleMap = new OpenLayers.StyleMap(
 		externalGraphic:"{{MEDIA_URL}}pins/bombing.png"});
 
 function mapInit() {
+	//var gazaBounds = new OpenLayers.Bounds(3801000,3660000,3850000,3710500);
+	var gazaBounds = new OpenLayers.Bounds(3801000,3660000,3855000,3710500);
+	//var gazaBounds = new OpenLayers.Bounds(3800000,3650000,3850000,3715000); 
+	//left,bottom,right,top
+	
 	map = new OpenLayers.Map('map', {
 		controls: [ ],
 		projection : new OpenLayers.Projection("EPSG:900913"),
-		displayProjection : new OpenLayers.Projection("EPSG:4326"), //EPSG:4326
+		displayProjection : new OpenLayers.Projection("EPSG:900913"), //EPSG:4326
 		units : "m",
 		maxResolution : "auto",
-		maxExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
-		restrictedExtent : new OpenLayers.Bounds(3801000,3660000,3850000,3710500), //gaza strip
+		maxExtent : gazaBounds,
+		restrictedExtent : gazaBounds,
 		minZoomLevel: 11,
 		maxZoomLevel: 17});
 
@@ -79,9 +84,10 @@ function mapInit() {
 		visibility:false
 	});
 	map.addLayer(osmLayer);
+	osmLayer.events.register('visibilitychanged', this, onStreetMapVisibilityChanged);
 	
 	//UNOSAT LAYER
-	unosat_buildings = new OpenLayers.Layer.GML("Damage", "/proxy/{{MEDIA_URL}}openlayers/unosat/doc.kml", 
+	unosat_buildings = new OpenLayers.Layer.GML("Damage", "/proxy/http://virtualgaza.media.mit.edu:81/media/openlayers/unosat/doc.kml", 
 	{
 		format: OpenLayers.Format.KML, 
 		projection: map.displayProjection,
@@ -102,7 +108,7 @@ function mapInit() {
 	//VECTOR LAYERS
 	var geojson_format = new OpenLayers.Format.GeoJSON();
 	{% for layer in vectorLayers %}
-		var {{layer.name}}_layer = new OpenLayers.Layer.Vector("{{layer.name}}",
+		{{layer.name}}_layer = new OpenLayers.Layer.Vector("{{layer.name}}",
 			{ {%if layer.attribution %}'attribution':"{{layer.attribution}}",{%endif%}
 				{%if layer.legend%}'legend':"{{layer.legend}}",{%endif%}
 				'styleMap':{{layer.styleName}}
@@ -203,6 +209,10 @@ function onMapMoveEnd() {
 		polygonSelectControl.activate();
 		pointSelectControl.deactivate();
 	}
+	
+	//retag floatbox links
+	//probably ineffecient to do the whole page
+	fb.tagAnchors(document.body);
 }
 
 function calculateVisibleDamage() {
@@ -251,6 +261,22 @@ function onDamageVisibiltyChanged(layer) {
 	} else {
 		$j("div").filter("#damage").hide();
 	}
+}
+
+function onStreetMapVisibilityChanged(layer) {
+  {% if polygonLayerName %}
+    if (layer.object.visibility){
+      //streetmap on, neighborhood labels off
+  		{{polygonLayerName}}_layer.styleMap.styles.default.defaultStyle.fontSize = "0px";
+  		{{polygonLayerName}}_layer.styleMap.styles.select.defaultStyle.fontSize = "0px";
+  	} else {
+  	  //streetmap off, neighborhood labels on
+  		{{polygonLayerName}}_layer.styleMap.styles.default.defaultStyle.fontSize = "10px";
+  		{{polygonLayerName}}_layer.styleMap.styles.select.defaultStyle.fontSize = "10px";
+  	}
+  	//console.log({{polygonLayerName}}_layer.styleMap.styles);
+  	{{polygonLayerName}}_layer.redraw();
+	{%endif%}
 }
 
 function toolTipsOver(feature) {
