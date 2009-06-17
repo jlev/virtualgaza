@@ -27,7 +27,7 @@ def frontpage(request):
 							pageTitle="Break the Information Blockade",
 							vectorLayers=layer_list,
 							polygonLayerName="Neighborhoods",
-							popupLayerName="Bombings",
+							#popupLayerName="Bombings",
 							),
 							context_instance = RequestContext(request))
 
@@ -85,7 +85,7 @@ def neighborhood_page(request,nameSlug):
 						vectorLayers=layerList,
 						galleryList=galleryList,
 						videoList=videoList,
-						popupLayerName="Bombings",
+						#popupLayerName="Bombings",
 						showDamage="True",
 						zoomLayer="Neighborhoods"),
 						context_instance = RequestContext(request))
@@ -124,8 +124,8 @@ def mapObjects(neighborhoodName):
 		{'name':'Border',
 		'list':borders,
 		'styleName':'lineStyleMap'},
-		{'name':'Bombings',
-		'list':bombings,
-		'styleName':'bombingStyleMap'}
+	#	{'name':'Bombings',
+	#	'list':bombings,
+	#	'styleName':'bombingStyleMap'}
 	]
 	return layer_list
