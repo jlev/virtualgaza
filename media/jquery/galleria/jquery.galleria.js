@@ -310,7 +310,8 @@ $$.onPageLoad = function(_src) {
 		_wrapper.empty().append(_img);
 
 		// insert the caption
-		_wrapper.siblings('.caption').text(_thumb.attr('title'));
+		//_wrapper.siblings('.caption').text(_thumb.attr('title')); //title tag as text
+		_wrapper.siblings('.caption').html(unescape(_thumb.attr('title'))); //title tag as parsed html
 		
 		// fire the onImage function to customize the loaded image's features
 		$.galleria.onImage(_img,_wrapper.siblings('.caption'),_thumb);

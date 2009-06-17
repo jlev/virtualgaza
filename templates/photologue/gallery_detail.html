@@ -23,7 +23,7 @@
 <div id="thumbnails">
   <ul class="gallery">
     {% for photo in object.public %}
-    <li {% if forloop.first %}class="active"{%endif%}><a href="{{photo.get_display_url}}" title="{{photo.caption}}"><img src="{{ photo.get_thumbnail_url }}" alt="{{photo.title}}"/></a></li>
+    <li {% if forloop.first %}class="active"{%endif%}><a href="{{photo.get_display_url}}" title="{{photo.title}}{% if photo.caption %}<br><em>{{photo.caption}}</em>{%endif%}"><img src="{{ photo.get_thumbnail_url }}"/></a></li>
     {% endfor %}
     </ul>
 </div>
