@@ -17,3 +17,8 @@ p#nav {
     clear:left;
 }
 
+#sample-photo {
+    display:inline;
+    padding-right:10px;
+}
+
