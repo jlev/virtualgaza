@@ -47,8 +47,28 @@ class Border(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class City(models.Model):
+	'''A city'''
+	name = models.CharField(max_length=50)
+	bounds = models.PolygonField(srid=theSRID)
+	population = models.IntegerField(blank=True,null=True)
+	objects = models.GeoManager()
+	
+	def getJSON(self):
+		json = {}
+		json['type']='Feature'
+		json['geometry'] = eval(self.bounds.geojson)
+		json['properties'] = {'name':str(self.name)}
+		return str(json)
+	
+	def __unicode__(self):
+		return self.name
+		
+	class Meta:
+		verbose_name_plural = 'cities'
+
 class Neighborhood(models.Model):
-	'''A local neighborhood, with bounds'''
+	'''A local neighborhood'''
 	name = models.CharField(max_length=50)
 	bounds = models.PolygonField(srid=theSRID)
 	population = models.IntegerField(blank=True,null=True)

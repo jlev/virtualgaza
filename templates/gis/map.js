@@ -209,6 +209,37 @@ function onMapMoveEnd() {
 		polygonSelectControl.activate();
 		pointSelectControl.deactivate();
 	}
+	
+	//hard code zoom function so neighborhood labels hidden at max zoom
+	if(map.zoom == 0) {
+      //neighborhood labels off
+      var n_default = Neighborhoods_layer.styleMap.styles["default"];
+      var n_selected = Neighborhoods_layer.styleMap.styles["select"];
+      n_default.defaultStyle.label="";
+      n_selected.defaultStyle.label="";
+      Neighborhoods_layer.redraw();
+    
+      //city labels on
+      var c_default = Cities_layer.styleMap.styles["default"];
+      var c_selected = Cities_layer.styleMap.styles["select"];
+      c_default.defaultStyle.label="${name}";
+      c_selected.defaultStyle.label="${name}";
+      Cities_layer.redraw();
+	} else {
+	  //neighborhood labels on
+    var n_default = Neighborhoods_layer.styleMap.styles["default"];
+    var n_selected = Neighborhoods_layer.styleMap.styles["select"];
+    n_default.defaultStyle.label="${name}";
+    n_selected.defaultStyle.label="${name}";
+    Neighborhoods_layer.redraw();
+    
+    //city labels off
+    var c_default = Cities_layer.styleMap.styles["default"];
+    var c_selected = Cities_layer.styleMap.styles["select"];
+    c_default.defaultStyle.label="";
+    c_selected.defaultStyle.label="";
+    Cities_layer.redraw();
+	}
 }
 
 function calculateVisibleDamage() {

@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, get_list_or_404,get_object_or_4
 from django.http import HttpResponse
 from django.template import RequestContext 
 from django.conf import settings
-from tour.models import Neighborhood,Location,Border,Bombing
+from tour.models import City,Neighborhood,Location,Border,Bombing
 from testimony.models import Author,Text,Video
 from photologue.models import Gallery,Photo
 from django.contrib.gis import geos
@@ -96,6 +96,11 @@ def mapObjects(neighborhoodName):
 	for b in borderList:
 		borders.append(b.getJSON())
 		
+	cityList = City.objects.all()
+	cities = []
+	for c in cityList:
+		cities.append(c.getJSON())
+		
 	if neighborhoodName == "all":
 		neighborhoodList = Neighborhood.objects.all()
 	else:
@@ -110,6 +115,9 @@ def mapObjects(neighborhoodName):
 		bombings.append(b.getJSON())
 	
 	layer_list = [
+		{'name':'Cities',
+			'list':cities,
+			'styleName':'polygonStyleMap'},
 		{'name':'Neighborhoods',
 			'list':neighborhoods,
 			'styleName':'polygonStyleMap'},
