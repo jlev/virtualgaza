@@ -208,19 +208,19 @@ function onMapMoveEnd() {
 	//hard coding is probably not the best solution
 	if(this.zoom >= 2) {
 		NeighborhoodSelectControl.deactivate();
-		pointSelectControl.activate();
+		//pointSelectControl.activate();
 	} else {
 		NeighborhoodSelectControl.activate();
-		pointSelectControl.deactivate();
+		//pointSelectControl.deactivate();
 	}
 	
 	//hard code zoom function so neighborhoods hidden at max zoom
 	if(this.zoom == 0) {
-		Cities_layer.setVisibility(true);
-		Neighborhoods_layer.setVisibility(false);
+		map.removeLayer(Neighborhoods_layer);
+		map.addLayer(Cities_layer);
 	} else {
-		Cities_layer.setVisibility(false);
-		Neighborhoods_layer.setVisibility(true);
+		map.addLayer(Neighborhoods_layer);
+		map.removeLayer(Cities_layer);
 	}
 }
 
