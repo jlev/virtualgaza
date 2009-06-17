@@ -90,7 +90,7 @@ function mapInit() {
 	unosat_buildings = new OpenLayers.Layer.GML("Damage", "/proxy/http://virtualgaza.media.mit.edu:81/media/openlayers/unosat/doc.kml", 
 	{
 		format: OpenLayers.Format.KML, 
-		projection: map.displayProjection,
+		projection: new OpenLayers.Projection("EPSG:4326"),
 		formatOptions: {
 			extractStyles: true, 
 			extractAttributes: true
@@ -237,13 +237,11 @@ function calculateVisibleDamage() {
 		}
 	}
 	
-	var numDestroyed = counts["#destroyed"],
-	   numDamaged = counts["#damaged"],
-	   numImpact = counts["#impact_field"] + counts["#impact_road"];
+	var numImpact = counts["#impact_field"] + counts["#impact_road"];
 
 	$j("div").filter("#damage").html( "<h3>Damage Analysis</h3>" +
-		"Buildings Destroyed:" + numDestroyed + "<br>" +
-		"Buildings Damaged:" + numDamaged + "<br>" +
+		"Buildings Destroyed:" + counts["#destroyed"] + "<br>" +
+		"Buildings Damaged:" + counts["#damaged"] + "<br>" +
 		"Impact Craters:" + numImpact +
 		"<div id='note'>Analysis released by UNITAR January 9, 2008. Due to the reduced resolution of available satellite imagery, it underestimates the damage extent in dense areas.</div>"
 		);
