@@ -134,17 +134,21 @@ function mapInit() {
 		{{popupLayerName}}_layer.attribution = "Bombing Tabulation: Alireza Doostdar (cc)";
 	{%endif%}
 	
+	//CITY CONTROLS
+	CitySelectControl = new OpenLayers.Control.newSelectFeature(Cities_layer,
+	{onClickSelect:zoomToFeature,
+		onHoverSelect:polygonOver,
+		onHoverUnselect:polygonOut});
+	map.addControl(CitySelectControl);
+	CitySelectControl.activate();
+	
 	//NEIGHBORHOOD CONTROLS
-	{% if polygonLayerName %}
-		polygonTooltips = new OpenLayers.Control.ToolTips({bgColor:"silver",textColor :"black", bold : true, opacity : 0.75});
-		map.addControl(polygonTooltips);
-		polygonSelectControl = new OpenLayers.Control.newSelectFeature({{polygonLayerName}}_layer,
-		{onClickSelect:zoomToNeighborhood,
-			onHoverSelect:polygonOver,
-			onHoverUnselect:polygonOut});
-		map.addControl(polygonSelectControl);
-		polygonSelectControl.activate();
-	{%endif%}
+	NeighborhoodSelectControl = new OpenLayers.Control.newSelectFeature(Neighborhoods_layer,
+	{onClickSelect:zoomToFeature,
+		onHoverSelect:polygonOver,
+		onHoverUnselect:polygonOut});
+	map.addControl(NeighborhoodSelectControl);
+	NeighborhoodSelectControl.activate();
 
 	map.zoomToExtent(map.restrictedExtent);
 
@@ -173,7 +177,7 @@ function osm_getTileURL (bounds) {
 }
 
 //EVENT HANDLERS
-function zoomToNeighborhood(feature) {
+function zoomToFeature(feature) {
 	this.map.zoomToExtent(feature.geometry.bounds);
 }
 
@@ -203,42 +207,20 @@ function onMapMoveEnd() {
 	//if close, deactivate polygonSelectControl
 	//hard coding is probably not the best solution
 	if(this.zoom >= 2) {
-		polygonSelectControl.deactivate();
+		NeighborhoodSelectControl.deactivate();
 		pointSelectControl.activate();
 	} else {
-		polygonSelectControl.activate();
+		NeighborhoodSelectControl.activate();
 		pointSelectControl.deactivate();
 	}
 	
-	//hard code zoom function so neighborhood labels hidden at max zoom
-	if(map.zoom == 0) {
-      //neighborhood labels off
-      var n_default = Neighborhoods_layer.styleMap.styles["default"];
-      var n_selected = Neighborhoods_layer.styleMap.styles["select"];
-      n_default.defaultStyle.label="";
-      n_selected.defaultStyle.label="";
-      Neighborhoods_layer.redraw();
-    
-      //city labels on
-      var c_default = Cities_layer.styleMap.styles["default"];
-      var c_selected = Cities_layer.styleMap.styles["select"];
-      c_default.defaultStyle.label="${name}";
-      c_selected.defaultStyle.label="${name}";
-      Cities_layer.redraw();
+	//hard code zoom function so neighborhoods hidden at max zoom
+	if(this.zoom == 0) {
+		Cities_layer.setVisibility(true);
+		Neighborhoods_layer.setVisibility(false);
 	} else {
-	  //neighborhood labels on
-    var n_default = Neighborhoods_layer.styleMap.styles["default"];
-    var n_selected = Neighborhoods_layer.styleMap.styles["select"];
-    n_default.defaultStyle.label="${name}";
-    n_selected.defaultStyle.label="${name}";
-    Neighborhoods_layer.redraw();
-    
-    //city labels off
-    var c_default = Cities_layer.styleMap.styles["default"];
-    var c_selected = Cities_layer.styleMap.styles["select"];
-    c_default.defaultStyle.label="";
-    c_selected.defaultStyle.label="";
-    Cities_layer.redraw();
+		Cities_layer.setVisibility(false);
+		Neighborhoods_layer.setVisibility(true);
 	}
 }
 
