@@ -6,6 +6,7 @@ var polygonSelectControl,pointSelectControl;
 
 //ROLLOVER VARIABLES
 var polygonToolTips,pointToolTips;
+var polygonLayer;
 
 //the map
 var map;
@@ -218,9 +219,11 @@ function onMapMoveEnd() {
 	if(this.zoom == 0) {
 		map.removeLayer(Neighborhoods_layer);
 		map.addLayer(Cities_layer);
+		polygonLayer = Cities_layer;
 	} else {
 		map.addLayer(Neighborhoods_layer);
 		map.removeLayer(Cities_layer);
+		polygonLayer = Neighborhoods_layer;
 	}
 }
 
@@ -271,9 +274,8 @@ function onDamageVisibiltyChanged(layer) {
 }
 
 function onStreetMapVisibilityChanged(layer) {
-  {% if polygonLayerName %}
-    var unselected = {{polygonLayerName}}_layer.styleMap.styles["default"];
-    var selected = {{polygonLayerName}}_layer.styleMap.styles["select"];
+    var unselected = polygonLayer.styleMap.styles["default"];
+    var selected = polygonLayer.styleMap.styles["select"];
     if (layer.object.visibility){
       //streetmap on, neighborhood labels off
   	  unselected.defaultStyle.label="";
@@ -283,8 +285,7 @@ function onStreetMapVisibilityChanged(layer) {
   	  unselected.defaultStyle.label="${name}";
   	  selected.defaultStyle.label="${name}";
   	}
-  	{{polygonLayerName}}_layer.redraw();
-	{%endif%}
+  	polygonLayer.redraw();
 }
 
 function toolTipsOver(feature) {
