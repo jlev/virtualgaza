@@ -7,12 +7,12 @@
 	</h3>
 
 {% for post in posts %}
-	<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/">{{ post.description }}</a>:<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/">{{ post.author }}</a>, {{ post.created_date|date:"N jS" }}
+	<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/{{ post.created_date.year }}/{{ post.created_date.month }}/{{ post.created_date.day }}/" rel="floatbox">{{ post.description }}</a>:<a href="/author/{{post.author.first_name|slugify}}_{{post.author.last_name|slugify}}/" rel="floatbox">{{ post.author }}</a>, {{ post.created_date|date:"N jS" }}
 	<br>
 {%endfor%}
 <div class="more">
-	<a href="/testimony/">More Testimony</a><br>
-	<a href="/authors/">More Authors</a><br>
+	<a href="/testimony/" rel="floatbox">More Testimony</a><br>
+	<a href="/authors/" rel="floatbox">More Authors</a><br>
 </div>
 </div>
 
@@ -23,7 +23,7 @@
 	<a href="{{ gallery.get_absolute_url }}">{{ gallery.title }}</a><br>
 	{% for photo in gallery.public|slice:":4" %}
 		<div class="gallery-photo">
-		<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_frontpage_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+		<a href="{{gallery.get_absolute_url}}#{{ photo.get_display_url }}"><img src="{{ photo.get_frontpage_thumbnail_url }}" alt="{{ photo.title }}"/></a>
 		</div>
 	{%endfor%}
 	</div>
