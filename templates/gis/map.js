@@ -209,10 +209,6 @@ function onMapMoveEnd() {
 		polygonSelectControl.activate();
 		pointSelectControl.deactivate();
 	}
-	
-	//retag floatbox links
-	//probably ineffecient to do the whole page
-	fb.tagAnchors(document.body);
 }
 
 function calculateVisibleDamage() {

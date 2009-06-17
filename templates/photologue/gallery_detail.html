@@ -21,7 +21,7 @@
     </ul>
 </div>
 
-<div id="bottom"
+<div id="bottom">
 <em>Originally published {{ object.date_added|date:"l, F jS, Y" }}</em>
 {% if object.description %}<p>{{ object.description }}</p>{% endif %}
 <p><a href="{% url pl-gallery-list 1 %}">View all galleries</a></p>
@@ -30,11 +30,11 @@
 {% endblock %}
 
 {%block scripts%}
-<link href="{{MEDIA_URL}}jquery/galleria/galleria.css" rel="stylesheet" type="text/css" media="screen"> 
 <script type="text/javascript" src="{{MEDIA_URL}}jquery/jquery-1.3.1.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}jquery/galleria/jquery.galleria.js"></script> 
+<link href="{{MEDIA_URL}}jquery/galleria/galleria.css" rel="stylesheet" type="text/css" media="screen"> 
 <script type="text/javascript"> 
-jQuery(function($) {
+jQuery(function(j) {
   $('ul.gallery').galleria({
   			history   : true, // activates the history object for bookmarking, back-button etc.
   			clickNext : true, // helper for making the image clickable
