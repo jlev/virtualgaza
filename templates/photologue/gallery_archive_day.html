@@ -12,7 +12,7 @@
         <h2>{{ gallery.title }}</h2>
         {% for photo in gallery.sample|slice:sample_size %}
         <div class="sample-photo">
-            <a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+            <a href="{{gallery.get_absolute_url}}#{{ photo.get_display_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
         </div>
         {% endfor %}
     </div>
