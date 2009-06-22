@@ -14,6 +14,7 @@ var CitySelectControl,NeighborhoodSelectControl;
 var damageLayer; //global so can be counted
 
 //STYLE MAPS
+//use two character label align as documented in OpenLayers/Feature/Vector.js
 var polygonStyleMap = new OpenLayers.StyleMap(
 				{"default":new OpenLayers.Style({strokeWidth:0,
 								fillOpacity:0,
@@ -23,7 +24,7 @@ var polygonStyleMap = new OpenLayers.StyleMap(
 								fontSize: "10px",
 								fontFamily: "Arial, sans-serif",
 								fontWeight: "bold",
-								labelAlign: "center"}), 
+								labelAlign: "cm"}), 
 				"select":new OpenLayers.Style({strokeWidth:1,
 								strokeColor:'#FF6600',
 								fillOpacity:0,
@@ -33,7 +34,7 @@ var polygonStyleMap = new OpenLayers.StyleMap(
 								fontSize: "10px",
 								fontFamily: "Arial, sans-serif",
 								fontWeight: "bold",
-								labelAlign: "center"})});
+								labelAlign: "cm"})});
 var lineStyleMap = new OpenLayers.StyleMap(
 				{strokeWidth:3,
 				strokeColor:'#FFFF00'});
