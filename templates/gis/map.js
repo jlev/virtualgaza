@@ -16,8 +16,9 @@ var damageLayer; //global so can be counted
 //STYLE MAPS
 //use two character label align as documented in OpenLayers/Feature/Vector.js
 var polygonStyleMap = new OpenLayers.StyleMap(
-				{"default":new OpenLayers.Style({strokeWidth:0,
-								fillOpacity:0,
+				{"default":new OpenLayers.Style(
+								{fill:false,
+								stroke:false,
 								pointerEvents: "all",
 								label : "${name}",
 								fontColor: "#FFFFFF",
@@ -25,7 +26,10 @@ var polygonStyleMap = new OpenLayers.StyleMap(
 								fontFamily: "Arial, sans-serif",
 								fontWeight: "bold",
 								labelAlign: "cm"}), 
-				"select":new OpenLayers.Style({strokeWidth:1,
+				"select":new OpenLayers.Style(
+								{fill:false,
+								stroke:true,
+								strokeWidth:1,
 								strokeColor:'#FF6600',
 								fillOpacity:0,
 								pointerEvents: "all",
