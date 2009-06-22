@@ -1,15 +1,17 @@
 //DECONFLICT JQUERY AND OPENLAYERS
 $j = jQuery.noConflict();
 
-//SELECT CONTROLS
-var polygonSelectControl,pointSelectControl;
+//define globals at top to satisfy IE
+var map; //the map
+var polygonLayer,polygonSelectControl; //either cities or neighborhoods, depending on zoom
 
-//ROLLOVER VARIABLES
-var polygonToolTips,pointToolTips;
-var polygonLayer;
+//global so can be turned on and off in mapMoveEnd
+{% for layer in vectorLayers %}
+var {{layer.name}}_layer;
+{%endfor%}
+var CitySelectControl,NeighborhoodSelectControl;
 
-//the map
-var map;
+var damageLayer; //global so can be counted
 
 //STYLE MAPS
 var polygonStyleMap = new OpenLayers.StyleMap(
@@ -88,7 +90,7 @@ function mapInit() {
 	osmLayer.events.register('visibilitychanged', this, onStreetMapVisibilityChanged);
 	
 	//UNOSAT LAYER
-	unosat_buildings = new OpenLayers.Layer.GML("Damage", "/proxy/http://virtualgaza.media.mit.edu:81/media/openlayers/unosat/doc.kml", 
+	damageLayer = new OpenLayers.Layer.GML("Damage", "/proxy/http://virtualgaza.media.mit.edu:81/media/openlayers/unosat/doc.kml", 
 	{
 		format: OpenLayers.Format.KML, 
 		projection: new OpenLayers.Projection("EPSG:4326"),
@@ -103,8 +105,8 @@ function mapInit() {
 				"<img src='{{MEDIA_URL}}openlayers/unosat/impact_road.png'> Impact Crater (Road)",
 		visibility:false
 	});
-	map.addLayer(unosat_buildings);
-	unosat_buildings.events.register('visibilitychanged', this, onDamageVisibiltyChanged);
+	map.addLayer(damageLayer);
+	damageLayer.events.register('visibilitychanged', this, onDamageVisibiltyChanged);
 	
 	//VECTOR LAYERS
 	var geojson_format = new OpenLayers.Format.GeoJSON();
@@ -126,7 +128,7 @@ function mapInit() {
 		pointToolTips = new OpenLayers.Control.ToolTips({bgColor:"red",textColor :"black", bold : false, opacity : 0.75,
 		widthValue:"200px"});
 		map.addControl(pointToolTips);
-		pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
+		var pointSelectControl = new OpenLayers.Control.newSelectFeature({{popupLayerName}}_layer,
 						{onHoverSelect:toolTipsOver, onHoverUnselect:toolTipsOut});
 		map.addControl(pointSelectControl);
 		pointSelectControl.activate();
@@ -201,29 +203,29 @@ function onMapMoveEnd() {
 		}
 	);
 	
-	if(unosat_buildings.visibility) {
+	if(damageLayer.visibility) {
 		calculateVisibleDamage();
-	}
-	
-	//if close, deactivate polygonSelectControl
-	//hard coding is probably not the best solution
-	if(this.zoom >= 2) {
-		NeighborhoodSelectControl.deactivate();
-		//pointSelectControl.activate();
-	} else {
-		NeighborhoodSelectControl.activate();
-		//pointSelectControl.deactivate();
 	}
 	
 	//hard code zoom function so neighborhoods hidden at max zoom
 	if(this.zoom == 0) {
-		map.removeLayer(Neighborhoods_layer);
-		map.addLayer(Cities_layer);
+		Neighborhoods_layer.setVisibility(false);
+		Cities_layer.setVisibility(true);
 		polygonLayer = Cities_layer;
+		polygonSelectControl = CitySelectControl;
 	} else {
-		map.addLayer(Neighborhoods_layer);
-		map.removeLayer(Cities_layer);
+		Neighborhoods_layer.setVisibility(true);
+		Cities_layer.setVisibility(false);
 		polygonLayer = Neighborhoods_layer;
+		polygonSelectControl = NeighborhoodSelectControl;
+	}
+
+	//if close, deactivate polygonSelectControl
+	//hard coding is probably not the best solution
+	if(this.zoom >= 2) {
+		polygonSelectControl.deactivate();
+	} else {
+		polygonSelectControl.activate();
 	}
 }
 
@@ -241,8 +243,8 @@ function calculateVisibleDamage() {
 	var miny = map_extent.bottom;
 	var maxy = map_extent.top;
 
-	for(var i = 0; i < unosat_buildings.features.length; i++) {
-		var b = unosat_buildings.features[i];
+	for(var i = 0; i < damageLayer.features.length; i++) {
+		var b = damageLayer.features[i];
 		if (b.geometry != null) {
 			var x = b.geometry.x,
 			    y = b.geometry.y;
