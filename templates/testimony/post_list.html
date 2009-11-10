@@ -34,11 +34,11 @@
 
   <div class="relatedBox">
     Also on {{year}}-{{month}}-{{day}}:<br>
-    &#187; <a href="http://www.nad-plo.org/pmg/reports/PMG.Daily.Sitrep.{{postList.0.created_date|date:"d"}}.{{postList.0.created_date|date:"m"}}.{{postList.0.created_date|date:"y"}}.pdf" target="_blank">PLO Daily Situation Report</a><br>
 	{%if alsoOnDate %}
 		{% for post in alsoOnDate %}
 		{{post.author.get_full_name}}: <a href="{{post.get_absolute_url}}">{{post.description}}</a><br>
 		{%endfor%}
+		Palestinian Monitoring Group: <a href="http://www.nad-plo.org/pmg/reports/PMG.Daily.Sitrep.{{postList.0.created_date|date:"d"}}.{{postList.0.created_date|date:"m"}}.{{postList.0.created_date|date:"y"}}.pdf" target="_blank">Daily Situation Report</a><br>
 	{%endif%}
   </div>
 
