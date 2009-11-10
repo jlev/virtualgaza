@@ -30,7 +30,7 @@
 
 <div id="bottom">
 <em>Originally published {{ object.date_added|date:"l, F jS, Y" }}</em>
-{% if object.description %}<p>{{ object.description }}</p>{% endif %}
+{% if object.description %}<p>{{ object.description|urlize|linebreaks}}</p>{% endif %}
 <p><a href="{% url pl-gallery-list 1 %}">View all galleries</a></p>
 </div>
 
