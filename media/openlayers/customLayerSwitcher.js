@@ -497,7 +497,7 @@ OpenLayers.Control.customLayerSwitcher =
         this.layersDiv.style.paddingLeft = "10px";
         this.layersDiv.style.paddingBottom = "5px";
         this.layersDiv.style.paddingRight = "75px";
-        this.layersDiv.style.backgroundColor = this.activeColor;        
+        //this.layersDiv.style.backgroundColor = this.activeColor;        
 
         // had to set width/height to get transparency in IE to work.
         // thanks -- http://jszen.blogspot.com/2005/04/ie6-opacity-filter-caveat.html
