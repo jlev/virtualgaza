@@ -23,6 +23,7 @@ databrowse.site.register(virtualgaza.tour.models.Bombing)
 #MAP URLS
 urlpatterns = patterns('virtualgaza.tour.views',
 	(r'^$','frontpage'),
+	(r'^iframe$','iframe'),
 	(r'^ajax/neighborhoods_within_bounds/$','neighborhoods_within_bounds'),
 	(r'^neighborhood/(?P<nameSlug>[\w-]+)/$','neighborhood_page'),
 )

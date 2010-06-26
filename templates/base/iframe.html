@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<link rel="stylesheet" href="{{ MEDIA_URL }}styles/base.css" type="text/css"/>
+	<link rel="stylesheet" href="{{ MEDIA_URL }}styles/frontpage.css" type="text/css"/>
+
+<body onload="mapInit()">
+
+	<table border="0" width="100%">
+	<tr class="frontpageRow">
+		<td class="frontpageColumn" align="left" width="500px">
+			<div id="map">
+				<div id="js-hidden">
+					Because your browser does not support javascript, many interactive features of this site will not function properly. Please upgrade to <a href="http://www.getfirefox.com">a modern browser</a>.
+				</div>
+				<script type="text/javascript">
+				document.getElementById('js-hidden').style.display = 'none';
+				</script>
+			</div>
+
+			<div id="mapKey">
+				{% block mapKey %}{%endblock mapKey%}
+			</div>
+			
+			<div id="caption">
+				{{captionText|safe}}
+			</div>
+			
+			<div id="share-button">
+			<!-- AddThis Button BEGIN -->
+			<script type="text/javascript">var addthis_pub="jlev";</script>
+			<a href="http://www.addthis.com/bookmark.php?v=20" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()"><img src="http://s7.addthis.com/static/btn/sm-share-en.gif" width="83" height="16" alt="Bookmark and Share" style="border:0"/></a><script type="text/javascript" src="http://s7.addthis.com/js/200/addthis_widget.js"></script>
+			<!-- AddThis Button END -->
+			</div>
+		</td>
+	{%endblock map%}
+
+	<td valign="top">
+		<div id="neighborhoods">
+		</div>
+		
+		<div class="box" id="damage"></div>
+	</td>
+</tr>
+</table>
+
+{% include "gis/map.html" %}
+<!-- Google Analytics Magic -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-7059313-1");
+pageTracker._trackPageview();
+} catch(err) {}
+</script>
+</body>
+</html>
