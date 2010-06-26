@@ -31,6 +31,15 @@ def frontpage(request):
 							),
 							context_instance = RequestContext(request))
 
+def iframe(request):
+	layer_list = mapObjects("all")
+	return render_to_response('base/iframe.html',
+					dict(mapDict,useMap="True",
+							vectorLayers=layer_list,
+							polygonLayerName="Neighborhoods",
+							),
+							context_instance = RequestContext(request))
+
 def neighborhoods_within_bounds(request):
 	if request.is_ajax() and request.method == 'POST':
 		try:
