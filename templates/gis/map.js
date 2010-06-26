@@ -95,7 +95,7 @@ function mapInit() {
 	osmLayer.events.register('visibilitychanged', this, onStreetMapVisibilityChanged);
 	
 	//UNOSAT LAYER
-	damageLayer = new OpenLayers.Layer.GML("Damage", "/proxy/http://virtualgaza.media.mit.edu:81/media/openlayers/unosat/doc.kml", 
+	damageLayer = new OpenLayers.Layer.GML("Damage", "http://virtualgaza.media.mit.edu/media/openlayers/unosat/doc.kml", 
 	{
 		format: OpenLayers.Format.KML, 
 		projection: new OpenLayers.Projection("EPSG:4326"),
