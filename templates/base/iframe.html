@@ -2,10 +2,10 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+	<base target="_blank">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	
-	<link rel="stylesheet" href="{{ MEDIA_URL }}styles/base.css" type="text/css"/>
-	<link rel="stylesheet" href="{{ MEDIA_URL }}styles/frontpage.css" type="text/css"/>
+	<link rel="stylesheet" href="{{ MEDIA_URL }}styles/iframe.css" type="text/css"/>
 
 <body onload="mapInit()">
 
@@ -22,7 +22,6 @@
 			</div>
 
 			<div id="mapKey">
-				{% block mapKey %}{%endblock mapKey%}
 			</div>
 			
 			<div id="caption">
@@ -36,7 +35,6 @@
 			<!-- AddThis Button END -->
 			</div>
 		</td>
-	{%endblock map%}
 
 	<td valign="top">
 		<div id="neighborhoods">

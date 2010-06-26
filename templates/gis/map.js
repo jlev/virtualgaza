@@ -68,7 +68,7 @@ function mapInit() {
 	map.addControl(new OpenLayers.Control.KeyboardDefaults());
 	map.addControl(new OpenLayers.Control.PanZoomBar());
 	map.addControl(new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('mapKey'),
-	activeColor:'silver',minimizeDiv:OpenLayers.Util.getElement('mapKey'),maximizeDiv:OpenLayers.Util.getElement('mapKey')}));
+	/*activeColor:'silver',*/minimizeDiv:OpenLayers.Util.getElement('mapKey'),maximizeDiv:OpenLayers.Util.getElement('mapKey')}));
 	map.addControl(new OpenLayers.Control.ScaleLine());
 	map.addControl(new OpenLayers.Control.Attribution({"separator":","}));
 	map.addControl(new OpenLayers.Control.Legend({}));
