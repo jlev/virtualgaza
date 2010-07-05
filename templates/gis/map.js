@@ -42,9 +42,12 @@ var polygonStyleMap = new OpenLayers.StyleMap(
 var lineStyleMap = new OpenLayers.StyleMap(
 				{strokeWidth:3,
 				strokeColor:'#FFFF00'});
+var pinStyleMap = new OpenLayers.StyleMap(
+  {'pointRadius':12,
+    'externalGraphic': "${icon}"
+  });
 var bombingStyleMap = new OpenLayers.StyleMap(
-		{pointRadius: 7,
-		fillOpacity:1,
+		{fillOpacity:1,
 		externalGraphic:"{{MEDIA_URL}}pins/bombing.png"});
 
 function mapInit() {
@@ -127,6 +130,13 @@ function mapInit() {
 		{% endfor %}
 		map.addLayer({{layer.name}}_layer);
 	{%endfor%}
+	
+	//BuildingsLayer
+	popupSelectControl = new OpenLayers.Control.newSelectFeature(Buildings_layer,
+      {onSelect: onFeatureSelect,
+      onUnselect: onFeatureUnselect});
+map.addControl(popupSelectControl);
+popupSelectControl.activate();
 	
 	//BOMBING LAYER
 	{%if popupLayerName %}
@@ -295,6 +305,7 @@ function onStreetMapVisibilityChanged(layer) {
   	polygonLayer.redraw();
 }
 
+//TOOLTIPS
 function toolTipsOver(feature) {
 	var displayText = '';
 	displayText += '<div class="bombingName">' + feature.attributes.name + '</div>';
@@ -308,3 +319,24 @@ function toolTipsOut(feature){
 	pointToolTips.hide();
 }
 
+//POPUPS
+function onFeatureSelect(feature) {
+    selectedFeature = feature;
+    html = "<b>" + feature.attributes.name + "</b>";
+    html += "<p>" + feature.attributes.description + "</p>";
+    html += "<i>Damage: " + feature.attributes.damage + "</i>";
+    popup = new OpenLayers.Popup("popup", 
+                feature.geometry.getBounds().getCenterLonLat(),
+                new OpenLayers.Size(200,130),
+                html, true);
+    //create the popup now with blank text
+    popup.panMapIfOutOfView = true;
+    popup.keepInMap = true;
+    popup.setBorder('1px solid black');
+    map.addPopup(popup);
+}
+function onFeatureUnselect(feature) {
+    map.removePopup(feature.popup);
+    feature.popup.destroy();
+    feature.popup = null;
+}

@@ -1,0 +1,250 @@
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom"> 
+<Document>
+	<name>Gaza-Places.kml</name>
+	<open>1</open>
+    <Style id="highlightPlacemark">
+      <IconStyle> 
+        <Icon>
+          <href>http://google-maps-icons.googlecode.com/files/university.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id="normalPlacemark">
+      <IconStyle>
+        <Icon>
+          <href>http://google-maps-icons.googlecode.com/files/university.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="exampleStyleMap">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#normalPlacemark</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#highlightPlacemark</styleUrl>
+      </Pair>
+    </StyleMap>
+			<Placemark id="p1">
+				<name>University College of Applied Sciences</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>University College of Applied Sciences:</strong></font></p>   
+	  	  <p><font color="#666666">In 1998, the College was established to provide the Gaza Strip community with its needs for highly-qualified and well-trained professionals. With the continuing growth and high demand for its graduates, the newly-born college eventually moved to a new campus in 2003.Started with only 200 students studying in three majors, there are currently over 8,500 students pursuing their technical education in more than 34 majors. With the ever increasing demand, the College established the Gaza Polytechnic Institute in 2006 to expand its services to the southern part of the Gaza Strip. Further, the College established the University College of Applied Sciences to launch its bachelor degree programs in 2007.</font></p>
+          	  <p><a href="http://www.ucas.edu.ps/english/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4367528,31.4979577,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p2">
+				<name>Al-Quds Open University</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Al-Quds Open University:</strong></font></p>   
+	  	  <p><font color="#666666">The idea of the establishment of the University started in 1975 based on the needs of the Palestinians for higher education, and taking into consideration their demographical, social and economical situations under the Israeli occupation. Upon the request of the Palestinian Liberation Organization, UNESCO conducted a feasibility study for the University project, in 1980, approved by UNESCO General Conference. The Palestinian National Council approved the plan in 1981, but, because of unfavorable circumstances, the execution of the project was delayed until 1985.</font></p>
+          	  <p><a href="http://www.qou.edu/englishIndexPage.do" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+          |s|
+          	  Photo
+          |s|
+          	  <img height="200px" src="http://www.qou.edu/homePage/photoAlbum2010/pic6.jpg" /><br/>
+	  	  <font color="#666666"><strong>Al-Quds Open University</strong></font>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4533557,31.5340855,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p3">
+				<name>University of Palestine International</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>University of Palestine International:</strong></font></p>   
+	  	  <p><font color="#666666"> a Palestinian private institution of higher education located in Zahra city with campuses operating in Jordan, Saudi Arabia and Syria. The university was established in 2003. Each specialization has a supervisory committee of qualified lecturers who are selected in accordance with the highest academic standards, and who have good professional experience in different universities. Moreover, there is an IT unit responsible for organizing communication between lecturers and students through the UPINAR Revision and the UPINAR Office Hour, using a technological program developed by these university teams to increase the effectiveness of education and to meet the expected goals and outcomes of the academic programs. This process was the starting step in creating an unrivaled distinction through providing quality courses and methodology.</font></p>
+          	  <p><a href="http://www.up.edu.ps/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+                              ]]></description>
+				<Point>
+					<coordinates>34.404786,31.47757,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p4">
+				<name>Al-Aqsa University - Gaza</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Al-Aqsa University - Gaza:</strong></font></p>   
+	  	  <p><font color="#666666">Al-Aqsa University was established in 2000 under the Higher Education Act (No.11, 1988) as an expansion of the College of Education. The University has been a member of the Arab Universities Union as well as of the Palestinian Higher Education Council since 2003. Al-Aqsa University consists of seven faculties: namely the Faculty of Arts, Sciences, Education, Media, Fine Arts, Physical Education, Administration and Financial Studies. The University is the sole academic institution in the vicinity that is able to offer bachelor degrees in the fields of media studies, fine arts and physical education. Our organisation realises the importance of utilising modern technology in delivering education and the numerous potential benefits. The University has incorporated various modern technologies into its methods of teaching and delivers</font></p>
+          	  <p><a href="http://www.alaqsa.edu.ps/en/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4407654,31.5112946,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p5">
+				<name>Gaza Women University</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Gaza Women University:</strong></font></p>   
+	  	  <p><font color="#666666">In the year of 2006 a group of active Palestinians led by Prof. El Khoudary decided to establish a private University in Gaza under the name of Gaza Women University.</font></p>
+          	  <p><a href="http://www.gwu.edu.ps/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+                              ]]></description>
+				<Point>
+					<coordinates>34.445116,31.4969377,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p6">
+				<name>College of Science and Technology</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>College of Science and Technology:</strong></font></p>   
+	  	  <p><font color="#666666">College of Science and Technology</font></p>
+          	  <p><a href="http://www.cst-kh.edu.ps/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+          |s|
+          	  Photo
+          |s|
+          	  <img height="200px" src="http://sphotos.ak.fbcdn.net/hphotos-ak-sjc1/hs479.snc3/26232_335126703393_335027718393_3505644_4199778_n.jpg" /><br/>
+	  	  <font color="#666666"><strong>College of Science and Technology</strong></font>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4395638,31.5137825,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p7">
+				<name>Palestine Techniqal College</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Palestine Techniqal College:</strong></font></p>   
+	  	  <p><font color="#666666"></font></p>
+          	  <p><a href="http://www.ptcdb.edu.ps/mainsite/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4395638,31.5137825,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p8">
+				<name>Palestine Community College</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Palestine Community College:</strong></font></p>   
+	  	  <p><font color="#666666"></font></p>
+          	  <p><a href="http://www.paluniv.edu.ps/website/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4395638,31.5137825,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p9">
+				<name>Palestine Applied Polytechnic</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Palestine Applied Polytechnic:</strong></font></p>   
+	  	  <p><font color="#666666"></font></p>
+          	  <p><a href="http://polytechnic.edu.ps/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4395638,31.5137825,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p10">
+				<name>Gaza Community College for Tourism Studies</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Gaza Community College for Tourism Studies:</strong></font></p>   
+	  	  <p><font color="#666666"></font></p>
+          	  <p><a href="" target="_blank"><strong><font color="#CC3333"></font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4395638,31.5137825,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p11">
+				<name>Islamic University Of Gaza</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Islamic University Of Gaza:</strong></font></p>   
+	  	  <p><font color="#666666">IUG is an independent academic institution located in Gaza. IUG is a home to the well-planned programs, a way to the different community levels and a place for researchers and good teachers.  IUG is a member of four associations: International Association of Universities, Community of Mediterranean Universities, Association of Arab Universities and Association of Islamic Universities.</font></p>
+          	  <p><a href="http://www.iugaza.edu.ps/en/" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+          |s|
+          	  Photo
+          |s|
+          	  <img height="200px" src="http://www.iugaza.edu.ps/en/About/images/12.jpg" /><br/>
+	  	  <font color="#666666"><strong>Islamic University Of Gaza</strong></font>
+          |s|
+          	  Video
+          |s|
+          	  <object width="420" height="200"><param name="movie" value="http://www.youtube.com/v/J7tAzd50NvU"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/J7tAzd50NvU" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="420" height="200"></embed></object><br/>
+	  	  <font color="#666666"><strong></strong></font>
+                              ]]></description>
+				<Point>
+					<coordinates>34.4399071,31.5136361,0</coordinates>
+				</Point>
+			</Placemark>
+			<Placemark id="p12">
+				<name>Al-Azhar University</name>
+				<styleUrl>#exampleStyleMap</styleUrl>
+				<Snippet maxLines="0"></Snippet>
+				<description><![CDATA[      
+                  
+	  	  <font color="{static_Text_Color}">&copy;2010 Tida Gaza</font>   
+	  	  <p align="left"><font color="#666666"><strong>Al-Azhar University:</strong></font></p>   
+	  	  <p><font color="#666666"> a Palestinian university established in 1992 in Gaza City, Palestinian territories. The department of desalination and Related Fields was established on 1995 by Riyad Hassan El-Khoudary and earned immense popularity among the researchers and students. The water research center is an independent non-government Palestinian institution in Gaza. [1] Al Azhar University has continued to operate, despite the Israeli blockade of Gaza. In the late 1990s the university started its own Medical Institute in collaboration with Abu-Dees University in Jerusalem. The university is also famous for it its Pharmacy program, which is considered a very prestigious program.</font></p>
+          	  <p><a href="http://www.alazhar.edu.ps" target="_blank"><strong><font color="#CC3333">for More</font></strong></a>      
+	  	  <br /><a href="http://www.tidagaza.org" target="_blank"><strong><font color="#CC3333">Tida Gaza</font></strong></a></p>
+          |s|
+          	  Photo
+          |s|
+          	  <img height="200px" src="http://www.palestineremembered.com/GeoPoints/Gaza_526/Gaza-11201.jpg" /><br/>
+	  	  <font color="#666666"><strong>Al-Azhar University</strong></font>
+                              ]]></description>
+				<Point>
+					<coordinates>34.44035768508911,31.51480685973568,0</coordinates>
+				</Point>
+			</Placemark>
+
+</Document>
+</kml>
+
+

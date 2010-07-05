@@ -144,14 +144,31 @@ class Building(models.Model):
 		('DESTROYED','Destroyed')
 	)
 	name = models.CharField(max_length=50)
+	description = models.TextField(blank=True,null=True)
 	coords = models.PointField(srid=theSRID,blank=True)
 	model = models.FileField(upload_to='models',blank=True)
 	damage = models.CharField(max_length=10, choices=DAMAGE_CHOICES,blank=True)
 	buildingType = models.ForeignKey(BuildingType)
 	objects = models.GeoManager()
-	
+	def getJSON(self):
+		json = {}
+		json['type']='Feature'
+		json['geometry'] = eval(self.coords.geojson)
+
+		#clear strange characters
+		try:
+			desc = str(self.description)
+		except UnicodeEncodeError,e:
+			import sys
+			sys.stderr.write('Unicode Error'+str(e))
+			desc = "unicode error"
+		json['properties'] = {'name':str(self.name),'type':str(self.buildingType),
+					'description':str(desc),'damage':str(self.get_damage_display()),
+					'icon':str(self.buildingType.mapPin.url)}	
+		return str(json)
 	def __unicode__(self):
 		return self.name
+
 
 class Bombing(models.Model):
 	KIND_CHOICES = (
