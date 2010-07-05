@@ -33,7 +33,7 @@ class LocationAdmin(tour.widgets.GoogleAdmin):
 	debug = True
 	
 class BuildingAdmin(tour.widgets.GoogleAdmin):
-	fields = ['name','description','buildingType','damage','coords']
+	fields = ['name','description','buildingType','url','damage','coords']
 	default_lon = gaza_sm.coords[0]
 	default_lat = gaza_sm.coords[1]
 	default_zoom = 12

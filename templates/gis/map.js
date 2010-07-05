@@ -322,7 +322,11 @@ function toolTipsOut(feature){
 //POPUPS
 function onFeatureSelect(feature) {
     selectedFeature = feature;
-    html = "<b>" + feature.attributes.name + "</b>";
+    if (feature.attributes.url) {
+      html = "<a href=" + feature.attributes.url + " target=_blank><b>" + feature.attributes.name + "</b></a>";
+    } else {
+     html = "<b>" + feature.attributes.name + "</b>"; 
+    }
     html += "<p>" + feature.attributes.description + "</p>";
     html += "<i>Damage: " + feature.attributes.damage + "</i>";
     popup = new OpenLayers.Popup("popup", 

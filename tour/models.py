@@ -145,6 +145,7 @@ class Building(models.Model):
 	)
 	name = models.CharField(max_length=50)
 	description = models.TextField(blank=True,null=True)
+	url = models.URLField(blank=True,null=True)
 	coords = models.PointField(srid=theSRID,blank=True)
 	model = models.FileField(upload_to='models',blank=True)
 	damage = models.CharField(max_length=10, choices=DAMAGE_CHOICES,blank=True)
@@ -162,7 +163,7 @@ class Building(models.Model):
 			import sys
 			sys.stderr.write('Unicode Error'+str(e))
 			desc = "unicode error"
-		json['properties'] = {'name':str(self.name),'type':str(self.buildingType),
+		json['properties'] = {'name':str(self.name),'type':str(self.buildingType),'url':str(self.url),
 					'description':str(desc),'damage':str(self.get_damage_display()),
 					'icon':str(self.buildingType.mapPin.url)}	
 		return str(json)
