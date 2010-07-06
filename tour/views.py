@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, get_list_or_404,get_object_or_4
 from django.http import HttpResponse
 from django.template import RequestContext 
 from django.conf import settings
-from tour.models import City,Neighborhood,Location,Border,Bombing,Building
+from tour.models import City,Neighborhood,Location,Border,Bombing,BuildingType,Building
 from testimony.models import Author,Text,Video
 from photologue.models import Gallery,Photo
 from django.contrib.gis import geos
@@ -20,22 +20,27 @@ def deslug(name):
 	return " ".join(bits)
 
 def frontpage(request):
-	layer_list = mapObjects("all")
+	vector_layers = vectorObjects("all")
+	pin_layers = pinObjects()
 
 	return render_to_response('base/frontpage.html',
 					dict(mapDict,useMap="True",
 							pageTitle="Break the Information Blockade",
-							vectorLayers=layer_list,
+							vectorLayers=vector_layers,
+							pinLayers=pin_layers,
 							polygonLayerName="Neighborhoods",
 							#popupLayerName="Bombings",
 							),
 							context_instance = RequestContext(request))
 
 def iframe(request):
-	layer_list = mapObjects("all")
+	vector_layers = mapObjects("all")
+	pin_layers = pinObjects()
+	
 	return render_to_response('base/iframe.html',
 					dict(mapDict,useMap="True",
-							vectorLayers=layer_list,
+							vectorLayers=vector_layers,
+							pinLayers = pin_layers,
 							polygonLayerName="Neighborhoods",
 							),
 							context_instance = RequestContext(request))
@@ -99,7 +104,7 @@ def neighborhood_page(request,nameSlug):
 						zoomLayer="Neighborhoods"),
 						context_instance = RequestContext(request))
 
-def mapObjects(neighborhoodName):
+def vectorObjects(neighborhoodName):
 	borderList = Border.objects.all()
 	borders = []
 	for b in borderList:
@@ -118,16 +123,6 @@ def mapObjects(neighborhoodName):
 	for n in neighborhoodList:
 		neighborhoods.append(n.getJSON())
 		
-	buildingList = Building.objects.all()
-	buildings = []
-	for b in buildingList:
-		buildings.append(b.getJSON())
-	
-	#bombingList = Bombing.objects.all()
-	#bombings = []
-	#for b in bombingList:
-	#	bombings.append(b.getJSON())
-	
 	layer_list = [
 		{'name':'Cities',
 			'list':cities,
@@ -138,11 +133,20 @@ def mapObjects(neighborhoodName):
 		{'name':'Border',
 		'list':borders,
 		'styleName':'lineStyleMap'},
-		{'name':'Buildings',
-		'list':buildings,
-		'styleName':'pinStyleMap'}
-	#	{'name':'Bombings',
-	#	'list':bombings,
-	#	'styleName':'bombingStyleMap'}
 	]
 	return layer_list
+	
+
+def pinObjects():
+	pinlist = []
+	for t in BuildingType.objects.all():
+		t_list = Building.objects.filter(buildingType=t)
+		if (len(t_list) == 0):
+			continue #don't include empty lists
+		obj_list = []
+		for b in t_list:
+			obj_list.append(b.getJSON())
+		pinlist.append( {'name':t.name,
+		                    'list':obj_list,
+		                    'styleName':'pinStyleMap'})
+	return pinlist
