@@ -87,7 +87,18 @@ OpenLayers.Control.customLayerSwitcher =
      * {Boolean} 
      */
     ascending: true,
- 
+
+    /**
+     * Property: groupDivs
+     * Object with {DOMElements}, {Booleans} and {Strings}
+     */
+     groups: {
+              groupDivs:{},
+              checked: {},
+              layers:{},
+              display: {}
+              },
+
     /**
      * Constructor: OpenLayers.Control.LayerSwitcher
      * 
@@ -185,6 +196,7 @@ OpenLayers.Control.customLayerSwitcher =
         }
         this[layersType + "LayersDiv"].innerHTML = "";
         this[layersType + "Layers"] = [];
+        this.groups.groupDivs = {};
     },
 
 
@@ -238,28 +250,38 @@ OpenLayers.Control.customLayerSwitcher =
         
         var containsOverlays = false;
         var containsBaseLayers = false;
+        var i;
+        var layer;
         
         // Save state -- for checking layer if the map state changed.
         // We save this before redrawing, because in the process of redrawing
         // we will trigger more visibility changes, and we want to not redraw
         // and enter an infinite loop.
         var len = this.map.layers.length;
-        this.layerStates = new Array(len);
-        for (var i=0; i <len; i++) {
-            var layer = this.map.layers[i];
+        this.layerStates = new Array(this.map.layers.length);
+        for (i=0; i <len; i++) {
+            layer = this.map.layers[i];
             this.layerStates[i] = {
                 'name': layer.name, 
                 'visibility': layer.visibility,
                 'inRange': layer.inRange,
                 'id': layer.id
             };
+           
+           // create group divs
+           if (layer.group && !layer.isBaseLayer) {
+               layer.group = layer.group.replace(/\/$/,"");
+               layer.group = layer.group.replace(/^\//,"");
+               this.createGroupDiv(layer.group);
+           }
         }    
 
         var layers = this.map.layers.slice();
         if (!this.ascending) { layers.reverse(); }
-        for(var i=0, len=layers.length; i<len; i++) {
-            var layer = layers[i];
+        for(i=0, len=layers.length; i<len; i++) {
+            layer = layers[i];
             var baseLayer = layer.isBaseLayer;
+            var layerDiv = null;
 
             if (layer.displayInLayerSwitcher) {
 
@@ -271,8 +293,7 @@ OpenLayers.Control.customLayerSwitcher =
 
                 // only check a baselayer if it is *the* baselayer, check data
                 //  layers if they are visible
-                var checked = (baseLayer) ? (layer == this.map.baseLayer)
-                                          : layer.getVisibility();
+                var checked = (baseLayer) ? (layer == this.map.baseLayer) : layer.getVisibility();
     
                 // create input element
                 var inputElem = document.createElement("input");
@@ -302,19 +323,17 @@ OpenLayers.Control.customLayerSwitcher =
                     labelSpan.style.color = "gray";
                 }
                 labelSpan.innerHTML = layer.name;
-                labelSpan.style.verticalAlign = (baseLayer) ? "bottom" 
-                                                            : "baseline";
+                labelSpan.style.verticalAlign = (baseLayer) ? "bottom" : "baseline";
                 OpenLayers.Event.observe(labelSpan, "click", 
                     OpenLayers.Function.bindAsEventListener(this.onInputClick,
                                                             context)
                 );
                 // create line break
-                var br = document.createElement("br");
+                //var br = document.createElement("br");
 //added this instead of line break between elems
                 labelSpan.style.paddingRight = "5px";
                 
-                var groupArray = (baseLayer) ? this.baseLayers
-                                             : this.dataLayers;
+                var groupArray = (baseLayer) ? this.baseLayers : this.dataLayers;
                 groupArray.push({
                     'layer': layer,
                     'inputElem': inputElem,
@@ -324,9 +343,31 @@ OpenLayers.Control.customLayerSwitcher =
     
                 var groupDiv = (baseLayer) ? this.baseLayersDiv
                                            : this.dataLayersDiv;
-                groupDiv.appendChild(inputElem);
-                groupDiv.appendChild(labelSpan);
-                //groupDiv.appendChild(br);
+               // layer group for data layers 
+               if (!baseLayer) {
+                   // no group
+                   if (layer.group == null)  {
+                       this.dataLayersDiv.appendChild(inputElem);
+                       this.dataLayersDiv.appendChild(labelSpan);
+                       //this.dataLayersDiv.appendChild(br);
+                   }
+                   // group exists it is most probably allready there
+                   else {
+                       var groupname = layer.group;
+                       var div = this.groups.groupDivs[groupname];
+                       div.appendChild(inputElem);
+                       div.appendChild(labelSpan);
+                       //div.appendChild(br);
+                       // append layer to the group
+                       this.appendLayerToGroups(layer);
+                   }
+               }
+               // base layers
+               else {
+                   this.baseLayersDiv.appendChild(inputElem);
+                   this.baseLayersDiv.appendChild(labelSpan);
+                   //this.baseLayersDiv.appendChild(br);
+               }
             }
         }
 
@@ -365,6 +406,54 @@ OpenLayers.Control.customLayerSwitcher =
         }
         OpenLayers.Event.stop(e);
     },
+
+    /** 
+     * Method:
+     * A group label has been clicked, check or uncheck its corresponding input
+     * 
+     * Parameters:
+     * e - {Event} 
+     *
+     * Context:  
+     *  - {DOMElement} inputElem
+     *  - {<OpenLayers.Control.LayerSwitcher>} layerSwitcher
+     *  - {DOMElement} groupDiv
+     */
+
+    onInputGroupClick: function(e) {
+
+        // setup the check value
+        var check = !this.inputElem.checked;
+
+        // get all <input></input> tags in this div
+        var inputs = this.groupDiv.getElementsByTagName("input");
+
+        // check the group input, other inputs are in groupDiv,
+        // inputElem is in parent div
+        this.inputElem.checked=check;
+
+        // store to groupCheckd structure, where it can be later found
+        this.layerSwitcher.groups.checked[this.inputElem.value] = check;
+
+        for (var i = 0; i < inputs.length; i++) {
+            // same as above
+            inputs[i].checked=check;
+            this.layerSwitcher.groups.checked[inputs[i].value] = check;
+        }
+
+        // groups are done, now the layers
+        var dataLayers = this.layerSwitcher.dataLayers;
+        for (var j = 0; j < dataLayers.length; j++) {
+            var layerEntry = dataLayers[j];   
+            if (this.layerSwitcher.isInGroup(
+                    this.inputElem.value,layerEntry.layer)) {
+                layerEntry.inputElem.checked = check;
+                layerEntry.layer.setVisibility(check);
+            }
+        }
+
+        OpenLayers.Event.stop(e);
+    },
     
     /**
      * Method: onLayerClick
@@ -378,6 +467,173 @@ OpenLayers.Control.customLayerSwitcher =
         this.updateMap();
     },
 
+    /**
+     * Method: onGroupClick
+     * Make the div with layers invisible
+     * 
+     * Context: 
+     * layergroup - {String} 
+     * groups - {Array} of {DOMElements}
+     */
+    onGroupClick: function(e) {
+        var layergroup = this.layergroup;
+        var div = this.groups.groupDivs[layergroup];
+        if (div) {
+            if (div.style.display != "block") {
+                div.style.display = "block";
+                this.groups.display[layergroup] = "block";
+            }
+            else {
+                div.style.display = "none";
+                this.groups.display[layergroup] = "none";
+            }
+        }
+    },
+
+    /** 
+     * Method: onRemoveLayerClick
+     * 
+     * 
+     * Parameters:
+     * e - {Event} 
+     *
+     * Context:  
+     *  - {Layer} Layer
+     */
+
+    onRemoveLayerClick: function(e) {
+        
+        var map = this.layer.map;
+        map.removeLayer(this.layer,true);
+
+        OpenLayers.Event.stop(e);
+    },
+
+    /** 
+     * Method: onMoveLayerClick
+     * 
+     * 
+     * Parameters:
+     * e - {Event} 
+     *
+     * Context:  
+     *  - {Layer} Layer
+     *  - {Boolean} up
+     *  - layerSwitcher {OpenLayers.Control}
+     */
+
+    onMoveLayerClick: function(e) {
+        
+        var map = this.layer.map;
+        var idx = null;
+        var newidx = null;
+        var layers = map.layers;
+        var tmplayer = null;
+
+        // get layer index
+        for (var i = 0; i < map.layers.length; i++) {
+            if (this.layer == map.layers[i]) {
+                idx = i;
+                break;
+            }
+        }
+
+        // move up index
+        if (this.up == true) {
+            i = 1;
+            while (1) {
+                newidx = idx-i;
+                if (newidx <= 0 ) {
+                    newidx = 0;
+                    break;
+                }
+                else if (map.layers[newidx].displayInLayerSwitcher == true && 
+                    map.layers[newidx].group == map.layers[idx].group) {
+                    break;
+                }
+                else {
+                    i += 1;
+                }
+            }
+        }
+        // get down index
+        else {
+            i = 1;
+            while (1) {
+                newidx = idx+i;
+                if (newidx >= map.getNumLayers()) {
+                    newidx = map.getNumLayers()-1;
+                    break;
+                }
+                else if (map.layers[newidx].displayInLayerSwitcher == true &&
+                    map.layers[newidx].group == map.layers[idx].group) {
+                    break;
+                }
+                else {
+                    i += 1;
+                }
+            }
+        }
+
+        // switch
+        map.raiseLayer(map.layers[idx], newidx-idx);
+
+        this.layerSwitcher.redraw();
+        OpenLayers.Event.stop(e);
+    },
+
+    /** 
+     * Method: onOpacityLayerClick
+     * 
+     * 
+     * Parameters:
+     * e - {Event} 
+     *
+     * Context:  
+     *  - {Layer} Layer
+     *  - {Boolean} up
+     *  - layerSwitcher {OpenLayers.Control}
+     */
+
+    onOpacityLayerClick: function(e) {
+        
+        if (this.layer.opacity == undefined) {
+            this.layer.opacity = 1;
+        }
+
+        var opacity = this.layer.opacity;
+
+
+
+        opacity = this.up == true ? opacity+0.1 : opacity-0.1;
+        opacity = opacity < 0 ? 0 : opacity;
+        opacity = opacity > 1 ? 1 : opacity;
+        this.layer.setOpacity(opacity);
+
+        //this.layerSwitcher.redraw();
+        OpenLayers.Event.stop(e);
+    },
+
+    /** 
+     * Method: onZoomToLayer
+     * 
+     * 
+     * Parameters:
+     * e - {Event} 
+     *
+     * Context:  
+     *  - {Layer} Layer
+     *  - layerSwitcher {OpenLayers.Control}
+     */
+
+    onZoomToLayer: function(e) {
+        
+        var map = this.layer.map;
+        map.zoomToExtent(this.layer.maxExtent);
+
+        //this.layerSwitcher.redraw();
+        OpenLayers.Event.stop(e);
+    },
 
     /** 
      * Method: updateMap
@@ -524,7 +780,7 @@ OpenLayers.Control.customLayerSwitcher =
 
         this.dataLbl = document.createElement("div");
 				this.dataLbl.id = "dataLbl";
-        this.dataLbl.innerHTML = OpenLayers.i18n("Layers:"); //Data label name
+        //this.dataLbl.innerHTML = OpenLayers.i18n("Layers:"); //Data label name
         
         this.dataLayersDiv = document.createElement("div");
 				this.dataLayersDiv.id = "dataLayersDiv";
@@ -574,8 +830,8 @@ OpenLayers.Control.customLayerSwitcher =
         this.div.appendChild(this.maximizeDiv);
 
         // minimize button div
-        var img = imgLocation + 'layer-switcher-minimize.png';
-        var sz = new OpenLayers.Size(18,18);        
+        img = imgLocation + 'layer-switcher-minimize.png';
+        sz = new OpenLayers.Size(18,18);        
         this.minimizeDiv = OpenLayers.Util.createAlphaImageDiv(
                                     "OpenLayers_Control_MinimizeDiv", 
                                     null, 
@@ -632,6 +888,127 @@ OpenLayers.Control.customLayerSwitcher =
             this.ignoreEvent(evt);
         }
     },
+
+
+    /** 
+     * Method: createGroupDiv
+     * Creates <div></div> element for group of layers defined by input string.
+     * 
+     * Parameters:
+     * layergroup - {Strin} with group structure as "Parent Group/It's child"
+     *  
+     * Returns:
+     * {DOMElement} <div></div> object for this group of layers
+     */
+    createGroupDiv: function(layergroup) {
+        var groupNames = layergroup.split("/"); // array with layer names
+        var groupName = groupNames[groupNames.length-1]; // name of the last group in the line
+        //var br = document.createElement("br"); 
+        var groupDiv = this.groups.groupDivs[layergroup];
+        
+        // groupDiv does not exist: create
+        if (!groupDiv) {
+
+            // search for the parent div - it can be another group div, or 
+            // this dataLayersDiv directly
+            var parentDiv = this.groups.groupDivs[groupNames.slice(0,groupNames.length-2).join("/")];
+
+            if (!parentDiv) {
+
+                // dataLayersDiv is parent div
+                if (groupNames.length == 1) {
+                    parentDiv = this.dataLayersDiv;
+                }
+                // there is no such thing, like parent div,
+                else {
+                    parentDiv = this.createGroupDiv( groupNames.slice(0,groupNames.length-1).join("/"));
+                }
+            }
+
+            // create the div
+            groupDiv = document.createElement("div");
+            groupDiv.setAttribute('class', 'olLayerGroup');
+            //groupDiv.style.marginLeft="10px";
+            //groupDiv.style.marginBottom="5px";
+            if (!this.groups.display[layergroup]) {
+                this.groups.display[layergroup] = "block";
+            }
+            groupDiv.style.display= this.groups.display[layergroup];
+            this.groups.groupDivs[layergroup] = groupDiv;
+
+            // create the label
+            var groupLbl = document.createElement("span");
+            groupLbl.innerHTML="<u>"+groupName+"</u>"; //<br/>";
+            //groupLbl.style.marginTop = "3px";
+            //groupLbl.style.marginLeft = "3px";
+            //groupLbl.style.marginBottom = "3px";
+            groupLbl.style.fontWeight = "bold";
+
+            // setup mouse click event on groupLbl
+            OpenLayers.Event.observe(groupLbl, "mouseup", 
+                OpenLayers.Function.bindAsEventListener(
+                    this.onGroupClick, {layergroup: layergroup, groups:
+                    this.groups}));
+            
+            // create input checkbox
+            /*var groupInput = document.createElement("input");
+            groupInput.id = "input_" + groupNames.join("_");
+            groupInput.name = groupNames.join("_");
+            groupInput.type = "checkbox";
+            groupInput.value = layergroup;
+            groupInput.checked = false;
+            groupInput.defaultChecked = false;
+            if (!this.groups.checked[layergroup]) {
+                this.groups.checked[layergroup] = false;
+            }
+            groupInput.checked = this.groups.checked[layergroup];
+            groupInput.defaultChecked = this.groups.checked[layergroup];
+            */
+            // create empty array of layers
+            if (!this.groups.layers[layergroup]) {
+                this.groups.layers[layergroup] = [];
+            }
+            
+            // setup mouse click event on groupInput
+            var context = {groupDiv: groupDiv,
+                            layerSwitcher: this};
+             //               inputElem: groupInput};
+
+/*            OpenLayers.Event.observe(groupInput, "mouseup", 
+                OpenLayers.Function.bindAsEventListener(
+                    this.onInputGroupClick, context));*/
+            
+            // append to parent div
+            //parentDiv.appendChild(groupInput);
+            parentDiv.appendChild(groupLbl);
+            parentDiv.appendChild(groupDiv);
+
+        }
+
+        return this.groups.groupDivs[layergroup];
+    },
+
+    appendLayerToGroups: function(layer) {
+        var groupNames = layer.group.split("/");
+        var groupName = null;
+
+        for (var i = 1; i <= groupNames.length; i++) {
+            var groupName = groupNames.slice(0,i).join("/");
+            if (!this.isInGroup(groupName,layer.id)) {
+                this.groups.layers[groupName].push(layer);
+            }
+        }
+    },
+    
+    isInGroup: function (groupName, id) {
+        for (var j = 0; j < this.groups.layers[groupName].length; j++) {
+            if (this.groups.layers[groupName][j].id == id) {
+                return true;
+            }
+        }
+        return false;
+    },
+  
 
     CLASS_NAME: "OpenLayers.Control.customLayerSwitcher"
 });

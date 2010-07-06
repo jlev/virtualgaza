@@ -13,12 +13,12 @@
 }
 
 #dataLbl {
-	display:inline;
+	display:block;
 	padding-right:5px;
 }
 
 #dataLayersDiv {
-	display:inline;
+	display:block;
 	padding-right:5px;
 }
 

@@ -92,7 +92,8 @@ function mapInit() {
 		displayOutsideMaxExtent: true, opacity: 1,
 		isBaseLayer: false, visibility: true,
 		attribution:"OpenStreetMap (cc)",
-		visibility:false
+		visibility:false,
+		group:'Layers'
 	});
 	map.addLayer(osmLayer);
 	osmLayer.events.register('visibilitychanged', this, onStreetMapVisibilityChanged);
@@ -111,7 +112,8 @@ function mapInit() {
 				"<img src='{{MEDIA_URL}}openlayers/unosat/damaged.png'> Building Likely Severely Damaged<br>"+
 				"<img src='{{MEDIA_URL}}openlayers/unosat/impact_field.png'> Impact Crater (Field)<br>"+
 				"<img src='{{MEDIA_URL}}openlayers/unosat/impact_road.png'> Impact Crater (Road)",
-		visibility:false
+		visibility:false,
+		group:'Layers'
 	});
 	map.addLayer(damageLayer);
 	damageLayer.events.register('visibilitychanged', this, onDamageVisibiltyChanged);
@@ -122,6 +124,7 @@ function mapInit() {
 		{{layer.name}}_layer = new OpenLayers.Layer.Vector("{{layer.name}}",
 			{ {%if layer.attribution %}'attribution':"{{layer.attribution}}",{%endif%}
 				{%if layer.legend%}'legend':"{{layer.legend}}",{%endif%}
+				'group':'Layers',
 				'styleMap':{{layer.styleName}}
 		});
 		{% for object in layer.list %}
@@ -131,12 +134,27 @@ function mapInit() {
 		map.addLayer({{layer.name}}_layer);
 	{%endfor%}
 	
-	//BuildingsLayer
-	popupSelectControl = new OpenLayers.Control.newSelectFeature(Buildings_layer,
-      {onSelect: onFeatureSelect,
-      onUnselect: onFeatureUnselect});
-map.addControl(popupSelectControl);
-popupSelectControl.activate();
+	//PIN LAYERS
+	{% for layer in pinLayers %}
+		{{layer.name}}_layer = new OpenLayers.Layer.Vector("{{layer.name}}",
+			{ {%if layer.attribution %}'attribution':"{{layer.attribution}}",{%endif%}
+				{%if layer.legend%}'legend':"{{layer.legend}}",{%endif%}
+				'group':'Locations',
+				'styleMap':{{layer.styleName}}
+		});
+		{% for object in layer.list %}
+			var {{layer.name}}_{{forloop.counter}} = geojson_format.read({{ object|safe }});
+			{{layer.name}}_layer.addFeatures({{layer.name}}_{{forloop.counter}});
+		{% endfor %}
+		map.addLayer({{layer.name}}_layer);
+		
+		//control
+		{{layer.name}}_select = new OpenLayers.Control.newSelectFeature({{layer.name}}_layer,
+        {onSelect: onFeatureSelect,
+        onUnselect: onFeatureUnselect});
+  map.addControl({{layer.name}}_select);
+  {{layer.name}}_select.activate();
+	{%endfor%}
 	
 	//BOMBING LAYER
 	{%if popupLayerName %}
