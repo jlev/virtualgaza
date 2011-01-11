@@ -1,29 +1,13 @@
 # Django settings for virtualgaza project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 SEND_BROKEN_LINK_EMAILS = True
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'virtualgaza@gmail.com'
-EMAIL_HOST_PASSWORD = 'alan007dershowitz'
-EMAIL_PORT = 587
-
-SERVER_EMAIL = 'virtualgaza@gmail.com'
 
 ADMINS = (
     ('Josh Levinger','jlev@mit.edu'),
 )
-
 MANAGERS = ADMINS
-
-DATABASE_ENGINE = 'postgresql_psycopg2'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'virtualgaza'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'virtualgaza'             # Not used with sqlite3.
-DATABASE_PASSWORD ='zzaOve'         # Not used with sqlite3.
-DATABASE_HOST = 'localhost'             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = '5433'             # Set to empty string for default. Not used with sqlite3.
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -51,7 +35,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-SITE_ROOT = '/home/jlev/django_apps/virtualgaza/'
+SITE_ROOT = '/Users/jlev/Code/virtualgaza/'
 MEDIA_ROOT = SITE_ROOT + 'media/'
 STATIC_DOC_ROOT = MEDIA_ROOT
 
@@ -63,10 +47,7 @@ MEDIA_URL = "/media/"
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = 'http://virtualgaza.media.mit.edu:81/media/admin/'
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'n^07awh1gxt@5i#ti5u(er)+(oola_97*pg9hw75!qj6=cs1zw'
+ADMIN_MEDIA_PREFIX = 'http://virtualgaza.media.mit.edu/media/admin/'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -104,15 +85,10 @@ INSTALLED_APPS = (
     'photologue',
     'virtualgaza.tour',
     'virtualgaza.testimony',
+    'django_evolution'
 )
 
 GALLERY_SAMPLE_SIZE = 4
 AUTH_PROFILE_MODULE = 'testimony.UserProfile'
 
-GOOGLE_MAPS_API_KEYS = {
-	'virtualgaza.com':'ABQIAAAAT9uyY_WHXEyDYZHQMelCKhTpj_x8CYqdlUqSxsqEfv92evxgVhSnqavVlKF2mOnUFJZ9_YXj87jy9A',
-	'virtualgaza.media.mit.edu':'ABQIAAAAT9uyY_WHXEyDYZHQMelCKhQ2dBtsAHoo0c1_usWe8rtogyPvpxTBCk0EGSLddn5x07i7li4APltpjQ'
-	}
-#dynamically chosen in views
-GOOGLE_MAPS_API_KEY = GOOGLE_MAPS_API_KEYS['virtualgaza.media.mit.edu']
-#set default for admin maps
+from settings_local import *
